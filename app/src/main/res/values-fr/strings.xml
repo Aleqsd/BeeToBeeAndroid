@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">Configuration</string>
+    <string name="hello_world">Salut le monde !</string>
+    <string name="firstName">Prénom</string>
+    <string name="lastName">Nom</string>
+    <string name="password">Mot de passe</string>
+    <string name="reenterEmail">Confirmer Email</string>
+    <string name="reenterPassword">Confirmer Password</string>
+    <string name="createAccount">Créer un compte</string>
+    <string name="alreadyMember">Déjà membre ? Connectez vous !</string>
+    <string name="login">Connexion</string>
+    <string name="loginFailed">Echec de la connexion</string>
+    <string name="enterValidEmail">Entrez une adresse Email valide</string>
+    <string name="between4and16char">Entre 4 et 16 caractères</string>
+    <string name="signup">Inscription</string>
+    <string name="creatingAccount">Création du compte...</string>
+    <string name="atLeast2Characters">Au moins 2 caractères</string>
+    <string name="emailDoNotMatch">Emails non identiques</string>
+    <string name="passwordDoNotMatch">Mots de passe non identiques</string>
+    <string name="between2and30char">Entre 2 et 30 caractères</string>
+</resources>

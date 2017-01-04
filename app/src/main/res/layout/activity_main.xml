@@ -1,0 +1,92 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/primary_dark"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_dark"
+            android:theme="@style/AppTheme.Dark"
+            android:minHeight="?attr/actionBarSize"
+            android:id="@+id/toolbar2" />
+
+        <View
+            android:id="@+id/leBas"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/leHaut"
+            android:background="@color/primary" />
+
+        <View
+            android:id="@+id/leHaut"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/primary_darker"
+            android:layout_below="@+id/toolbar2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <RelativeLayout
+            android:id="@+id/info"
+            android:layout_width="231dp"
+            android:layout_height="136dp"
+            android:layout_marginLeft="23dp"
+            android:adjustViewBounds="true"
+            android:layout_marginStart="23dp"
+            android:layout_below="@+id/toolbar2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/avatar"
+                android:text="Alexandre DO-O ALMEIDA"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textView1"
+                android:layout_below="@+id/textView1"
+                android:singleLine="true"
+                android:text="Android / iOS Developer"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/avatar"
+                app:civ_border_color="@color/primary_dark"
+                app:civ_border_width="4dp"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="10"
+                app:civ_shadow_color="@color/primary_darker"
+                android:id="@id/avatar"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>
