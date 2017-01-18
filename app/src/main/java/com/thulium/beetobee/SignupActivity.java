@@ -156,4 +156,11 @@ public class SignupActivity extends AppCompatActivity {
 
         return valid;
     }
+
+    @Override
+    public void onBackPressed() {
+
+        // Otherwise defer to system default behavior.
+        super.onBackPressed();
+    }
 }

@@ -23,7 +23,6 @@ public class LoginActivity extends AppCompatActivity {
     @Bind(R.id.input_password) EditText _passwordText;
     @Bind(R.id.btn_login) Button _loginButton;
     @Bind(R.id.link_signup) TextView _signupLink;
-    @Bind(R.id.textViewTest) TextView _textTest;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,17 +47,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_SIGNUP);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
-        });
-
-        _textTest.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();
             }
         });
     }
@@ -92,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
-                }, 3000);
+                }, 2000);
     }
 
 
@@ -111,11 +99,14 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Disable going back to the MainActivity
-        moveTaskToBack(true);
+        //moveTaskToBack(true);
+        finish();
     }
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
+        Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+        startActivity(intent);
         finish();
     }
 
