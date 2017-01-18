@@ -1,22 +1,21 @@
 package com.thulium.beetobee;
 
 import android.app.ProgressDialog;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
-public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "LoginActivity";
+public class LaunchActivity extends AppCompatActivity {
+    private static final String TAG = "LaunchActivity";
     private static final int REQUEST_SIGNUP = 0;
 
     @Bind(R.id.input_email) EditText _emailText;
@@ -27,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_launch);
         ButterKnife.bind(this);
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+        final ProgressDialog progressDialog = new ProgressDialog(LaunchActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -98,7 +97,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Disable going back to the MainActivity
         //moveTaskToBack(true);
         finish();
     }
@@ -139,3 +137,4 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 }
+
