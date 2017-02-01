@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,7 +19,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
+import com.thulium.beetobee.Formation.TestFragment;
 
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,18 +47,20 @@ public class BaseActivity extends AppCompatActivity
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getPosition() == 0) {
-                    fragment = new TestFragment();
-                }
-                if(tab.getPosition() == 1) {
+                if (tab.getPosition() == 0) {
                     fragment = new Test2Fragment();
+                }
+                if (tab.getPosition() == 1) {
+                    fragment = new TestFragment();
                 }
 
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.content_base, fragment);
+                if (fragment != null)
+                    ft.replace(R.id.content_base, fragment);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 ft.commit();
+
 // called when tab selected
             }
 
@@ -83,13 +87,14 @@ public class BaseActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        View hView =  navigationView.getHeaderView(0);
+        View hView = navigationView.getHeaderView(0);
         avatar = (ImageView) hView.findViewById(R.id.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(intent);
+
             }
         });
 
@@ -99,7 +104,7 @@ public class BaseActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
+        drawer.openDrawer(Gravity.LEFT);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -112,9 +117,6 @@ public class BaseActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-
-
 
 
     @Override

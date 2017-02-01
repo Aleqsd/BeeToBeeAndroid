@@ -11,17 +11,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.thulium.beetobee.WebService.MyResponse;
+import com.thulium.beetobee.WebService.RestService;
+import com.thulium.beetobee.WebService.TestProfile;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class LaunchActivity extends AppCompatActivity {
     private static final String TAG = "LaunchActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    @Bind(R.id.input_email) EditText _emailText;
-    @Bind(R.id.input_password) EditText _passwordText;
-    @Bind(R.id.btn_login) Button _loginButton;
-    @Bind(R.id.link_signup) TextView _signupLink;
+    @Bind(R.id.input_email)
+    EditText _emailText;
+    @Bind(R.id.input_password)
+    EditText _passwordText;
+    @Bind(R.id.btn_login)
+    Button _loginButton;
+    @Bind(R.id.link_signup)
+    TextView _signupLink;
+    @Bind(R.id.testTextView)
+    TextView _testTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +61,14 @@ public class LaunchActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
+
+        _testTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TestProfile.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void login() {
@@ -69,17 +90,48 @@ public class LaunchActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        // TODO: Implement your own authentication logic here.
+        RestService restService = new RestService();
+        restService.getService().login(email, password, new Callback<MyResponse>() {
+            @Override
+            public void success(MyResponse totalResponse, Response response) {
+                if (response.getStatus() == 200) {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    onLoginSuccess();
+                                    // onLoginFailed();
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
+                } else {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    //onLoginSuccess();
+                                    onLoginFailed();
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
+                }
+            }
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 2000);
+            @Override
+            public void failure(RetrofitError error) {
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                // On complete call either onLoginSuccess or onLoginFailed
+                                //onLoginSuccess();
+                                onLoginFailed();
+                                progressDialog.dismiss();
+                            }
+                        }, 500);
+            }
+        });
+
+
     }
 
 
@@ -87,7 +139,6 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
                 // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
                 this.finish();

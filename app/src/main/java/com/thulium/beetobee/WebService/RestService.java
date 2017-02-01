@@ -1,4 +1,4 @@
-package com.thulium.beetobee;
+package com.thulium.beetobee.WebService;
 
 import retrofit.RestAdapter;
 
@@ -8,9 +8,10 @@ import retrofit.RestAdapter;
 
 public class RestService {
 
-    private static final String URL = "http://10.0.2.2:9001";
+    private static final String URL = "https://www.beetobee.fr:8443";
     private retrofit.RestAdapter restAdapter;
-    private InstituteService apiService;
+    private RequeteService apiService;
+
 
     public RestService()
     {
@@ -19,9 +20,9 @@ public class RestService {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
-        apiService = restAdapter.create(InstituteService.class);
+        apiService = restAdapter.create(RequeteService.class);
     }
 
-    public InstituteService getService() { return apiService; }
+    public RequeteService getService() { return apiService; }
 
 }

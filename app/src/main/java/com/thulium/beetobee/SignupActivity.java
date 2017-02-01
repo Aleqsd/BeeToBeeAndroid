@@ -11,20 +11,35 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.thulium.beetobee.WebService.MyResponse;
+import com.thulium.beetobee.WebService.RestService;
+import com.thulium.beetobee.WebService.UserRegister;
+
 import butterknife.ButterKnife;
 import butterknife.Bind;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
-    @Bind(R.id.input_firstName) EditText _firstNameText;
-    @Bind(R.id.input_lastName) EditText _lastNameText;
-    @Bind(R.id.input_email) EditText _emailText;
-    @Bind(R.id.input_reEnterEmail) EditText _reEnterEmail;
-    @Bind(R.id.input_password) EditText _passwordText;
-    @Bind(R.id.input_reEnterPassword) EditText _reEnterPasswordText;
-    @Bind(R.id.btn_signup) Button _signupButton;
-    @Bind(R.id.link_login) TextView _loginLink;
+    @Bind(R.id.input_firstName)
+    EditText _firstNameText;
+    @Bind(R.id.input_lastName)
+    EditText _lastNameText;
+    @Bind(R.id.input_email)
+    EditText _emailText;
+    @Bind(R.id.input_reEnterEmail)
+    EditText _reEnterEmail;
+    @Bind(R.id.input_password)
+    EditText _passwordText;
+    @Bind(R.id.input_reEnterPassword)
+    EditText _reEnterPasswordText;
+    @Bind(R.id.btn_signup)
+    Button _signupButton;
+    @Bind(R.id.link_login)
+    TextView _loginLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,9 +58,8 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
-                Intent intent = new Intent(getApplicationContext(),LaunchActivity.class);
+                Intent intent = new Intent(getApplicationContext(), LaunchActivity.class);
                 startActivity(intent);
-                finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
@@ -74,25 +88,62 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
 
-        // TODO: Implement your own signup logic here.
+        UserRegister ourUser = new UserRegister(firstName, lastName, email, password);
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        RestService restService = new RestService();
+        restService.getService().addStudent(ourUser, new Callback<UserRegister>() {
+            @Override
+            public void success(UserRegister ourUser, Response response) {
+                if (response.getStatus() == 200) {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    onSignupSuccess();
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
+                } else {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    //onLoginSuccess();
+                                    onSignupFailed();
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                // On complete call either onLoginSuccess or onLoginFailed
+                                //onLoginSuccess();
+                                onSignupFailed();
+                                progressDialog.dismiss();
+                            }
+                        }, 500);
+            }
+        });
+
+
     }
 
 
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
-        finish();
+        Toast.makeText(getBaseContext(), "Account Created", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getApplicationContext(), LaunchActivity.class);
+        // TODO: REAL TODO : Passer les valeurs email et passsword et préremplir (email et password en public variables)
+        //intent.putExtra("email",email);
+        //intent.putExtra("password",password);
+        startActivity(intent);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
     public void onSignupFailed() {
@@ -118,7 +169,7 @@ public class SignupActivity extends AppCompatActivity {
             _firstNameText.setError(null);
         }
 
-        if (lastName.isEmpty() || lastName.length() < 2  || lastName.length() > 30) {
+        if (lastName.isEmpty() || lastName.length() < 2 || lastName.length() > 30) {
             _lastNameText.setError(getString(R.string.between2and30char));
             valid = false;
         } else {

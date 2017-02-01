@@ -1,9 +1,18 @@
-package com.thulium.beetobee;
+package com.thulium.beetobee.WebService;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.thulium.beetobee.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -22,12 +31,14 @@ public class TestProfile extends AppCompatActivity {
 
 
         RestService restService = new RestService();
-        restService.getService().getStudentById(1,new Callback<Student>() {
+        restService.getService().getStudentById(1,new Callback<MyResponse>() {
             @Override
-            public void success(Student student, Response responde) {
-                text1.setText(String.valueOf(student.Age));
-                text2.setText(student.Name);
-                text3.setText(student.Email);
+            public void success(MyResponse totalResponse, Response response) {
+
+                text1.setText(totalResponse.getUser().getFirstname());
+                text2.setText(totalResponse.getUser().getLastname());
+                text3.setText(totalResponse.getUser().getEmail());
+
             }
 
             @Override
@@ -35,5 +46,6 @@ public class TestProfile extends AppCompatActivity {
                 Toast.makeText(TestProfile.this, error.getMessage().toString(),Toast.LENGTH_LONG);
             }
         });
+
     }
 }

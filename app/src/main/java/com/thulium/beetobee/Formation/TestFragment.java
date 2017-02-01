@@ -1,4 +1,4 @@
-package com.thulium.beetobee;
+package com.thulium.beetobee.Formation;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,6 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.thulium.beetobee.R;
+
+import java.util.ArrayList;
 
 
 /**
@@ -64,8 +69,46 @@ public class TestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        // if extending Activity
+        //setContentView(R.layout.activity_main);
+
+
+
         return inflater.inflate(R.layout.fragment_test, container, false);
     }
+
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        // 1. pass context and data to the custom adapter
+        MyAdapter adapter = new MyAdapter(this.getContext(), generateData());
+
+        // if extending Activity 2. Get ListView from activity_main.xml
+        ListView listView = (ListView) getView().findViewById(R.id.listeFormation);
+
+        // 3. setListAdapter
+        listView.setAdapter(adapter);
+    }
+
+    private ArrayList<Formation> generateData(){
+        ArrayList<Formation> models = new ArrayList<Formation>();
+        models.add(new Formation(R.drawable.badge,"Menu Item 1","1"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Menu Item 2","2"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
+
+
+        return models;
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
