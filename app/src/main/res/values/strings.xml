@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">BeeToBee</string>
+    <string name="app_name">BeeToBee</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -7,6 +7,7 @@
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
     <string name="password">Password</string>
+    <string name="email">Email</string>
     <string name="reenterEmail">Re-enter Email</string>
     <string name="reenterPassword">Re-enter Password</string>
     <string name="createAccount">Create Account</string>
@@ -16,12 +17,12 @@
     <string name="enterValidEmail">Enter a valid email address</string>
     <string name="between4and16char">Between 4 and 16 alphanumeric characters</string>
     <string name="signup">Signup</string>
-    <string name="creatingAccount">Creating Account...</string>
+    <string name="creatingAccount">Creating Account&#8230;</string>
     <string name="atLeast2Characters">\"At least 2 characters\"</string>
     <string name="emailDoNotMatch">Email do not match</string>
     <string name="passwordDoNotMatch">Passwords do not match</string>
     <string name="between2and30char">Between 2 and 30 alphanumeric characters</string>
-    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_profile" translatable="false">Profile</string>
     <string name="large_text" translatable="false">
         "Material is the metaphor.\n\n"
 
@@ -111,9 +112,9 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="loremIpsum" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-    <string name="title_activity_profile_edit">activity_profile_edit</string>
-    <string name="title_activity_login_test">Sign in</string>
+    <string name="loremIpsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="title_activity_profile_edit" translatable="false">activity_profile_edit</string>
+    <string name="title_activity_login_test" translatable="false">Sign in</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -127,12 +128,16 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_main2" translatable="false">Main2Activity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="title_activity_base">BaseActivity</string>
-    <string name="title_activity_test_profile">TestProfile</string>
+    <string name="title_activity_base" translatable="false">BaseActivity</string>
+    <string name="title_activity_test_profile" translatable="false">TestProfile</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="title_activity_scrolling" translatable="false">ScrollingActivity</string>
+    <string name="LoremIpsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nec consectetur orci, vitae pulvinar ligula. Quisque finibus dolor dui, vitae consequat quam tincidunt vel. Mauris non dapibus nulla. Praesent non sagittis massa. Donec tellus odio, tincidunt eget aliquet, congue vel sapien. In mi ex, faucibus at risus a, ornare porta ipsum. Morbi vestibulum est massa, vitae pretium erat maximus non. Vivamus malesuada eros sit amet nisi aliquet, non efficitur nisi ullamcorper. Praesent nunc odio, rhoncus ac purus et, porta mattis libero. Nulla interdum augue in tortor semper malesuada. Aliquam et tortor ullamcorper, fringilla odio eu, tristique quam. Ut ut accumsan lacus, id facilisis orci. Nunc finibus sapien porttitor libero posuere, id sollicitudin est consectetur. Duis quis mauris quis magna dapibus lobortis sed ut lectus. Vestibulum vel sodales ex. Aliquam volutpat finibus facilisis. Suspendisse nec viverra enim, tempus pulvinar risus. Quisque rhoncus lacus id sem facilisis, vitae consequat purus venenatis. Proin sed gravida mauris, in scelerisque dui. Sed vehicula neque id orci ornare venenatis. Ut libero justo, vestibulum eget varius eget, pharetra a ante. Mauris lobortis lectus eget malesuada tincidunt. Aenean id risus non odio tristique sagittis eget ut turpis. Aliquam convallis vehicula mi eget ultricies. Donec vulputate elit id interdum tincidunt. Donec massa tellus, luctus non facilisis sagittis, facilisis et nibh. Vestibulum finibus tempor justo, non maximus nibh tincidunt eu. Aliquam ut orci tincidunt, feugiat velit eu, laoreet dolor. Pellentesque id nibh ut tortor semper aliquam. Sed rutrum diam a leo posuere porttitor. Donec sem nibh, suscipit et egestas ac, laoreet et urna. Morbi neque leo, bibendum sed porttitor sit amet, pellentesque nec diam. Integer malesuada leo nec auctor gravida. Mauris blandit, diam consequat ultrices lobortis, mi mauris aliquam arcu, sed tincidunt metus risus id libero. Etiam libero dui, ornare non volutpat ut, eleifend vitae diam. Duis auctor ultrices lacus, et laoreet dui volutpat vel. Aliquam erat volutpat. Ut pharetra, mi ac fringilla volutpat, ligula magna pretium leo, ut aliquam nunc turpis iaculis dolor. Pellentesque egestas tortor sit amet quam convallis sodales. Vestibulum maximus tempus justo, luctus molestie turpis convallis id. Mauris sagittis bibendum auctor. Sed tempor non ligula sit amet sagittis. Nunc id dignissim dolor, quis scelerisque ex. Donec vestibulum viverra ipsum id accumsan. Vestibulum quis vehicula felis. Nunc in consectetur lectus. Fusce imperdiet ligula ut convallis vestibulum. Fusce nec nisl id neque luctus congue. Quisque semper eget lectus a facilisis. Cras pulvinar ex sed efficitur consequat. Donec nec tincidunt mauris, sit amet feugiat nisl. Vestibulum facilisis ultrices malesuada. Suspendisse quis tempor dolor, eu interdum dolor. Proin fringilla luctus lorem eget placerat. Praesent feugiat velit mi, volutpat tristique elit elementum nec. Phasellus justo velit, vulputate cursus commodo sit amet, elementum accumsan justo. Sed gravida luctus elementum. In hac habitasse platea dictumst. Vivamus at cursus tellus. Mauris diam felis, rhoncus a condimentum nec, scelerisque a quam. Duis ac lobortis nulla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec condimentum pretium eros vitae porttitor. Vivamus ut arcu erat. Nullam gravida, nisl imperdiet finibus congue, magna odio hendrerit ante, a commodo sapien dui vel risus. Nunc eu felis gravida, sodales magna quis, suscipit quam. Curabitur blandit mauris massa, ac pellentesque tortor gravida vitae.</string>
+    <string name="test">TEST</string>
+    <string name="ErrorTab">Tab selected à 1 est null</string>
 </resources>

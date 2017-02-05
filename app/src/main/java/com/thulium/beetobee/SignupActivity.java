@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.thulium.beetobee.WebService.MyResponse;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.UserRegister;
 
@@ -40,6 +39,9 @@ public class SignupActivity extends AppCompatActivity {
     Button _signupButton;
     @Bind(R.id.link_login)
     TextView _loginLink;
+
+    public String email;
+    public String password;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,10 +85,8 @@ public class SignupActivity extends AppCompatActivity {
 
         String firstName = _firstNameText.getText().toString();
         String lastName = _lastNameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String reEnterEmail = _reEnterEmail.getText().toString();
-        String password = _passwordText.getText().toString();
-        String reEnterPassword = _reEnterPasswordText.getText().toString();
+        email = _emailText.getText().toString();
+        password = _passwordText.getText().toString();
 
         UserRegister ourUser = new UserRegister(firstName, lastName, email, password);
 
@@ -139,9 +139,8 @@ public class SignupActivity extends AppCompatActivity {
         setResult(RESULT_OK, null);
         Toast.makeText(getBaseContext(), "Account Created", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(), LaunchActivity.class);
-        // TODO: REAL TODO : Passer les valeurs email et passsword et préremplir (email et password en public variables)
-        //intent.putExtra("email",email);
-        //intent.putExtra("password",password);
+        intent.putExtra("email", email);
+        intent.putExtra("password", password);
         startActivity(intent);
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }

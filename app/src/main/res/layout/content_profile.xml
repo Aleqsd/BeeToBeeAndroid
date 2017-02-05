@@ -1,57 +1,61 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/primary_dark"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/test"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primary_dark"
-            android:theme="@style/AppTheme.Dark"
-            android:minHeight="?attr/actionBarSize"
-            android:id="@+id/toolbar2" />
-
         <View
-            android:id="@+id/leBas"
+            android:id="@+id/leHaut3"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/leHaut"
-            android:background="@color/primary" />
+            android:layout_height="70dp"
+            android:background="@color/primary_darker"
+            android:layout_alignParentStart="true" />
 
         <View
             android:id="@+id/leHaut"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@color/primary_darker"
-            android:layout_below="@+id/toolbar2"
-            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/leHaut3"
             android:layout_alignParentStart="true" />
+
+        <View
+            android:id="@+id/leHaut2"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/primary"
+            android:layout_below="@+id/leHaut"
+            android:layout_alignParentStart="true" />
+
+        <ScrollView
+            android:id="@+id/leBas"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/leHaut2"
+            android:background="@color/primary" >
+
+            <TextView
+                android:text="@string/LoremIpsum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView" />
+        </ScrollView>
 
         <RelativeLayout
             android:id="@+id/info"
             android:layout_width="231dp"
             android:layout_height="136dp"
-            android:layout_marginLeft="23dp"
             android:adjustViewBounds="true"
             android:layout_marginStart="23dp"
-            android:layout_below="@+id/toolbar2"
-            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/leHaut3"
             android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true">
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/avatar"
+                android:layout_toEndOf="@+id/avatar"
                 android:text="Alexandre DO-O ALMEIDA"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
@@ -61,9 +65,9 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textView1"
+                android:layout_alignStart="@+id/textView1"
                 android:layout_below="@+id/textView1"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:text="Android / iOS Developer"
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />
@@ -80,13 +84,14 @@
                 android:id="@id/avatar"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="15dp"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
         </RelativeLayout>
 
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
 
-    </RelativeLayout>
-
-
-</FrameLayout>
+</RelativeLayout>

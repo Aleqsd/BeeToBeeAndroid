@@ -14,7 +14,9 @@
         android:paddingRight="24dp"
         android:weightSum="1">
 
-        <ImageView android:src="@drawable/beetobeelogo"
+        <ImageView
+            android:src="@drawable/beetobeelogo"
+            android:contentDescription="Logo BeeToBee"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_marginBottom="24dp"
@@ -59,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="Email" />
+                android:hint="@string/email" />
         </android.support.design.widget.TextInputLayout>
 
 
@@ -118,7 +120,7 @@
             android:layout_marginBottom="24dp"
             android:text="@string/alreadyMember"
             android:gravity="center"
-            android:textSize="16dip"/>
+            android:textSize="16sp"/>
 
     </LinearLayout>
 </ScrollView>

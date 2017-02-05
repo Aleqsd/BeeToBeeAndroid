@@ -2,12 +2,15 @@ package com.thulium.beetobee;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,15 +22,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.thulium.beetobee.Formation.Test2Fragment;
 import com.thulium.beetobee.Formation.TestFragment;
 
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = "BaseActivity";
+
     private Fragment fragment = null;
     private Class fragmentClass;
-    private ImageView avatar;
+    private TabLayout tabLayout;
 
 
     @Override
@@ -35,11 +42,16 @@ public class BaseActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hView = navigationView.getHeaderView(0);
 
+        TextView email = (TextView) hView.findViewById(R.id.email);
+        TextView firstname = (TextView) hView.findViewById(R.id.firstname);
+        ImageView avatar = (ImageView) hView.findViewById(R.id.avatar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
         tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
         tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
@@ -85,10 +97,6 @@ public class BaseActivity extends AppCompatActivity
         });
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-        View hView = navigationView.getHeaderView(0);
-        avatar = (ImageView) hView.findViewById(R.id.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,10 +110,27 @@ public class BaseActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
-        drawer.openDrawer(Gravity.LEFT);
+        //drawer.openDrawer(Gravity.START);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String lf = extras.getString("loggedFirstname");
+            String le = extras.getString("loggedEmail");
+            firstname.setText(lf);
+            email.setText(le);
+            //The key argument here must match that used in the other activity
+        }
+
+        new Handler().postDelayed(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        tabLayout.getTabAt(1).select();
+                    }
+                }, 100);
     }
 
     @Override

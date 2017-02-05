@@ -2,11 +2,13 @@ package com.thulium.beetobee.Formation;
 
 /**
  * Created by Alex on 01/02/2017.
+ * Adapter pour formation list
  */
 
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +33,8 @@ public class MyAdapter extends ArrayAdapter<Formation> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         // 1. Create inflater
         LayoutInflater inflater = (LayoutInflater) context
@@ -39,7 +42,7 @@ public class MyAdapter extends ArrayAdapter<Formation> {
 
         // 2. Get rowView from inflater
 
-        View rowView = null;
+        View rowView;
         rowView = inflater.inflate(R.layout.formation, parent, false);
 
         // 3. Get icon,title & counter views from the rowView

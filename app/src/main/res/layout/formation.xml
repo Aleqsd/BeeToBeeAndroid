@@ -7,9 +7,10 @@
     <!-- icon -->
     <ImageView
         android:id="@+id/item_icon"
+        android:contentDescription="Icone de formation"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
@@ -21,22 +22,24 @@
         android:id="@+id/item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/item_icon"
+        android:layout_toEndOf="@+id/item_icon"
         android:layout_alignBaseline="@+id/item_counter"
-        android:textSize="18dp"/>
+        android:textSize="18sp"/>
 
     <!-- counter -->
     <TextView
         android:id="@+id/item_counter"
-        android:layout_width="32dp"
+        android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/primary_darker"
         android:gravity="center"
         android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp" />
 
 </RelativeLayout>

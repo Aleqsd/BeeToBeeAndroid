@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +28,7 @@ public class TestFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String TAG = "TestFragment";
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,8 +58,8 @@ public class TestFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -82,29 +80,35 @@ public class TestFragment extends Fragment {
         // 1. pass context and data to the custom adapter
         MyAdapter adapter = new MyAdapter(this.getContext(), generateData());
 
+        ListView listView = null;
         // if extending Activity 2. Get ListView from activity_main.xml
-        ListView listView = (ListView) getView().findViewById(R.id.listeFormation);
+        try {
+            listView = (ListView) getView().findViewById(R.id.listeFormation);
+        } catch (NullPointerException e) {
+            Log.e(TAG,"ListView null");
+        }
 
         // 3. setListAdapter
         listView.setAdapter(adapter);
     }
 
     private ArrayList<Formation> generateData(){
-        ArrayList<Formation> models = new ArrayList<Formation>();
-        models.add(new Formation(R.drawable.badge,"Menu Item 1","1"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Menu Item 2","2"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-        models.add(new Formation(R.drawable.avatar,"Menu Item 3","3"));
-
+        ArrayList<Formation> models = new ArrayList<>();
+        models.add(new Formation(R.drawable.avatar,"Android","Alex"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Guignol","Guillaume"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Web","Nicolas"));
+        models.add(new Formation(R.drawable.beetobeelogo,"iOS","Ludovic"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Design","TmoT"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Design","Julie"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Design","Alexia"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Web","Simon"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Web","Léo"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Formation 10","1"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Formation 11","2"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Formation 12","3"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Formation 13","4"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Formation 14","5"));
+        models.add(new Formation(R.drawable.beetobeelogo,"Formation 15","6"));
 
         return models;
     }

@@ -9,13 +9,12 @@ import retrofit.RestAdapter;
 public class RestService {
 
     private static final String URL = "https://www.beetobee.fr:8443";
-    private retrofit.RestAdapter restAdapter;
     private RequeteService apiService;
 
 
     public RestService()
     {
-        restAdapter = new retrofit.RestAdapter.Builder()
+        RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(URL)
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();

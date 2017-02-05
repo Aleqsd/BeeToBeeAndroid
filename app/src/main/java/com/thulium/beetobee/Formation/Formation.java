@@ -2,6 +2,7 @@ package com.thulium.beetobee.Formation;
 
 /**
  * Created by Alex on 01/02/2017.
+ * Classe Formation de l'objet servant à remplir la liste des formations
  */
 
 public class Formation {

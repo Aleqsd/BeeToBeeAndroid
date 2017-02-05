@@ -18,11 +18,9 @@
             android:name=".BaseActivity"
             android:label="@string/title_activity_base"
             android:theme="@style/AppTheme.Dark" />
-        <activity android:name=".TestList" />
-        <activity android:name=".WebService.TestProfile" />
         <activity
             android:name=".ProfileActivity"
-            android:label="@string/title_activity_profile"/>
+            android:label="@string/title_activity_profile" />
         <activity android:name=".LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

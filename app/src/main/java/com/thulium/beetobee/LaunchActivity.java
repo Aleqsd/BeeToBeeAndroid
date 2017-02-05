@@ -2,6 +2,8 @@ package com.thulium.beetobee;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +15,6 @@ import android.widget.Toast;
 
 import com.thulium.beetobee.WebService.MyResponse;
 import com.thulium.beetobee.WebService.RestService;
-import com.thulium.beetobee.WebService.TestProfile;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,11 +37,26 @@ public class LaunchActivity extends AppCompatActivity {
     @Bind(R.id.testTextView)
     TextView _testTextView;
 
+    public String loggedFirstname;
+    public String loggedEmail;
+    public String auth_token;
+    public int auth_id = 0;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
         ButterKnife.bind(this);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String email = extras.getString("email");
+            String password = extras.getString("password");
+            _emailText.setText(email);
+            _passwordText.setText(password);
+            //The key argument here must match that used in the other activity
+        }
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -62,13 +78,68 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        _testTextView.setOnClickListener(new View.OnClickListener() {
+        getToken();
+
+        if (auth_token != null && !(auth_token.equals("")) && auth_id != 0)
+            loginWithToken();
+    }
+
+    public void loginWithToken() {
+
+        Log.d(TAG, "LoginWithToken");
+
+        _loginButton.setEnabled(false);
+
+        final ProgressDialog progressDialog = new ProgressDialog(LaunchActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
+
+        RestService restService = new RestService();
+        restService.getService().loginWithToken(auth_id, auth_token, new Callback<MyResponse>() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), TestProfile.class);
-                startActivity(intent);
+            public void success(final MyResponse totalResponse, Response response) {
+                if (response.getStatus() == 200) {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    Log.d(TAG, totalResponse.getResponse());
+                                    loggedEmail = totalResponse.getUser().getEmail();
+                                    loggedFirstname = totalResponse.getUser().getFirstname();
+                                    onLoginSuccess();
+                                    // onLoginFailed();
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
+                } else {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    //onLoginSuccess();
+                                    onLoginFailed();
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                // On complete call either onLoginSuccess or onLoginFailed
+                                //onLoginSuccess();
+                                onLoginFailed();
+                                progressDialog.dismiss();
+                            }
+                        }, 500);
             }
         });
+
     }
 
     public void login() {
@@ -93,12 +164,17 @@ public class LaunchActivity extends AppCompatActivity {
         RestService restService = new RestService();
         restService.getService().login(email, password, new Callback<MyResponse>() {
             @Override
-            public void success(MyResponse totalResponse, Response response) {
+            public void success(final MyResponse totalResponse, Response response) {
                 if (response.getStatus() == 200) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
                                     // On complete call either onLoginSuccess or onLoginFailed
+                                    loggedEmail = totalResponse.getUser().getEmail();
+                                    loggedFirstname = totalResponse.getUser().getFirstname();
+                                    auth_token = totalResponse.getUser().getAccess_token();
+                                    auth_id = totalResponse.getUser().getId();
+                                    setToken();
                                     onLoginSuccess();
                                     // onLoginFailed();
                                     progressDialog.dismiss();
@@ -152,9 +228,30 @@ public class LaunchActivity extends AppCompatActivity {
         finish();
     }
 
+    public void setToken() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("access_token", auth_token);
+        editor.putInt("id", auth_id);
+        editor.apply();
+        Log.d(TAG, "register token : " + auth_token + " id : " + auth_id);
+    }
+
+    public void getToken() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        auth_token = settings.getString("access_token", "");
+        auth_id = settings.getInt("id", 0);
+        Log.d(TAG, "registered token : " + auth_token + " registered id : " + auth_id);
+    }
+
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
         Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+        if ((loggedEmail != null) && (loggedFirstname != null)) {
+            intent.putExtra("loggedEmail", loggedEmail);
+            intent.putExtra("loggedFirstname", loggedFirstname);
+        }
+
         startActivity(intent);
         finish();
     }
