@@ -165,31 +165,35 @@ public class LaunchActivity extends AppCompatActivity {
         restService.getService().login(email, password, new Callback<MyResponse>() {
             @Override
             public void success(final MyResponse totalResponse, Response response) {
-                if (response.getStatus() == 200) {
+                if (totalResponse.getCode() == 200) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
-                                    // On complete call either onLoginSuccess or onLoginFailed
                                     loggedEmail = totalResponse.getUser().getEmail();
                                     loggedFirstname = totalResponse.getUser().getFirstname();
                                     auth_token = totalResponse.getUser().getAccess_token();
                                     auth_id = totalResponse.getUser().getId();
                                     setToken();
                                     onLoginSuccess();
-                                    // onLoginFailed();
                                     progressDialog.dismiss();
                                 }
-                            }, 500);
+                            }, 100);
+                } else if (totalResponse.getCode() == 503){
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    onWrongLogin();
+                                    progressDialog.dismiss();
+                                }
+                            }, 100);
                 } else {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
-                                    // On complete call either onLoginSuccess or onLoginFailed
-                                    //onLoginSuccess();
                                     onLoginFailed();
                                     progressDialog.dismiss();
                                 }
-                            }, 500);
+                            }, 100);
                 }
             }
 
@@ -198,16 +202,20 @@ public class LaunchActivity extends AppCompatActivity {
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
-                                // On complete call either onLoginSuccess or onLoginFailed
-                                //onLoginSuccess();
+
                                 onLoginFailed();
                                 progressDialog.dismiss();
                             }
-                        }, 500);
+                        }, 100);
             }
         });
 
 
+    }
+
+    private void onWrongLogin() {
+        Toast.makeText(getBaseContext(), getString(R.string.wrongInfos), Toast.LENGTH_LONG).show();
+        _loginButton.setEnabled(true);
     }
 
 

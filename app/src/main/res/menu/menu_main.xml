@@ -1,4 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Test"
+        android:id="@+id/action_test"
+        android:showAsAction="always" />
     <item android:id="@+id/action_edit"
     android:icon="@drawable/hamburger"
     android:title="Disconnect"

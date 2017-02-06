@@ -39,5 +39,5 @@ public interface RequeteService {
 
     //i.e. http://localhost/api/institute/Students/1
     @POST("/users/register")
-    void addStudent(@Body UserRegister user, Callback<UserRegister> callback);
+    void addStudent(@Body UserRegister user, Callback<MyResponse> callback);
 }

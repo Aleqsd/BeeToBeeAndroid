@@ -5,12 +5,15 @@ package com.thulium.beetobee.WebService;
  */
 
 public class MyResponse {
+    public int code;
     public String response;
     public User user;
 
     public String getResponse() {
         return response;
     }
+
+    public int getCode() { return code; }
 
     public User getUser() {
         return user;

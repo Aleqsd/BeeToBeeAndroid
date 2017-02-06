@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.thulium.beetobee.WebService.MyResponse;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.UserRegister;
 
@@ -91,15 +92,25 @@ public class SignupActivity extends AppCompatActivity {
         UserRegister ourUser = new UserRegister(firstName, lastName, email, password);
 
         RestService restService = new RestService();
-        restService.getService().addStudent(ourUser, new Callback<UserRegister>() {
+        restService.getService().addStudent(ourUser, new Callback<MyResponse>() {
             @Override
-            public void success(UserRegister ourUser, Response response) {
-                if (response.getStatus() == 200) {
+            public void success(MyResponse totalResponse, Response response) {
+                if ((totalResponse.getCode() == 200)) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
                                     // On complete call either onLoginSuccess or onLoginFailed
                                     onSignupSuccess();
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
+                } else if (totalResponse.getCode() == 500){
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    //onLoginSuccess();
+                                    emailAlreadyUsed();
                                     progressDialog.dismiss();
                                 }
                             }, 500);
@@ -146,7 +157,13 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Connexion au serveur impossible", Toast.LENGTH_LONG).show();
+
+        _signupButton.setEnabled(true);
+    }
+
+    public void emailAlreadyUsed() {
+        Toast.makeText(getBaseContext(), "Email déjà utilisée", Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }
