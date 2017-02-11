@@ -2,6 +2,7 @@ package com.thulium.beetobee.WebService;
 
 /**
  * Created by Alex on 01/02/2017.
+ * This Class is used to receive the response from an registration
  */
 
 public class UserRegister {

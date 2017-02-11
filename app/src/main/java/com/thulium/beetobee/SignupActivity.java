@@ -11,15 +11,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.thulium.beetobee.WebService.MyResponse;
+import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.UserRegister;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
@@ -91,25 +91,29 @@ public class SignupActivity extends AppCompatActivity {
 
         UserRegister ourUser = new UserRegister(firstName, lastName, email, password);
 
-        RestService restService = new RestService();
-        restService.getService().addStudent(ourUser, new Callback<MyResponse>() {
+
+        final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
+        Call<UserRegister> call = requeteService.addStudent(ourUser);
+        call.enqueue(new Callback<UserRegister>() {
             @Override
-            public void success(MyResponse totalResponse, Response response) {
-                if ((totalResponse.getCode() == 200)) {
+            public void onResponse(final Call<UserRegister> call, final Response<UserRegister> response) {
+                if ((response.code() == 200)) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
                                     // On complete call either onLoginSuccess or onLoginFailed
+                                    Log.d(TAG, response.body().getResponse());
                                     onSignupSuccess();
                                     progressDialog.dismiss();
                                 }
                             }, 500);
-                } else if (totalResponse.getCode() == 500){
+                } else if (response.code() == 500){
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
                                     // On complete call either onLoginSuccess or onLoginFailed
                                     //onLoginSuccess();
+                                    Log.d(TAG, response.body().getResponse());
                                     emailAlreadyUsed();
                                     progressDialog.dismiss();
                                 }
@@ -120,28 +124,27 @@ public class SignupActivity extends AppCompatActivity {
                                 public void run() {
                                     // On complete call either onLoginSuccess or onLoginFailed
                                     //onLoginSuccess();
+                                    Log.d(TAG, response.body().getResponse());
                                     onSignupFailed();
                                     progressDialog.dismiss();
                                 }
                             }, 500);
                 }
             }
-
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<UserRegister> call, final Throwable t) {
                 new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                // On complete call either onLoginSuccess or onLoginFailed
-                                //onLoginSuccess();
-                                onSignupFailed();
-                                progressDialog.dismiss();
-                            }
-                        }, 500);
+                    new Runnable() {
+                        public void run() {
+                            // On complete call either onLoginSuccess or onLoginFailed
+                            //onLoginSuccess();
+                            Log.d(TAG, t.getMessage());
+                            onSignupFailed();
+                            progressDialog.dismiss();
+                        }
+                    }, 500);
             }
         });
-
-
     }
 
 

@@ -14,13 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thulium.beetobee.WebService.MyResponse;
+import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
+import com.thulium.beetobee.WebService.User;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Callback;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class LaunchActivity extends AppCompatActivity {
     private static final String TAG = "LaunchActivity";
@@ -96,18 +98,24 @@ public class LaunchActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        RestService restService = new RestService();
-        restService.getService().loginWithToken(auth_id, auth_token, new Callback<MyResponse>() {
+
+        RequeteService requeteService = RestService.getClient().create(RequeteService.class);
+        Call<MyResponse> call2 = requeteService.loginWithToken(auth_id, auth_token);
+        call2.enqueue(new Callback<MyResponse>() {
             @Override
-            public void success(final MyResponse totalResponse, Response response) {
-                if (response.getStatus() == 200) {
+            public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
+                Log.d(TAG, "LoginWithToken, Response code : "+response.code());
+                if (response.code() == 200) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
+                                    MyResponse currentResponse = response.body();
                                     // On complete call either onLoginSuccess or onLoginFailed
-                                    Log.d(TAG, totalResponse.getResponse());
-                                    loggedEmail = totalResponse.getUser().getEmail();
-                                    loggedFirstname = totalResponse.getUser().getFirstname();
+                                    Log.d(TAG, response.message());
+                                    loggedEmail = currentResponse.getUser().getEmail();
+                                    loggedFirstname = currentResponse.getUser().getFirstname();
+                                    Log.d(TAG, response.body().getResponse());
+                                    Log.d(TAG, "LoggedWithToken with : "+loggedEmail+" "+loggedFirstname+" "+auth_token);
                                     onLoginSuccess();
                                     // onLoginFailed();
                                     progressDialog.dismiss();
@@ -119,6 +127,7 @@ public class LaunchActivity extends AppCompatActivity {
                                 public void run() {
                                     // On complete call either onLoginSuccess or onLoginFailed
                                     //onLoginSuccess();
+                                    Log.d(TAG, response.body().getResponse());
                                     onLoginFailed();
                                     progressDialog.dismiss();
                                 }
@@ -127,12 +136,14 @@ public class LaunchActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<MyResponse> call, final Throwable t) {
+                Log.d(TAG, "LoginWithToken failure");
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
                                 // On complete call either onLoginSuccess or onLoginFailed
                                 //onLoginSuccess();
+                                Log.d(TAG, t.getMessage());
                                 onLoginFailed();
                                 progressDialog.dismiss();
                             }
@@ -143,8 +154,6 @@ public class LaunchActivity extends AppCompatActivity {
     }
 
     public void login() {
-        Log.d(TAG, "Login");
-
         if (!validate()) {
             onLoginFailed();
             return;
@@ -161,27 +170,33 @@ public class LaunchActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        RestService restService = new RestService();
-        restService.getService().login(email, password, new Callback<MyResponse>() {
+        RequeteService requeteService = RestService.getClient().create(RequeteService.class);
+        Call<MyResponse> call = requeteService.login(email,password);
+        call.enqueue(new Callback<MyResponse>() {
             @Override
-            public void success(final MyResponse totalResponse, Response response) {
-                if (totalResponse.getCode() == 200) {
+            public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
+                Log.d(TAG, "Login, Response code : "+response.code());
+                if (response.code() == 200) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
-                                    loggedEmail = totalResponse.getUser().getEmail();
-                                    loggedFirstname = totalResponse.getUser().getFirstname();
-                                    auth_token = totalResponse.getUser().getAccess_token();
-                                    auth_id = totalResponse.getUser().getId();
+                                    MyResponse currentResponse = response.body();
+                                    loggedEmail = currentResponse.getUser().getEmail();
+                                    loggedFirstname = currentResponse.getUser().getFirstname();
+                                    auth_token = currentResponse.getUser().getAccess_token();
+                                    auth_id = currentResponse.getUser().getId();
+                                    Log.d(TAG, response.body().getResponse());
+                                    Log.d(TAG, "Logged with : "+loggedEmail+" "+loggedFirstname+" "+auth_token);
                                     setToken();
                                     onLoginSuccess();
                                     progressDialog.dismiss();
                                 }
                             }, 100);
-                } else if (totalResponse.getCode() == 503){
+                } else if (response.code() == 503) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
+                                    Log.d(TAG, response.body().getResponse());
                                     onWrongLogin();
                                     progressDialog.dismiss();
                                 }
@@ -190,6 +205,7 @@ public class LaunchActivity extends AppCompatActivity {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
+                                    Log.d(TAG, response.body().getResponse());
                                     onLoginFailed();
                                     progressDialog.dismiss();
                                 }
@@ -198,19 +214,18 @@ public class LaunchActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<MyResponse> call, final Throwable t) {
+                Log.d(TAG, "Login failure");
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
-
+                                Log.d(TAG, t.getMessage());
                                 onLoginFailed();
                                 progressDialog.dismiss();
                             }
                         }, 100);
             }
         });
-
-
     }
 
     private void onWrongLogin() {

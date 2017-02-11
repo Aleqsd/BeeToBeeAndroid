@@ -51,6 +51,11 @@ public class ProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+    }
+
+    private Uri outputFileUri;
+
+    private void openImageIntent() {
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
@@ -78,13 +83,8 @@ public class ProfileActivity extends AppCompatActivity {
                 // result of the request.
             }
         }
-    }
 
-    private Uri outputFileUri;
-
-    private void openImageIntent() {
-
-// Determine Uri of camera image to save.
+        // Determine Uri of camera image to save.
         final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
         root.mkdirs();
         final String fname = "img_"+ System.currentTimeMillis() + ".jpg";
