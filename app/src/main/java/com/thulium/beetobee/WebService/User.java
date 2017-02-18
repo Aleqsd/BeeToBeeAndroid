@@ -1,12 +1,13 @@
 package com.thulium.beetobee.WebService;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  * Created by Alex on 01/02/2017.
  */
 
-public class User {
+public class User implements Serializable{
     public int id;
     public String email;
     public String firstname;
@@ -172,5 +173,29 @@ public class User {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", password='" + password + '\'' +
+                ", birthDate=" + birthDate +
+                ", profilePicture='" + profilePicture + '\'' +
+                ", skypeId='" + skypeId + '\'' +
+                ", city='" + city + '\'' +
+                ", university='" + university + '\'' +
+                ", education='" + education + '\'' +
+                ", level=" + level +
+                ", fbLink='" + fbLink + '\'' +
+                ", twitterLink='" + twitterLink + '\'' +
+                ", access_token='" + access_token + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", roleId=" + roleId +
+                '}';
     }
 }

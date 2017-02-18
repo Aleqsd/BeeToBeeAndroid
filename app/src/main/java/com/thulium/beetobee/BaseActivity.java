@@ -1,8 +1,12 @@
 package com.thulium.beetobee;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,6 +30,7 @@ import android.widget.TextView;
 
 import com.thulium.beetobee.Formation.Test2Fragment;
 import com.thulium.beetobee.Formation.TestFragment;
+import com.thulium.beetobee.WebService.User;
 
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +40,8 @@ public class BaseActivity extends AppCompatActivity
     private Fragment fragment = null;
     private Class fragmentClass;
     private TabLayout tabLayout;
+    private String profile_picture_path;
+    public User user;
 
 
     @Override
@@ -55,6 +62,15 @@ public class BaseActivity extends AppCompatActivity
         tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
         tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
         tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (settings.contains("profile_picture"))
+        {
+            profile_picture_path = settings.getString("profile_picture",null);
+            Bitmap myBitmap = BitmapFactory.decodeFile(profile_picture_path);
+            avatar.setImageBitmap(myBitmap);
+            Log.d(TAG, "Profile picture set");
+        }
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -101,8 +117,8 @@ public class BaseActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                intent.putExtra("user",user);
                 startActivity(intent);
-
             }
         });
 
@@ -115,12 +131,10 @@ public class BaseActivity extends AppCompatActivity
         //drawer.openDrawer(Gravity.START);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String lf = extras.getString("loggedFirstname");
-            String le = extras.getString("loggedEmail");
-            firstname.setText(lf);
-            email.setText(le);
+        user = (User) getIntent().getSerializableExtra("user");
+        if (user != null) {
+            firstname.setText(user.getFirstname());
+            email.setText(user.getEmail());
             //The key argument here must match that used in the other activity
         }
 

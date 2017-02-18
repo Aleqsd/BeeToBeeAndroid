@@ -7,8 +7,6 @@ package com.thulium.beetobee.WebService;
 
 public class UserRegister {
 
-    public int code = 0;
-    public String response;
     public String email;
     public String firstname;
     public String lastname;
@@ -21,13 +19,6 @@ public class UserRegister {
         this.password = password;
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public String getResponse() {
-        return response;
-    }
 
     public String getEmail() {
         return email;

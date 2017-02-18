@@ -1,9 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Test"
-        android:id="@+id/action_test"
+    <item android:title="Edit"
+        android:id="@+id/action_edit"
+        android:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_disconnect"
+        android:title="Disconnect"
         android:showAsAction="always" />
-    <item android:id="@+id/action_edit"
-    android:icon="@drawable/hamburger"
-    android:title="Disconnect"
-    android:showAsAction="always"></item>
 </menu>

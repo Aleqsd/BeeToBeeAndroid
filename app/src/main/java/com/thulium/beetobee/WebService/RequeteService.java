@@ -12,6 +12,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * Created by Alex on 17/01/2017.
@@ -26,12 +27,18 @@ public interface RequeteService {
     @GET("users/{id}")
     Call<MyResponse> loginWithToken(@Path("id") Integer id, @Query("access_token") String access_token);
 
-    @POST("/users/register")
-    Call<UserRegister> addStudent(@Body UserRegister user);
+    @POST("/users/signup")
+    Call<MyResponse> addStudent(@Body UserRegister user);
+
+    @POST("users/update/{id}")
+    Call<MyResponse> updateUser(@Body User user, @Path("id") Integer id, @Query("access_token") String access_token);
 
     @Multipart
-    @POST("upload")
-    Call<ResponseBody> upload(@Part MultipartBody.Part file);
+    @POST("users/{id}/picture")
+    Call<ResponseBody> uploadProfilePicture(@Path("id") Integer id,@Part MultipartBody.Part file, @Query("access_token") String access_token);
+
+    @GET
+    Call<ResponseBody> downloadProfilePicture(@Url String fileUrl);
 
     //i.e. http://localhost/api/institute/Students
     //@GET("/institute/Students")

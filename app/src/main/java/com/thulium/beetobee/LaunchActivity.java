@@ -18,13 +18,15 @@ import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.User;
 
+import java.io.Serializable;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Callback;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class LaunchActivity extends AppCompatActivity {
+public class LaunchActivity extends AppCompatActivity implements Serializable {
     private static final String TAG = "LaunchActivity";
     private static final int REQUEST_SIGNUP = 0;
 
@@ -43,6 +45,7 @@ public class LaunchActivity extends AppCompatActivity {
     public String loggedEmail;
     public String auth_token;
     public int auth_id = 0;
+    public User user;
 
 
     @Override
@@ -105,13 +108,14 @@ public class LaunchActivity extends AppCompatActivity {
             @Override
             public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
                 Log.d(TAG, "LoginWithToken, Response code : "+response.code());
-                if (response.code() == 200) {
+                if (response.isSuccessful()) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
                                     MyResponse currentResponse = response.body();
                                     // On complete call either onLoginSuccess or onLoginFailed
                                     Log.d(TAG, response.message());
+                                    user = currentResponse.getUser();
                                     loggedEmail = currentResponse.getUser().getEmail();
                                     loggedFirstname = currentResponse.getUser().getFirstname();
                                     Log.d(TAG, response.body().getResponse());
@@ -176,11 +180,12 @@ public class LaunchActivity extends AppCompatActivity {
             @Override
             public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
                 Log.d(TAG, "Login, Response code : "+response.code());
-                if (response.code() == 200) {
+                if (response.isSuccessful()) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
                                     MyResponse currentResponse = response.body();
+                                    user = currentResponse.getUser();
                                     loggedEmail = currentResponse.getUser().getEmail();
                                     loggedFirstname = currentResponse.getUser().getFirstname();
                                     auth_token = currentResponse.getUser().getAccess_token();
@@ -189,15 +194,6 @@ public class LaunchActivity extends AppCompatActivity {
                                     Log.d(TAG, "Logged with : "+loggedEmail+" "+loggedFirstname+" "+auth_token);
                                     setToken();
                                     onLoginSuccess();
-                                    progressDialog.dismiss();
-                                }
-                            }, 100);
-                } else if (response.code() == 503) {
-                    new android.os.Handler().postDelayed(
-                            new Runnable() {
-                                public void run() {
-                                    Log.d(TAG, response.body().getResponse());
-                                    onWrongLogin();
                                     progressDialog.dismiss();
                                 }
                             }, 100);
@@ -270,10 +266,11 @@ public class LaunchActivity extends AppCompatActivity {
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
         Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
-        if ((loggedEmail != null) && (loggedFirstname != null)) {
-            intent.putExtra("loggedEmail", loggedEmail);
-            intent.putExtra("loggedFirstname", loggedFirstname);
+        if (user != null) {
+            intent.putExtra("user", user);
+            Log.d(TAG, user.toString());
         }
+
 
         startActivity(intent);
         finish();

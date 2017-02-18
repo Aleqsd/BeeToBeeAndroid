@@ -11,12 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.thulium.beetobee.WebService.MyResponse;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.UserRegister;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -91,30 +93,18 @@ public class SignupActivity extends AppCompatActivity {
 
         UserRegister ourUser = new UserRegister(firstName, lastName, email, password);
 
-
         final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
-        Call<UserRegister> call = requeteService.addStudent(ourUser);
-        call.enqueue(new Callback<UserRegister>() {
+        Call<MyResponse> call = requeteService.addStudent(ourUser);
+        call.enqueue(new Callback<MyResponse>() {
             @Override
-            public void onResponse(final Call<UserRegister> call, final Response<UserRegister> response) {
-                if ((response.code() == 200)) {
+            public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
+                if (response.isSuccessful()) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
                                     // On complete call either onLoginSuccess or onLoginFailed
-                                    Log.d(TAG, response.body().getResponse());
+                                    Log.d(TAG, response.message());
                                     onSignupSuccess();
-                                    progressDialog.dismiss();
-                                }
-                            }, 500);
-                } else if (response.code() == 500){
-                    new android.os.Handler().postDelayed(
-                            new Runnable() {
-                                public void run() {
-                                    // On complete call either onLoginSuccess or onLoginFailed
-                                    //onLoginSuccess();
-                                    Log.d(TAG, response.body().getResponse());
-                                    emailAlreadyUsed();
                                     progressDialog.dismiss();
                                 }
                             }, 500);
@@ -124,7 +114,7 @@ public class SignupActivity extends AppCompatActivity {
                                 public void run() {
                                     // On complete call either onLoginSuccess or onLoginFailed
                                     //onLoginSuccess();
-                                    Log.d(TAG, response.body().getResponse());
+                                    Log.d(TAG, response.message());
                                     onSignupFailed();
                                     progressDialog.dismiss();
                                 }
@@ -132,7 +122,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(Call<UserRegister> call, final Throwable t) {
+            public void onFailure(Call<MyResponse> call, final Throwable t) {
                 new android.os.Handler().postDelayed(
                     new Runnable() {
                         public void run() {
