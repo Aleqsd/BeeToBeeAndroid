@@ -31,7 +31,7 @@ public interface RequeteService {
     Call<MyResponse> addStudent(@Body UserRegister user);
 
     @POST("users/update/{id}")
-    Call<MyResponse> updateUser(@Body User user, @Path("id") Integer id, @Query("access_token") String access_token);
+    Call<MyResponse> updateUser(@Body UserUpdate user, @Path("id") Integer id, @Query("access_token") String access_token);
 
     @Multipart
     @POST("users/{id}/picture")

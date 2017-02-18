@@ -44,6 +44,8 @@ import com.thulium.beetobee.WebService.MyResponse;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.User;
+import com.thulium.beetobee.WebService.UserRegister;
+import com.thulium.beetobee.WebService.UserUpdate;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -273,14 +275,15 @@ public class ProfileActivity extends AppCompatActivity {
         Button button = (Button) view.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                user.setFirstName(editText.getText().toString());
                 final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this, R.style.AppTheme_Dark_Dialog);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setMessage("Updating...");
                 progressDialog.show();
 
+                UserUpdate ourUser = new UserUpdate();
+                ourUser.setFirstname(editText.getText().toString());
                 RequeteService requeteService = RestService.getClient().create(RequeteService.class);
-                Call<MyResponse> call = requeteService.updateUser(user, user.getId(), user.getAccess_token());
+                Call<MyResponse> call = requeteService.updateUser(ourUser, user.getId(), user.getAccess_token());
                 call.enqueue(new Callback<MyResponse>() {
                     @Override
                     public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
@@ -289,6 +292,7 @@ public class ProfileActivity extends AppCompatActivity {
                             new Handler().postDelayed(
                                     new Runnable() {
                                         public void run() {
+                                            // ToDo si update, mettre à jour les infos de l'user dans les UI, faire l'update
                                             Log.d(TAG, response.raw().request().toString());
                                             Log.d(TAG, response.message());
                                             Snackbar snackbar = Snackbar.make(view, "Update successful", Snackbar.LENGTH_LONG);

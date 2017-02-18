@@ -19,6 +19,10 @@ public class UserRegister {
         this.password = password;
     }
 
+    public UserRegister(String firstname){
+        this.firstname = firstname;
+    }
+
 
     public String getEmail() {
         return email;
