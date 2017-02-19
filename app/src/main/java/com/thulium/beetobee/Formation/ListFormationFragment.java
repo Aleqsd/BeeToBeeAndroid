@@ -1,26 +1,22 @@
 package com.thulium.beetobee.Formation;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.thulium.beetobee.FormationActivity;
 import com.thulium.beetobee.R;
-import com.thulium.beetobee.WebService.RequeteService;
-import com.thulium.beetobee.WebService.RestService;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.GregorianCalendar;
 
 
 /**
@@ -38,7 +34,7 @@ public class ListFormationFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "ListFormationFragment";
     private Formation formation;
-    private static final String FORMATION_KEY = "describable_key";
+    private static final String FORMATION_KEY = "formation";
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,21 +54,15 @@ public class ListFormationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String mParam1 = getArguments().getString(ARG_PARAM1);
-            String mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         // if extending Activity
         //setContentView(R.layout.activity_main);
         formation = (Formation) getArguments().getSerializable(FORMATION_KEY);
-
 
         return inflater.inflate(R.layout.list_formation_fragment, container, false);
     }
@@ -91,14 +81,25 @@ public class ListFormationFragment extends Fragment {
 
         // 3. setListAdapter
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
+                // ToDo Faire des animations stylées
+                Formation selectedFormation = (Formation) adapter.getItemAtPosition(position);
+                Intent intent = new Intent(getContext(), FormationActivity.class);
+                intent.putExtra("formation", selectedFormation);
+                startActivity(intent);
+            }
+        });
     }
 
     private ArrayList<Formation> generateData(){
 
         final ArrayList<Formation> models = new ArrayList<>();
 
-        models.add(new Formation(formation.getTitle(),formation.getDescription()));
-        models.add(new Formation("BeeToBee","Alex"));
+        if (formation != null)
+            models.add(new Formation(formation.getTitle(),formation.getDescription()));
+        models.add(new Formation(10,"BeeToBee","Formation Android",120,new java.sql.Date(new GregorianCalendar(2017, 9, 3).getTimeInMillis()),"16h","A10",5));
         models.add(new Formation("Guignol","Guillaume"));
         models.add(new Formation("Web","Nicolas"));
         models.add(new Formation("iOS","Ludovic"));

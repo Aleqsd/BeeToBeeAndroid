@@ -228,7 +228,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                //ToDo faire une logique validate() comme avec SignupActivity avant updateUser
                 UserUpdate ourUser = new UserUpdate();
                 ourUser.setFirstname(editText.getText().toString());
                 RequeteService requeteService = RestService.getClient().create(RequeteService.class);

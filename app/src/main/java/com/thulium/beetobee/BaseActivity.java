@@ -52,7 +52,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = "BaseActivity";
     private Fragment fragment = null;
     private Class fragmentClass;
-    private TabLayout tabLayout;
     public Formation formation;
     public User user;
     public ImageView avatar;
@@ -80,11 +79,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             //The key argument here must match that used in the other activity
         }
 
-        // Create the tabs
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
 
         // Getting the formation for the FormationList Fragment
         final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
@@ -95,6 +89,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 if (response.isSuccessful()) {
                     formation = response.body().getFormation();
                     Log.d(TAG, response.message());
+
+                    FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+                    fragment = ListFormationFragment.newInstance(formation);
+                    tx.replace(R.id.content_base, fragment);
+                    tx.commit();
                 } else {
                     Log.d(TAG, response.message());
                 }
@@ -138,7 +137,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             });
         }
 
-        // TabListener
+        /* TabListener
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -171,7 +170,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             public void onTabReselected(TabLayout.Tab tab) {
             // called when a tab is reselected
             }
-        });
+        });*/
 
         // Avatar leading to profile page, passing the user object
         // ToDo Ergonomy : More obvious way to accessing Profile page ?
@@ -191,19 +190,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         //drawer.openDrawer(Gravity.START);
         navigationView.setNavigationItemSelectedListener(this);
-
-        // Poping on tab2
-        new Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            tabLayout.getTabAt(1).select();
-                        } catch (NullPointerException e) {
-                            Log.e(TAG, "error");
-                        }
-                    }
-                }, 100);
     }
 
     @Override
@@ -243,31 +229,36 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-
-
+        
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            fragmentClass = ListFormationFragment.class;
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            fragment = ListFormationFragment.newInstance(formation);
+            tx.replace(R.id.content_base, fragment);
+            tx.commit();
         } else if (id == R.id.nav_gallery) {
-            fragmentClass = ListFormationFragment.class;
+            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
         } else if (id == R.id.nav_manage) {
-            fragmentClass = ListFormationFragment.class;
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            fragment = ListFormationFragment.newInstance(formation);
+            tx.replace(R.id.content_base, fragment);
+            tx.commit();
         } else if (id == R.id.nav_share) {
-            fragmentClass = ListFormationFragment.class;
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            fragment = ListFormationFragment.newInstance(formation);
+            tx.replace(R.id.content_base, fragment);
+            tx.commit();
         } else if (id == R.id.nav_send) {
-            fragmentClass = ListFormationFragment.class;
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            fragment = CreateFormationFragment.newInstance();
+            tx.replace(R.id.content_base, fragment);
+            tx.commit();
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_base, fragment).commit();
         // Set action bar title
         setTitle(item.getTitle());
 

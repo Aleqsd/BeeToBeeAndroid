@@ -32,10 +32,6 @@ import retrofit2.Response;
  */
 public class CreateFormationFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "CreateFormationFragment";
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private EditText editTextTitle;
     private EditText editTextDescription;
 
@@ -49,27 +45,15 @@ public class CreateFormationFragment extends Fragment implements View.OnClickLis
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment CreateFormationFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static CreateFormationFragment newInstance(String param1, String param2) {
-        CreateFormationFragment fragment = new CreateFormationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static CreateFormationFragment newInstance() {
+        return new CreateFormationFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String mParam1 = getArguments().getString(ARG_PARAM1);
-            String mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
