@@ -1,8 +1,10 @@
 package com.thulium.beetobee.Formation;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,47 +13,46 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.thulium.beetobee.R;
+import com.thulium.beetobee.WebService.RequeteService;
+import com.thulium.beetobee.WebService.RestService;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TestFragment.OnFragmentInteractionListener} interface
+ * {@link ListFormationFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TestFragment#newInstance} factory method to
+ * Use the {@link ListFormationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TestFragment extends Fragment {
+public class ListFormationFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String TAG = "TestFragment";
+    private static final String TAG = "ListFormationFragment";
+    private Formation formation;
+    private static final String FORMATION_KEY = "describable_key";
 
     private OnFragmentInteractionListener mListener;
 
-    public TestFragment() {
-        // Required empty public constructor
+    public static ListFormationFragment newInstance(Formation formation) {
+        ListFormationFragment fragment = new ListFormationFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(FORMATION_KEY, formation);
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TestFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TestFragment newInstance(String param1, String param2) {
-        TestFragment fragment = new TestFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public ListFormationFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -70,10 +71,10 @@ public class TestFragment extends Fragment {
 
         // if extending Activity
         //setContentView(R.layout.activity_main);
+        formation = (Formation) getArguments().getSerializable(FORMATION_KEY);
 
 
-
-        return inflater.inflate(R.layout.fragment_test, container, false);
+        return inflater.inflate(R.layout.list_formation_fragment, container, false);
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -93,23 +94,25 @@ public class TestFragment extends Fragment {
     }
 
     private ArrayList<Formation> generateData(){
-        ArrayList<Formation> models = new ArrayList<>();
-        models.add(new Formation(R.drawable.avatar,"Android","Alex"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Guignol","Guillaume"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Web","Nicolas"));
-        models.add(new Formation(R.drawable.beetobeelogo,"iOS","Ludovic"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Design","TmoT"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Design","Julie"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Design","Alexia"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Web","Simon"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Web","Léo"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Formation 10","1"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Formation 11","2"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Formation 12","3"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Formation 13","4"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Formation 14","5"));
-        models.add(new Formation(R.drawable.beetobeelogo,"Formation 15","6"));
 
+        final ArrayList<Formation> models = new ArrayList<>();
+
+        models.add(new Formation(formation.getTitle(),formation.getDescription()));
+        models.add(new Formation("BeeToBee","Alex"));
+        models.add(new Formation("Guignol","Guillaume"));
+        models.add(new Formation("Web","Nicolas"));
+        models.add(new Formation("iOS","Ludovic"));
+        models.add(new Formation("Design","TmoT"));
+        models.add(new Formation("Design","Julie"));
+        models.add(new Formation("Design","Alexia"));
+        models.add(new Formation("Web","Simon"));
+        models.add(new Formation("Web","Léo"));
+        models.add(new Formation("Formation 10","1"));
+        models.add(new Formation("Formation 11","2"));
+        models.add(new Formation("Formation 12","3"));
+        models.add(new Formation("Formation 13","4"));
+        models.add(new Formation("Formation 14","5"));
+        models.add(new Formation("Formation 15","6"));
         return models;
     }
 

@@ -51,9 +51,12 @@ public class MyAdapter extends ArrayAdapter<Formation> {
         TextView counterView = (TextView) rowView.findViewById(R.id.item_counter);
 
         // 4. Set the text for textView
-        imgView.setImageResource(modelsArrayList.get(position).getIcon());
+        if (modelsArrayList.get(position).getTitle().equals("BeeToBee"))
+            imgView.setImageResource(R.drawable.beetobeelogo);
+        else
+            imgView.setImageResource(R.drawable.badge);
         titleView.setText(modelsArrayList.get(position).getTitle());
-        counterView.setText(modelsArrayList.get(position).getCounter());
+        counterView.setText(modelsArrayList.get(position).getDescription());
 
         // 5. retrn rowView
         return rowView;

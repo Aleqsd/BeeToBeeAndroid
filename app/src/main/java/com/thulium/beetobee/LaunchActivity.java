@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -67,6 +68,7 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
 
             @Override
             public void onClick(View v) {
+                hideSoftKeyBoard();
                 login();
             }
         });
@@ -124,7 +126,7 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
                                     // onLoginFailed();
                                     progressDialog.dismiss();
                                 }
-                            }, 500);
+                            }, 100);
                 } else {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
@@ -135,7 +137,7 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
                                     onLoginFailed();
                                     progressDialog.dismiss();
                                 }
-                            }, 500);
+                            }, 100);
                 }
             }
 
@@ -151,7 +153,7 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
                                 onLoginFailed();
                                 progressDialog.dismiss();
                             }
-                        }, 500);
+                        }, 100);
             }
         });
 
@@ -202,7 +204,7 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
                             new Runnable() {
                                 public void run() {
                                     Log.d(TAG, response.body().getResponse());
-                                    onLoginFailed();
+                                    onWrongLogin();
                                     progressDialog.dismiss();
                                 }
                             }, 100);
@@ -234,7 +236,7 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-                // TODO: Implement successful signup logic here
+                // Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
                 this.finish();
             }
@@ -271,7 +273,6 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
             Log.d(TAG, user.toString());
         }
 
-
         startActivity(intent);
         finish();
     }
@@ -303,6 +304,14 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
         }
 
         return valid;
+    }
+
+    private void hideSoftKeyBoard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+        if(imm.isAcceptingText()) { // verify if the soft keyboard is open
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }
 

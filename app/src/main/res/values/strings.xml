@@ -141,4 +141,9 @@
     <string name="test">TEST</string>
     <string name="ErrorTab">Tab select at 1 is null</string>
     <string name="wrongInfos">Email or password incorrect</string>
+    <string name="name">Name</string>
+    <string name="button">Button</string>
+    <string name="description">Description</string>
+    <string name="submit">Submit</string>
+    <string name="formationtitle">FormationTitle</string>
 </resources>

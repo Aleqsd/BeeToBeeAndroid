@@ -1,5 +1,8 @@
 package com.thulium.beetobee.WebService;
 
+import com.thulium.beetobee.Formation.Formation;
+import com.thulium.beetobee.Formation.MyFormationResponse;
+
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -21,13 +24,13 @@ import retrofit2.http.Url;
 
 public interface RequeteService {
 
-    @GET("/signin")
+    @GET("signin")
     Call<MyResponse> login(@Query("email") String email, @Query("password") String password);
 
     @GET("users/{id}")
     Call<MyResponse> loginWithToken(@Path("id") Integer id, @Query("access_token") String access_token);
 
-    @POST("/users/signup")
+    @POST("users/signup")
     Call<MyResponse> addStudent(@Body UserRegister user);
 
     @POST("users/update/{id}")
@@ -40,18 +43,9 @@ public interface RequeteService {
     @GET
     Call<ResponseBody> downloadProfilePicture(@Url String fileUrl);
 
-    //i.e. http://localhost/api/institute/Students
-    //@GET("/institute/Students")
-    //public void getStudent(Callback<List<User>> callback);
+    @GET("formations/{id}")
+    Call<MyFormationResponse> getFormation(@Path("id") Integer id);
 
-    //@GET("/users/{id}")
-    //void getStudentById(@Path("id") Integer id, Callback<MyResponse> callback);
-
-    //i.e. http://localhost/api/institute/Students/1
-    //@DELETE("/institute/Students/{id}")
-    //public void deleteStudentById(@Path("id") Integer id, Callback<User> callback);
-
-    //i.e. http://localhost/api/institute/Students/1
-    //@PUT("/institute/Students/{id}")
-    //public void updateStudentById(@Path("id") Integer id, @Body User user, Callback<User> callback);
+    @POST("formations/add")
+    Call<MyFormationResponse> addFormation(@Body Formation formation);
 }

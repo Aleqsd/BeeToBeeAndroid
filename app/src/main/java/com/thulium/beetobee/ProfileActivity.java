@@ -20,6 +20,7 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -35,28 +36,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
+
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.thulium.beetobee.WebService.MyResponse;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.User;
-import com.thulium.beetobee.WebService.UserRegister;
 import com.thulium.beetobee.WebService.UserUpdate;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,19 +68,35 @@ public class ProfileActivity extends AppCompatActivity {
     public CircularImageView avatar;
     public User user;
     private String profile_picture_path;
+    private FloatingActionButton floatingActionButton;
+    private Toolbar myToolbar;
+    public TextView name;
+    public TextView desc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        myToolbar.setTitle("Profile");
         setSupportActionBar(myToolbar);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        name = (TextView) findViewById(R.id.textView1);
+        desc = (TextView) findViewById(R.id.textView2);
         avatar = (CircularImageView) findViewById(R.id.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                openImageIntent();
+                if (floatingActionButton.getVisibility() == View.VISIBLE)
+                    openImageIntent();
             }
         });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (floatingActionButton.getVisibility() == View.VISIBLE)
+                    openImageIntent();
+            }
+        });;
 
 
         if (getSupportActionBar() != null) {
@@ -103,16 +111,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        if (settings.contains("profile_picture"))
-        {
-            profile_picture_path = settings.getString("profile_picture",null);
+        if (settings.contains("profile_picture")) {
+            profile_picture_path = settings.getString("profile_picture", null);
             Bitmap myBitmap = BitmapFactory.decodeFile(profile_picture_path);
             avatar.setImageBitmap(myBitmap);
             Log.d(TAG, "Profile picture set");
-        }
-        else
-        {
-            final String url = "https://api.beetobee.fr/users/"+user.getId()+"/picture/dl";
+        } else {
+            final String url = "https://api.beetobee.fr/users/" + user.getId() + "/picture/dl";
             final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
 
             new AsyncTask<Void, Long, Void>() {
@@ -124,7 +129,7 @@ public class ProfileActivity extends AppCompatActivity {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.isSuccessful()) {
                                 Log.d(TAG, "server contacted and has file");
-
+                                //ToDo Limite à la taille du fichier ou au nombre d'upload par heure ou minutes ?
                                 boolean writtenToDisk = writeResponseBodyToDisk(response.body());
 
                                 Log.d(TAG, "file download was a success? " + writtenToDisk);
@@ -144,126 +149,71 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private boolean writeResponseBodyToDisk(ResponseBody body) {
-        try {
-            File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + "img_" + System.currentTimeMillis() + ".jpg");
-
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-            final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this, R.style.AppTheme_Dark_Dialog);
-            progressDialog.setIndeterminate(false);
-            progressDialog.setTitle("Downloading Profile Picture");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setCancelable(true);
-            progressDialog.setMax(100);
-            progressDialog.show();
-
-            try {
-                byte[] fileReader = new byte[4096];
-
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
-
-                inputStream = body.byteStream();
-                outputStream = new FileOutputStream(futureStudioIconFile);
-
-                while (true) {
-                    int read = inputStream.read(fileReader);
-
-                    if (read == -1) {
-                        break;
-                    }
-
-                    outputStream.write(fileReader, 0, read);
-
-                    fileSizeDownloaded += read;
-
-                    long progress = fileSizeDownloaded/fileSize;
-                    progressDialog.setProgress((int) progress);
-                    //Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
-                }
-
-                outputStream.flush();
-                progressDialog.dismiss();
-
-                if(futureStudioIconFile.exists()){
-                    Bitmap myBitmap = BitmapFactory.decodeFile(futureStudioIconFile.getAbsolutePath());
-                    avatar.setImageBitmap(myBitmap);
-                    Log.d(TAG, "profil_picture created in Shared Preference : "+futureStudioIconFile.getAbsolutePath());
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("profile_picture", futureStudioIconFile.getAbsolutePath());
-                    editor.apply();
-                }
-
-
-                return true;
-            } catch (IOException e) {
-                return false;
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            }
-        } catch (IOException e) {
-            return false;
-        }
-
-    }
-
     private void setProfileInfos() {
         LinearLayout leBas = (LinearLayout) findViewById(R.id.leBas);
 
-        View view = LayoutInflater.from(this).inflate(R.layout.profile_infos, null);
-        TextView textView1 = (TextView) view.findViewById(R.id.textView);
-        TextView textView3 = (TextView) view.findViewById(R.id.textView3);
-        TextView textView4 = (TextView) view.findViewById(R.id.textView4);
-        TextView textView5 = (TextView) view.findViewById(R.id.textView5);
-        TextView textView6 = (TextView) view.findViewById(R.id.textView6);
-        TextView textView7 = (TextView) view.findViewById(R.id.textView7);
-        TextView textView8 = (TextView) view.findViewById(R.id.textView8);
-        TextView textView9 = (TextView) view.findViewById(R.id.textView9);
-        TextView textView10 = (TextView) view.findViewById(R.id.textView10);
-        TextView textView11 = (TextView) view.findViewById(R.id.textView11);
-        TextView textView12 = (TextView) view.findViewById(R.id.textView12);
-        TextView textView13 = (TextView) view.findViewById(R.id.textView13);
-        TextView textView14 = (TextView) view.findViewById(R.id.textView14);
-        TextView textView15 = (TextView) view.findViewById(R.id.textView15);
-        TextView textView16 = (TextView) view.findViewById(R.id.textView16);
-        TextView textView17 = (TextView) view.findViewById(R.id.textView17);
-        TextView textView18 = (TextView) view.findViewById(R.id.textView18);
+        if (getIntent().getExtras().containsKey("update")) {
+            Snackbar snackbar = Snackbar.make(leBas, "Update successful", Snackbar.LENGTH_LONG);
+            snackbar.show();
+            user = (User) getIntent().getSerializableExtra("user");
+        }
 
-        textView1.setText(user.getEmail());
-        textView3.setText(user.getFirstname());
-        textView4.setText(user.getLastname());
-        textView5.setText(user.getPassword());
+        View viewBas = LayoutInflater.from(this).inflate(R.layout.profile_infos, null);
+
+        TextView textView = (TextView) viewBas.findViewById(R.id.textView);
+        TextView textView3 = (TextView) viewBas.findViewById(R.id.textView3);
+        TextView textView4 = (TextView) viewBas.findViewById(R.id.textView4);
+        TextView textView5 = (TextView) viewBas.findViewById(R.id.textView5);
+        TextView textView6 = (TextView) viewBas.findViewById(R.id.textView6);
+        TextView textView7 = (TextView) viewBas.findViewById(R.id.textView7);
+        TextView textView8 = (TextView) viewBas.findViewById(R.id.textView8);
+        TextView textView9 = (TextView) viewBas.findViewById(R.id.textView9);
+        TextView textView10 = (TextView) viewBas.findViewById(R.id.textView10);
+        TextView textView11 = (TextView) viewBas.findViewById(R.id.textView11);
+        TextView textView12 = (TextView) viewBas.findViewById(R.id.textView12);
+        TextView textView13 = (TextView) viewBas.findViewById(R.id.textView13);
+        TextView textView14 = (TextView) viewBas.findViewById(R.id.textView14);
+        TextView textView15 = (TextView) viewBas.findViewById(R.id.textView15);
+        TextView textView16 = (TextView) viewBas.findViewById(R.id.textView16);
+        TextView textView17 = (TextView) viewBas.findViewById(R.id.textView17);
+        TextView textView18 = (TextView) viewBas.findViewById(R.id.textView18);
+
+        name.setText(user.getFirstname()+" "+user.getLastname());
+        desc.setText("Ynov Student");
+
+        textView.setText("Email : " + user.getEmail());
+        textView3.setText("Firstname : " + user.getFirstname());
+        textView4.setText("Lastname : " + user.getLastname());
+        textView5.setText("Password : " + user.getPassword());
         if (user.getBirthDate() != null)
-            textView6.setText(user.getBirthDate().toString());
-        textView7.setText(user.getProfilePicture());
-        textView8.setText(user.getSkypeId());
-        textView9.setText(user.getCity());
-        textView10.setText(user.getUniversity());
-        textView11.setText(user.getEducation());
+            textView6.setText("Birthdate : " + user.getBirthDate().toString());
+        else
+            textView6.setText("Birthdate : null");
+        textView7.setText("ProfilePicture : " + user.getProfilePicture());
+        textView8.setText("Skype : " + user.getSkypeId());
+        textView9.setText("City : " + user.getCity());
+        textView10.setText("University : " + user.getUniversity());
+        textView11.setText("Education : " + user.getEducation());
         if (user.getLevel() != 0)
-            textView12.setText(user.getLevel());
-        textView13.setText(user.getFbLink());
-        textView14.setText(user.getTwitterLink());
-        textView15.setText(user.getAccess_token());
-        textView16.setText(user.getCreatedAt());
-        textView17.setText(user.getUpdatedAt());
+            textView12.setText("Level : " + user.getLevel());
+        else
+            textView12.setText("Level : null");
+        textView13.setText("Facebook : " + user.getFbLink());
+        textView14.setText("Twitter : " + user.getTwitterLink());
+        textView15.setText("AccessToken : " + user.getAccess_token());
+        textView16.setText("CreatedAt : " + user.getCreatedAt());
+        textView17.setText("UpdatedAt : " + user.getUpdatedAt());
         if (user.getRoleId() != 0)
-            textView18.setText(user.getRoleId());
+            textView18.setText("Role : " + user.getRoleId());
+        else
+            textView18.setText("Role : null");
 
-        leBas.addView(view);
-
+        leBas.addView(viewBas);
     }
 
     private void setProfileEditableInfos() {
+        floatingActionButton.setVisibility(View.VISIBLE);
+        myToolbar.setTitle("Edit Profile");
         LinearLayout leBas = (LinearLayout) findViewById(R.id.leBas);
 
         leBas.removeAllViews();
@@ -273,12 +223,11 @@ public class ProfileActivity extends AppCompatActivity {
         editText.setText(user.getFirstname());
 
         Button button = (Button) view.findViewById(R.id.button);
+
+        leBas.addView(view);
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this, R.style.AppTheme_Dark_Dialog);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setMessage("Updating...");
-                progressDialog.show();
 
                 UserUpdate ourUser = new UserUpdate();
                 ourUser.setFirstname(editText.getText().toString());
@@ -289,48 +238,30 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
                         Log.d(TAG, "Update, Response code : " + response.code());
                         if (response.isSuccessful()) {
-                            new Handler().postDelayed(
-                                    new Runnable() {
-                                        public void run() {
-                                            // ToDo si update, mettre à jour les infos de l'user dans les UI, faire l'update
-                                            Log.d(TAG, response.raw().request().toString());
-                                            Log.d(TAG, response.message());
-                                            Snackbar snackbar = Snackbar.make(view, "Update successful", Snackbar.LENGTH_LONG);
-                                            snackbar.show();
-                                            progressDialog.dismiss();
-                                        }
-                                    }, 100);
+                            Log.d(TAG, response.raw().request().toString());
+                            Log.d(TAG, response.message());
+                            user = response.body().getUser();
+                            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                            intent.putExtra("user", user);
+                            intent.putExtra("update", "ok");
+                            startActivity(intent);
+                            floatingActionButton.setVisibility(View.INVISIBLE);
                         } else {
-                            new Handler().postDelayed(
-                                    new Runnable() {
-                                        public void run() {
-                                            Log.d(TAG, response.message());
-                                            Snackbar snackbar = Snackbar.make(view, "Update failed", Snackbar.LENGTH_LONG);
-                                            snackbar.show();
-                                            progressDialog.dismiss();
-                                        }
-                                    }, 100);
+                            Log.d(TAG, response.message());
+                            Snackbar snackbar = Snackbar.make(view, "Update failed", Snackbar.LENGTH_LONG);
+                            snackbar.show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<MyResponse> call, final Throwable t) {
-                        Log.d(TAG, "Login failure");
-                        new Handler().postDelayed(
-                                new Runnable() {
-                                    public void run() {
-                                        Log.d(TAG, t.getMessage());
-                                        Snackbar snackbar = Snackbar.make(view, "Update failed", Snackbar.LENGTH_LONG);
-                                        snackbar.show();
-                                        progressDialog.dismiss();
-                                    }
-                                }, 100);
+                        Log.d(TAG, t.getMessage());
+                        Snackbar snackbar = Snackbar.make(view, "Update failed", Snackbar.LENGTH_LONG);
+                        snackbar.show();
                     }
                 });
             }
         });
-
-        leBas.addView(view);
     }
 
     private void openImageIntent() {
@@ -429,11 +360,18 @@ public class ProfileActivity extends AppCompatActivity {
                 MultipartBody.Part body = MultipartBody.Part.createFormData("picture", image.getName(), requestFile);
 
                 RequeteService requeteService = RestService.getClient().create(RequeteService.class);
-                Call<ResponseBody> call = requeteService.uploadProfilePicture(user.getId(), body,user.getAccess_token());
+                Call<ResponseBody> call = requeteService.uploadProfilePicture(user.getId(), body, user.getAccess_token());
+                final File finalImage = image;
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Log.v("Upload", "success");
+                        SavePictureInPreferences(finalImage.getAbsolutePath());
+                        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                        intent.putExtra("user", user);
+                        intent.putExtra("update", "ok");
+                        startActivity(intent);
+                        floatingActionButton.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
@@ -486,10 +424,7 @@ public class ProfileActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_disconnect) {
             Log.d("Profile", "Disconnect pressed");
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = settings.edit();
-            editor.clear();
-            editor.apply();
+            ClearPreferences();
             Intent intent = new Intent(getApplicationContext(), LaunchActivity.class);
             startActivity(intent);
             finish();
@@ -508,9 +443,100 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.d("CDA", "onBackPressed Called");
-        Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
-        intent.putExtra("user", user);
-        startActivity(intent);
+        if (floatingActionButton.getVisibility() == View.VISIBLE){
+            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
+        }
+        else
+        {
+            Log.d("CDA", "onBackPressed Called");
+            Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
+        }
+    }
+
+    private boolean writeResponseBodyToDisk(ResponseBody body) {
+        try {
+            File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + "img_" + System.currentTimeMillis() + ".jpg");
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this, R.style.AppTheme_Dark_Dialog);
+            progressDialog.setIndeterminate(false);
+            progressDialog.setTitle("Downloading Profile Picture");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setCancelable(true);
+            progressDialog.setMax(100);
+            progressDialog.show();
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(futureStudioIconFile);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    long progress = fileSizeDownloaded / fileSize;
+                    progressDialog.setProgress((int) progress);
+                    //Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+                progressDialog.dismiss();
+
+                if (futureStudioIconFile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(futureStudioIconFile.getAbsolutePath());
+                    avatar.setImageBitmap(myBitmap);
+                    SavePictureInPreferences(futureStudioIconFile.getAbsolutePath());
+                }
+
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+
+    }
+
+    private void SavePictureInPreferences(String profile_picture_path) {
+        Log.d(TAG, "profil_picture created in Shared Preference : " + profile_picture_path);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("profile_picture", profile_picture_path);
+        editor.apply();
+    }
+
+    private void ClearPreferences() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.clear();
+        editor.apply();
     }
 }
