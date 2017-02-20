@@ -1,5 +1,6 @@
 package com.thulium.beetobee;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,7 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class LaunchActivity extends AppCompatActivity implements Serializable {
+public class LaunchActivity extends Activity implements Serializable {
     private static final String TAG = "LaunchActivity";
     private static final int REQUEST_SIGNUP = 0;
 
@@ -39,8 +40,6 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
     Button _loginButton;
     @Bind(R.id.link_signup)
     TextView _signupLink;
-    @Bind(R.id.testTextView)
-    TextView _testTextView;
 
     public String loggedFirstname;
     public String loggedEmail;
@@ -48,6 +47,8 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
     public int auth_id = 0;
     public User user;
 
+    //ToDo Ne jamais envoyer un Json avec mot de passe
+    //ToDo gérer tous les cas où réponse 200 n'est pas une bonne réponse
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -182,7 +183,7 @@ public class LaunchActivity extends AppCompatActivity implements Serializable {
             @Override
             public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
                 Log.d(TAG, "Login, Response code : "+response.code());
-                if (response.isSuccessful()) {
+                if (response.body().getCode() == 200) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {

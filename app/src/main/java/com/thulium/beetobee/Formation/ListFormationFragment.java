@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.thulium.beetobee.FormationActivity;
 import com.thulium.beetobee.R;
 
 import java.util.ArrayList;

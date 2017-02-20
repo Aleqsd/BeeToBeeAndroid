@@ -1,4 +1,4 @@
-package com.thulium.beetobee;
+package com.thulium.beetobee.Formation;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.thulium.beetobee.BaseActivity;
 import com.thulium.beetobee.Formation.Formation;
 import com.thulium.beetobee.R;
 

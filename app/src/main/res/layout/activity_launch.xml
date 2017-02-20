@@ -64,11 +64,5 @@
             android:gravity="center"
             android:textSize="16sp"/>
 
-        <TextView
-            android:text="@string/test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/testTextView" />
-
     </LinearLayout>
 </ScrollView>

@@ -1,4 +1,6 @@
-package com.thulium.beetobee.Formation;
+package com.thulium.beetobee.WebService;
+
+import com.thulium.beetobee.Formation.Formation;
 
 /**
  * Created by Alex on 19/02/2017.

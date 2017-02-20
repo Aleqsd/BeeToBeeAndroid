@@ -21,21 +21,22 @@
         <View
             android:id="@+id/leHaut2"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
             android:background="@color/primary"
             android:layout_below="@+id/leHaut"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/leBas"
+            android:layout_height="match_parent" />
 
-        <LinearLayout
+        <ScrollView
             android:id="@+id/leBas"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/leHaut2"
             android:background="@color/primary"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_below="@+id/info">
 
-        </LinearLayout>
+        </ScrollView>
 
         <RelativeLayout
             android:id="@+id/info"

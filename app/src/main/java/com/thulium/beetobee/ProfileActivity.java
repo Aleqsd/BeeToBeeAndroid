@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
@@ -33,7 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 
@@ -67,7 +66,6 @@ public class ProfileActivity extends AppCompatActivity {
     private Uri outputFileUri;
     public CircularImageView avatar;
     public User user;
-    private String profile_picture_path;
     private FloatingActionButton floatingActionButton;
     private Toolbar myToolbar;
     public TextView name;
@@ -112,7 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (settings.contains("profile_picture")) {
-            profile_picture_path = settings.getString("profile_picture", null);
+            String profile_picture_path = settings.getString("profile_picture", null);
             Bitmap myBitmap = BitmapFactory.decodeFile(profile_picture_path);
             avatar.setImageBitmap(myBitmap);
             Log.d(TAG, "Profile picture set");
@@ -150,7 +148,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setProfileInfos() {
-        LinearLayout leBas = (LinearLayout) findViewById(R.id.leBas);
+        ScrollView leBas = (ScrollView) findViewById(R.id.leBas);
 
         if (getIntent().getExtras().containsKey("update")) {
             Snackbar snackbar = Snackbar.make(leBas, "Update successful", Snackbar.LENGTH_LONG);
@@ -214,15 +212,17 @@ public class ProfileActivity extends AppCompatActivity {
     private void setProfileEditableInfos() {
         floatingActionButton.setVisibility(View.VISIBLE);
         myToolbar.setTitle("Edit Profile");
-        LinearLayout leBas = (LinearLayout) findViewById(R.id.leBas);
+        ScrollView leBas = (ScrollView) findViewById(R.id.leBas);
 
         leBas.removeAllViews();
 
+        // ToDo mettre le nom/mail actuel lorsque clické
         final View view = LayoutInflater.from(this).inflate(R.layout.profile_edit_infos, null);
-        final EditText editText = (EditText) view.findViewById(R.id.editText);
-        editText.setText(user.getFirstname());
+        final EditText profil_email = (EditText) view.findViewById(R.id.profil_email);
+        final EditText profil_firstname = (EditText) view.findViewById(R.id.profil_firstname);
+        final EditText profil_lastname = (EditText) view.findViewById(R.id.profil_lastname);
 
-        Button button = (Button) view.findViewById(R.id.button);
+        Button button = (Button) view.findViewById(R.id.btn_confirm);
 
         leBas.addView(view);
 
@@ -230,7 +230,11 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //ToDo faire une logique validate() comme avec SignupActivity avant updateUser
                 UserUpdate ourUser = new UserUpdate();
-                ourUser.setFirstname(editText.getText().toString());
+
+                ourUser.setFirstname(profil_firstname.getText().toString());
+                ourUser.setLastname(profil_lastname.getText().toString());
+                ourUser.setEmail(profil_email.getText().toString());
+
                 RequeteService requeteService = RestService.getClient().create(RequeteService.class);
                 Call<MyResponse> call = requeteService.updateUser(ourUser, user.getId(), user.getAccess_token());
                 call.enqueue(new Callback<MyResponse>() {
@@ -333,7 +337,8 @@ public class ProfileActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == YOUR_SELECT_PICTURE_REQUEST_CODE) {
                 final boolean isCamera;
-                if (data == null) {
+                File testFile = new File(data.getData().getPath());
+                if (data == null || testFile.exists()) {
                     isCamera = true;
                 } else {
                     final String action = data.getAction();

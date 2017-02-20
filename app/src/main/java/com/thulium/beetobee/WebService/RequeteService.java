@@ -1,9 +1,6 @@
 package com.thulium.beetobee.WebService;
 
 import com.thulium.beetobee.Formation.Formation;
-import com.thulium.beetobee.Formation.MyFormationResponse;
-
-import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;

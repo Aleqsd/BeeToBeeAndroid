@@ -19,7 +19,6 @@ import com.thulium.beetobee.WebService.UserRegister;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
