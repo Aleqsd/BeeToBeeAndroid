@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +39,8 @@ public class LaunchActivity extends Activity implements Serializable {
     Button _loginButton;
     @Bind(R.id.link_signup)
     TextView _signupLink;
+    @Bind(R.id.test)
+    TextView _test;
 
     public String loggedFirstname;
     public String loggedEmail;
@@ -83,6 +84,17 @@ public class LaunchActivity extends Activity implements Serializable {
                 startActivityForResult(intent, REQUEST_SIGNUP);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+            }
+        });
+
+        _test.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Start the Signup activity
+                Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+                startActivityForResult(intent, REQUEST_SIGNUP);
+                finish();
             }
         });
 

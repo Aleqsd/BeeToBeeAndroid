@@ -15,12 +15,18 @@
             android:name=".SignupActivity"
             android:theme="@style/AppTheme.Dark" />
         <activity
+            android:name=".Formation.ListFormationActivity"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".BaseActivity"
             android:label="@string/title_activity_base"
             android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile" />
+        <activity
+            android:name=".Formation.MainActivity"
+            android:label="MainActivity" />
         <activity android:name=".LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -24,7 +24,9 @@ import android.widget.TextView;
 
 import com.thulium.beetobee.Formation.CreateFormationFragment;
 import com.thulium.beetobee.Formation.Formation;
+import com.thulium.beetobee.Formation.ListFormationActivity;
 import com.thulium.beetobee.Formation.ListFormationFragment;
+import com.thulium.beetobee.Formation.MainActivity;
 import com.thulium.beetobee.WebService.MyFormationResponse;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
@@ -90,7 +92,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
                     fragment = ListFormationFragment.newInstance(formation);
                     tx.replace(R.id.content_base, fragment);
-                    tx.commit();
+                    //tx.commit();
                 } else {
                     Log.d(TAG, response.message());
                 }
@@ -230,10 +232,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-            fragment = ListFormationFragment.newInstance(formation);
-            tx.replace(R.id.content_base, fragment);
-            tx.commit();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
             intent.putExtra("user", user);
