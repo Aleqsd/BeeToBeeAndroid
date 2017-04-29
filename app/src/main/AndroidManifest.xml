@@ -15,7 +15,7 @@
             android:name=".SignupActivity"
             android:theme="@style/AppTheme.Dark" />
         <activity
-            android:name=".Formation.ListFormationActivity"
+            android:name=".Old.ListFormationActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".BaseActivity"

@@ -1,4 +1,4 @@
-package com.thulium.beetobee.Formation;
+package com.thulium.beetobee.Old;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.thulium.beetobee.BaseActivity;
+import com.thulium.beetobee.Formation.CarouselEffectTransformer;
+import com.thulium.beetobee.Formation.MyPagerAdapter;
 import com.thulium.beetobee.R;
 
 public class ListFormationActivity extends AppCompatActivity {

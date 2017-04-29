@@ -1,5 +1,6 @@
 package com.thulium.beetobee.Formation;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.Fragment;
@@ -9,7 +10,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -27,24 +31,39 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.thulium.beetobee.BaseActivity;
 import com.thulium.beetobee.R;
+import com.thulium.beetobee.WebService.User;
 
 
 /**
  * Created by xmuSistone on 2016/9/18.
  */
-public class MainActivity extends FragmentActivity {
-
+public class MainActivity extends AppCompatActivity {
+    private Toolbar myToolbar;
     private TextView indicatorTv;
     private View positionView;
+    public User user;
     private ViewPager viewPager;
     private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
-    private final String[] imageArray = {"assets://image1.jpg", "assets://image2.jpg", "assets://image3.jpg", "assets://image4.jpg", "assets://image5.jpg"};
+    private final String[] imageArray = {"assets://image6.png", "assets://image7.png", "assets://image8.png"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myToolbar = (Toolbar) findViewById(R.id.toolbarListeFormation);
+        myToolbar.setTitle("Liste Formation");
+        setSupportActionBar(myToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        user = (User) getIntent().getSerializableExtra("user");
 
         // 1. 沉浸式状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -58,8 +77,6 @@ public class MainActivity extends FragmentActivity {
                         .setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             }
         }
-        positionView = findViewById(R.id.position_view);
-        dealStatusBar(); // 调整状态栏高度
 
         // 2. 初始化ImageLoader
         initImageLoader();
@@ -128,35 +145,6 @@ public class MainActivity extends FragmentActivity {
         indicatorTv.setText(Html.fromHtml("<font color='#12edf0'>" + currentItem + "</font>  /  " + totalNum));
     }
 
-    /**
-     * 调整沉浸式菜单的title
-     */
-    private void dealStatusBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
-            lp.height = statusBarHeight;
-            positionView.setLayoutParams(lp);
-        }
-    }
-
-    private int getStatusBarHeight() {
-        Class<?> c = null;
-        Object obj = null;
-        Field field = null;
-        int x = 0, statusBarHeight = 0;
-        try {
-            c = Class.forName("com.android.internal.R$dimen");
-            obj = c.newInstance();
-            field = c.getField("status_bar_height");
-            x = Integer.parseInt(field.get(obj).toString());
-            statusBarHeight = getResources().getDimensionPixelSize(x);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        return statusBarHeight;
-    }
-
     @SuppressWarnings("deprecation")
     private void initImageLoader() {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
@@ -184,4 +172,25 @@ public class MainActivity extends FragmentActivity {
         imageLoader.init(config);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }
 }

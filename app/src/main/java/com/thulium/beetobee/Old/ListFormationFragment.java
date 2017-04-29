@@ -1,4 +1,4 @@
-package com.thulium.beetobee.Formation;
+package com.thulium.beetobee.Old;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.thulium.beetobee.Formation.Formation;
+import com.thulium.beetobee.Formation.FormationActivity;
 import com.thulium.beetobee.R;
 
 import java.util.ArrayList;

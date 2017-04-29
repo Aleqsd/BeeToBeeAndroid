@@ -24,8 +24,7 @@ import android.widget.TextView;
 
 import com.thulium.beetobee.Formation.CreateFormationFragment;
 import com.thulium.beetobee.Formation.Formation;
-import com.thulium.beetobee.Formation.ListFormationActivity;
-import com.thulium.beetobee.Formation.ListFormationFragment;
+import com.thulium.beetobee.Old.ListFormationFragment;
 import com.thulium.beetobee.Formation.MainActivity;
 import com.thulium.beetobee.WebService.MyFormationResponse;
 import com.thulium.beetobee.WebService.RequeteService;
@@ -233,6 +232,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_camera) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("user", user);
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
