@@ -29,4 +29,17 @@
         </menu>
     </item>
 
+    <item android:title="Formateur">
+        <menu>
+            <item
+                android:id="@+id/devenir_formateur"
+                android:icon="@drawable/ic_mail_black_24dp"
+                android:title="Devenir formateur" />
+            <item
+                android:id="@+id/creer_formation"
+                android:icon="@drawable/ic_faq_black_24dp"
+                android:title="Créer une formation" />
+        </menu>
+    </item>
+
 </menu>

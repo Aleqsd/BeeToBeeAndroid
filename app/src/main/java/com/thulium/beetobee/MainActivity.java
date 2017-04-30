@@ -1,11 +1,7 @@
-package com.thulium.beetobee.Formation;
+package com.thulium.beetobee;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
@@ -28,25 +20,19 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.thulium.beetobee.BaseActivity;
-import com.thulium.beetobee.R;
+import com.thulium.beetobee.Formation.CommonFragment;
+import com.thulium.beetobee.Formation.CustPagerTransformer;
 import com.thulium.beetobee.WebService.User;
 
-
-/**
- * Created by xmuSistone on 2016/9/18.
- */
 public class MainActivity extends AppCompatActivity {
     private Toolbar myToolbar;
     private TextView indicatorTv;
-    private View positionView;
     public User user;
     private ViewPager viewPager;
-    private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
+    private List<CommonFragment> fragments = new ArrayList<>(); // ViewPager
     private final String[] imageArray = {"assets://image6.png", "assets://image7.png", "assets://image8.png"};
 
     @Override
@@ -65,39 +51,24 @@ public class MainActivity extends AppCompatActivity {
 
         user = (User) getIntent().getSerializableExtra("user");
 
-        // 1. 沉浸式状态栏
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(Color.TRANSPARENT);
-                getWindow()
-                        .getDecorView()
-                        .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            } else {
-                getWindow()
-                        .setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            }
-        }
-
-        // 2. 初始化ImageLoader
         initImageLoader();
 
-        // 3. 填充ViewPager
         fillViewPager();
     }
 
     /**
-     * 填充ViewPager
+     * ViewPager
      */
     private void fillViewPager() {
         indicatorTv = (TextView) findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        // 1. viewPager添加parallax效果，使用PageTransformer就足够了
+        // 1. viewPager parallax PageTransformer
         viewPager.setPageTransformer(false, new CustPagerTransformer(this));
 
-        // 2. viewPager添加adapter
+        // 2. viewPager adapter
         for (int i = 0; i < 10; i++) {
-            // 预先准备10个fragment
+            // 10 fragment
             fragments.add(new CommonFragment());
         }
 
@@ -111,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public int getCount() {
-                return 666;
+                return 10;
             }
         });
 
 
-        // 3. viewPager滑动时，调整指示器
+        // 3. viewPager
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -136,9 +107,6 @@ public class MainActivity extends AppCompatActivity {
         updateIndicatorTv();
     }
 
-    /**
-     * 更新指示器
-     */
     private void updateIndicatorTv() {
         int totalNum = viewPager.getAdapter().getCount();
         int currentItem = viewPager.getCurrentItem() + 1;
@@ -160,14 +128,14 @@ public class MainActivity extends AppCompatActivity {
                 .denyCacheImageMultipleSizesInMemory()
                 .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
                 .memoryCacheSize(2 * 1024 * 1024).memoryCacheSizePercentage(13) // default
-                .discCacheSize(50 * 1024 * 1024) // 缓冲大小
-                .discCacheFileCount(100) // 缓冲文件数目
+                .discCacheSize(50 * 1024 * 1024)
+                .discCacheFileCount(100)
                 .discCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
                 .imageDownloader(new BaseImageDownloader(this)) // default
                 .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
                 .writeDebugLogs().build();
 
-        // 2.单例ImageLoader类的初始化
+        // 2.ImageLoader
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(config);
     }

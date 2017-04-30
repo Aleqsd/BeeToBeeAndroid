@@ -129,7 +129,7 @@
 
         <!--2. 頂層可滑动的View-->
 
-        <com.stone.transition.AspectRatioCardView
+        <com.thulium.beetobee.AspectRatioCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -181,7 +181,7 @@
 
             </RelativeLayout>
 
-        </com.stone.transition.AspectRatioCardView>
+        </com.thulium.beetobee.AspectRatioCardView>
 
     </com.thulium.beetobee.Formation.DragLayout>
 

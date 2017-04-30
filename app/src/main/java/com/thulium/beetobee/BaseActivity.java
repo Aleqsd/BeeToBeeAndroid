@@ -1,6 +1,7 @@
 package com.thulium.beetobee;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,22 +22,36 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.thulium.beetobee.Formation.CreateFormationFragment;
+import com.android.volley.Cache;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.thulium.beetobee.Formation.Formation;
-import com.thulium.beetobee.Old.ListFormationFragment;
-import com.thulium.beetobee.Formation.MainActivity;
 import com.thulium.beetobee.WebService.MyFormationResponse;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.User;
+import com.thulium.beetobee.adapter.FeedListAdapter;
+import com.thulium.beetobee.app.AppController;
+import com.thulium.beetobee.data.FeedItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -53,7 +69,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public Formation formation;
     public User user;
     public ImageView avatar;
-
+    private FeedListAdapter listAdapter;
+    private List<FeedItem> feedItems;
+    private String URL_FEED = "http://api.androidhive.info/feed/feed.json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +85,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         TextView firstname = (TextView) hView.findViewById(R.id.firstname);
         avatar = (ImageView) hView.findViewById(R.id.avatar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("News");
         setSupportActionBar(toolbar);
 
         // Get the user informations from login
@@ -89,8 +108,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     Log.d(TAG, response.message());
 
                     FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-                    fragment = ListFormationFragment.newInstance(formation);
-                    tx.replace(R.id.content_base, fragment);
+                    //fragment = ListFormationFragment.newInstance(formation);
+                    //tx.replace(R.id.content_base, fragment);
                     //tx.commit();
                 } else {
                     Log.d(TAG, response.message());
@@ -188,7 +207,101 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         //drawer.openDrawer(Gravity.START);
         navigationView.setNavigationItemSelectedListener(this);
+
+        ListView feed_list = (ListView) findViewById(R.id.feed_list);
+
+        feedItems = new ArrayList<FeedItem>();
+
+        listAdapter = new FeedListAdapter(this, feedItems);
+        feed_list.setAdapter(listAdapter);
+
+        // We first check for cached request
+        Cache cache = AppController.getInstance().getRequestQueue().getCache();
+        Cache.Entry entry = cache.get(URL_FEED);
+        if (entry != null) {
+            // fetch the data from cache
+            try {
+                String data = new String(entry.data, "UTF-8");
+                try {
+                    parseJsonFeed(new JSONObject(data));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            // making fresh volley request and getting json
+            JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.GET,
+                    URL_FEED, null, new com.android.volley.Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    VolleyLog.d(TAG, "Response: " + response.toString());
+                    if (response != null) {
+                        parseJsonFeed(response);
+                    }
+                }
+            }, new com.android.volley.Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(TAG, "Error: " + error.getMessage());
+                }
+            });
+
+            // Adding request to volley request queue
+            AppController.getInstance().addToRequestQueue(jsonReq);
+        }
+
+        MenuItem item = navigationView.getMenu().getItem(4);
+        if(user.getRoleId() == 0) // Non formateur
+            item.getSubMenu().getItem(1).setVisible(false); // Cacher Espace Formateur
+        else
+            item.getSubMenu().getItem(0).setVisible(false); // Cacher Espace Formateur
     }
+
+
+    /**
+     * Parsing json reponse and passing the data to feed view list adapter
+     * */
+    private void parseJsonFeed(JSONObject response) {
+        try {
+            JSONArray feedArray = response.getJSONArray("feed");
+
+            for (int i = 0; i < feedArray.length(); i++) {
+                JSONObject feedObj = (JSONObject) feedArray.get(i);
+
+                FeedItem item = new FeedItem();
+                item.setId(feedObj.getInt("id"));
+                item.setName(feedObj.getString("name"));
+
+                // Image might be null sometimes
+                String image = feedObj.isNull("image") ? null : feedObj
+                        .getString("image");
+                item.setImge(image);
+                item.setStatus(feedObj.getString("status"));
+                item.setProfilePic(feedObj.getString("profilePic"));
+                item.setTimeStamp(feedObj.getString("timeStamp"));
+
+                // url might be null sometimes
+                String feedUrl = feedObj.isNull("url") ? null : feedObj
+                        .getString("url");
+                item.setUrl(feedUrl);
+
+                feedItems.add(item);
+            }
+
+            // notify data changes to list adapater
+            listAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     @Override
     public void onBackPressed() {
@@ -223,6 +336,20 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    Toast.makeText(getBaseContext(), "Need backend", Toast.LENGTH_LONG).show();
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        }
+    };
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -231,28 +358,33 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
             intent.putExtra("user", user);
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
-            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("user", user);
             startActivity(intent);
         } else if (id == R.id.nav_manage) {
+            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
+            /*
             FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
             fragment = ListFormationFragment.newInstance(formation);
             tx.replace(R.id.content_base, fragment);
-            tx.commit();
+            tx.commit();*/
         } else if (id == R.id.nav_share) {
-            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-            fragment = ListFormationFragment.newInstance(formation);
-            tx.replace(R.id.content_base, fragment);
-            tx.commit();
+
         } else if (id == R.id.nav_send) {
-            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-            fragment = CreateFormationFragment.newInstance();
-            tx.replace(R.id.content_base, fragment);
-            tx.commit();
+        }
+        else if (id == R.id.devenir_formateur) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Voulez vous faire une demande afin de devenir formateur ?").setPositiveButton("Oui", dialogClickListener)
+                    .setNegativeButton("Non", dialogClickListener).show();
+        }
+        else if (id == R.id.creer_formation) {
+
         }
 
 
