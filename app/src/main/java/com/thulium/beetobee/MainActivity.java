@@ -1,5 +1,6 @@
 package com.thulium.beetobee;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -25,9 +26,18 @@ import java.util.List;
 
 import com.thulium.beetobee.Formation.CommonFragment;
 import com.thulium.beetobee.Formation.CustPagerTransformer;
+import com.thulium.beetobee.Formation.Formation;
+import com.thulium.beetobee.WebService.AllFormationResponse;
+import com.thulium.beetobee.WebService.RequeteService;
+import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.User;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
     private Toolbar myToolbar;
     private TextView indicatorTv;
     public User user;
@@ -50,6 +60,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
         user = (User) getIntent().getSerializableExtra("user");
+
+        RequeteService requeteService = RestService.getClient().create(RequeteService.class);
+        Call<AllFormationResponse> call2 = requeteService.getAllFormation();
+        call2.enqueue(new Callback<AllFormationResponse>() {
+            @Override
+            public void onResponse(final Call<AllFormationResponse> call2, final Response<AllFormationResponse> response) {
+                Log.d(TAG, "FormationAll, Response code : "+response.code());
+                if (response.isSuccessful()) {
+                                    AllFormationResponse currentResponse = response.body();
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    Log.d(TAG, response.message());
+                                    // onLoginFailed();
+                } else {
+                                    Log.d(TAG, response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AllFormationResponse> call2, final Throwable t) {
+                Log.d(TAG, "FormationAll failure");
+                                Log.d(TAG, t.getMessage());
+            }
+        });
+
 
         initImageLoader();
 

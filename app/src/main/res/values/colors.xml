@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="primary">#2182DD</color>
-  <color name="primary_dark">#1C325E</color>
-  <color name="primary_darker">#1C325E</color>
+  <color name="primary">#2C3664</color> <!-- this is a comment -->
+    <color name="primary_dark">#46518F</color>
+  <color name="primary_darker">#46518F</color>
+  <color name="primary_light">#46518F</color>
+    <color name="yellow">#F5C12B</color>
 
-  <color name="colorPrimary">#3F51B5</color>
-  <color name="colorPrimaryDark">#303F9F</color>
-  <color name="colorAccent">#FF4081</color>
+    <color name="primary_blue_light">#46518F</color>
+    <color name="primary_blue">#3E457E</color>
+    <color name="primary_blue_dark">#353C74</color>
+    <color name="primary_blue_darker">#2C3664</color>
 
-  <color name="accent">#FFFFFF</color>
+  <color name="colorPrimary">#d3d6db</color>
+  <color name="colorPrimaryDark">#4D276B</color>
+  <color name="colorAccent">#321851</color>
+
+  <color name="accent">#321851</color>
 
   <color name="black">#000000</color>
   <color name="jet">#222222</color>
@@ -20,7 +27,7 @@
   <color name="iron">#CCCCCC</color>
 
   <color name="white">#ffffff</color>
-  <color name="feed_bg">#d3d6db</color>
+  <color name="feed_bg">#2C3664</color>
   <color name="feed_item_bg">#ffffff</color>
   <color name="feed_item_border">#c2c3c8</color>
   <color name="link">#0a80d1</color>

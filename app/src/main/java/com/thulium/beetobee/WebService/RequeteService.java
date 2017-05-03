@@ -2,6 +2,8 @@ package com.thulium.beetobee.WebService;
 
 import com.thulium.beetobee.Formation.Formation;
 
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -42,6 +44,9 @@ public interface RequeteService {
 
     @GET("formations/{id}")
     Call<MyFormationResponse> getFormation(@Path("id") Integer id);
+
+    @GET("formations/all")
+    Call<AllFormationResponse> getAllFormation();
 
     @POST("formations/add")
     Call<MyFormationResponse> addFormation(@Body Formation formation);

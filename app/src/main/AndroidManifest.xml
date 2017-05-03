@@ -21,12 +21,14 @@
             android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".ProfileActivity"
-            android:label="@string/title_activity_profile" />
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".MainActivity"
             android:label="MainActivity"
-            android:theme="@style/AppTheme.Dark"/>
-        <activity android:name=".LaunchActivity">
+            android:theme="@style/AppTheme.Dark" />
+        <activity android:name=".LaunchActivity"
+            android:theme="@style/AppTheme.Launch" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,6 +44,10 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".Formation.FormationActivity" />
+        <activity
+            android:name=".NewsActivity"
+            android:label="@string/title_activity_news"
+            android:theme="@style/AppTheme.Dark"></activity>
     </application>
 
 </manifest>

@@ -19,51 +19,66 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/beetobeelogo"
+        app:srcCompat="@drawable/bleu_electrique"
         android:id="@+id/logoFormation"
-        android:layout_weight="0.30"
+        android:layout_weight="0.55"
         android:adjustViewBounds="false" />
 
     <TextView
+        android:id="@+id/titleFormation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/titleFormation" />
+        android:textAlignment="center"
+        android:textSize="30sp" />
 
     <TextView
+        android:id="@+id/descriptionFormation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/descriptionFormation" />
+        android:textAlignment="center"
+        android:textSize="18sp" />
 
     <TextView
+        android:id="@+id/durationFormation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Duration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/durationFormation" />
+        android:textAlignment="center" />
 
     <TextView
+        android:id="@+id/dateFormation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/dateFormation" />
+        android:textAlignment="center" />
 
     <TextView
+        android:id="@+id/hourFormation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Hour"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/hourFormation" />
+        android:textAlignment="center" />
 
     <TextView
+        android:id="@+id/placeFormation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Place"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/placeFormation" />
+        android:textAlignment="center" />
 
     <TextView
-        android:text="AvailableSeat"
+        android:id="@+id/availableSeatFormation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/availableSeatFormation" />
+        android:text="AvailableSeat"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/buttonInscription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="S'inscrire" />
 
 </LinearLayout>

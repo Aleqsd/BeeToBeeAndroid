@@ -147,4 +147,5 @@
     <string name="submit">Submit</string>
     <string name="formationtitle">FormationTitle</string>
     <string name="title_activity_feed">FeedActivity</string>
+    <string name="title_activity_news">NewsActivity</string>
 </resources>

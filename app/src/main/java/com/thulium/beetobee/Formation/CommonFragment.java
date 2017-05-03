@@ -83,6 +83,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, imageUrl);
         startActivity(intent);
         //ActivityCompat.startActivity(activity, intent, options.toBundle());*/
+        Intent intent = new Intent(getContext(), FormationActivity.class);
+        startActivity(intent);
     }
 
     public void bindData(String imageUrl) {

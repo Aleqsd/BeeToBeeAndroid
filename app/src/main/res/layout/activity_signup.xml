@@ -14,26 +14,33 @@
         android:paddingRight="24dp"
         android:weightSum="1">
 
-        <ImageView
-            android:src="@drawable/beetobeelogo"
-            android:contentDescription="Logo BeeToBee"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginBottom="24dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.13" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.29">
 
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="133dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="22dp"
+                android:layout_weight="0.34"
+                android:contentDescription="Logo BeeToBee"
+                android:src="@drawable/bleu_electrique" />
+        </FrameLayout>
         <!-- Name Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:theme="@style/TextLabel">
             <EditText android:id="@+id/input_firstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="@string/firstName" />
+                android:hint="@string/firstName"
+                android:textColor="#F5C12B"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- LastName Label -->
@@ -41,12 +48,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:theme="@style/TextLabel">
             <EditText android:id="@+id/input_lastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="@string/lastName" />
+                android:hint="@string/lastName"
+                android:textColor="#F5C12B"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -56,12 +65,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:theme="@style/TextLabel">
             <EditText android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="@string/email" />
+                android:hint="@string/email"
+                android:textColor="#F5C12B"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -70,12 +81,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:theme="@style/TextLabel">
             <EditText android:id="@+id/input_reEnterEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="@string/reenterEmail" />
+                android:hint="@string/reenterEmail"
+                android:textColor="#F5C12B"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Label -->
@@ -83,12 +96,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:theme="@style/TextLabel">
             <EditText android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="@string/password"/>
+                android:hint="@string/password"
+                android:textColor="#F5C12B"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Re-enter Label -->
@@ -96,12 +111,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:theme="@style/TextLabel">
             <EditText android:id="@+id/input_reEnterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="@string/reenterPassword"/>
+                android:hint="@string/reenterPassword"
+                android:textColor="#F5C12B"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Signup Button -->
