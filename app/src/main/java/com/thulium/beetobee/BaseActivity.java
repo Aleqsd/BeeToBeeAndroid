@@ -108,9 +108,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     Log.d(TAG, response.message());
 
                     FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-                    //fragment = ListFormationFragment.newInstance(formation);
-                    //tx.replace(R.id.content_base, fragment);
-                    //tx.commit();
                 } else {
                     Log.d(TAG, response.message());
                 }

@@ -14,32 +14,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.thulium.beetobee.R;
+
+import org.junit.runner.Describable;
 
 /**
  * Created by xmuSistone on 2016/9/18.
  */
 public class CommonFragment extends Fragment implements DragLayout.GotoDetailListener {
     private ImageView imageView;
-    private View address1, address2, address3, address4, address5;
+    private TextView address1, address2, address3, address4, address5;
     private RatingBar ratingBar;
     private View head1, head2, head3, head4;
     private String imageUrl;
+    private String salut = "fail";
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null)
+            salut = getArguments().getString("formation");
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_common, null);
+
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
         ImageLoader.getInstance().displayImage(imageUrl, imageView);
-        address1 = dragLayout.findViewById(R.id.address1);
-        address2 = dragLayout.findViewById(R.id.address2);
-        address3 = dragLayout.findViewById(R.id.address3);
-        address4 = dragLayout.findViewById(R.id.address4);
-        address5 = dragLayout.findViewById(R.id.address5);
+        address1 = (TextView) dragLayout.findViewById(R.id.address1);
+        //address4 = dragLayout.findViewById(R.id.address4);
+        //address5 = dragLayout.findViewById(R.id.address5);
         ratingBar = (RatingBar) dragLayout.findViewById(R.id.rating);
 
         head1 = dragLayout.findViewById(R.id.head1);
@@ -48,11 +58,15 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         head4 = dragLayout.findViewById(R.id.head4);
 
         dragLayout.setGotoDetailListener(this);
+        address1.setText(salut);
         return rootView;
     }
 
     @Override
     public void gotoDetail() {
+        //salut = getArguments().getString("formation");
+
+
 
 /*
         Intent intent = new Intent(getContext(), DetailActivity.class);

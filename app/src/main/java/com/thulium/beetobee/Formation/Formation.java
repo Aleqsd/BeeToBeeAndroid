@@ -25,20 +25,21 @@ public class Formation implements Serializable {
     private String title;
     private String description;
     private int duration;
-    private Date date;
+    private String date;
     private String hour;
     private String place;
     private int availableSeat;
     private int creatorId;
     private User creator;
     private List<User> users;
+    private List<Theme> themes;
 
     public Formation(String title, String description) {
         this.title = title;
         this.description = description;
     }
 
-    public Formation(int id, String title, String description, int duration, Date date, String hour, String place, int availableSeat) {
+    public Formation(int id, String title, String description, int duration, String date, String hour, String place, int availableSeat) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -116,11 +117,11 @@ public class Formation implements Serializable {
         this.duration = duration;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -139,4 +140,13 @@ public class Formation implements Serializable {
     public void setPlace(String place) {
         this.place = place;
     }
+
+    public List<Theme> getThemes() {
+        return themes;
+    }
+
+    public void setThemes(List<Theme> themes) {
+        this.themes = themes;
+    }
+
 }

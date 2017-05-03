@@ -40,16 +40,16 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private Toolbar myToolbar;
     private TextView indicatorTv;
+    private AllFormationResponse currentResponse;
     public User user;
     private ViewPager viewPager;
     private List<CommonFragment> fragments = new ArrayList<>(); // ViewPager
-    private final String[] imageArray = {"assets://image6.png", "assets://image7.png", "assets://image8.png"};
+    private final String[] imageArray = {"assets://informatique.png", "assets://commerce.png", "assets://graphique.png"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         myToolbar = (Toolbar) findViewById(R.id.toolbarListeFormation);
         myToolbar.setTitle("Liste Formation");
         setSupportActionBar(myToolbar);
@@ -60,50 +60,85 @@ public class MainActivity extends AppCompatActivity {
         }
 
         user = (User) getIntent().getSerializableExtra("user");
+        currentResponse = new AllFormationResponse();
+
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Getting formations...");
+        progressDialog.show();
 
         RequeteService requeteService = RestService.getClient().create(RequeteService.class);
         Call<AllFormationResponse> call2 = requeteService.getAllFormation();
         call2.enqueue(new Callback<AllFormationResponse>() {
             @Override
             public void onResponse(final Call<AllFormationResponse> call2, final Response<AllFormationResponse> response) {
-                Log.d(TAG, "FormationAll, Response code : "+response.code());
                 if (response.isSuccessful()) {
-                                    AllFormationResponse currentResponse = response.body();
-                                    // On complete call either onLoginSuccess or onLoginFailed
-                                    Log.d(TAG, response.message());
-                                    // onLoginFailed();
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    if (response.isSuccessful()) {
+                                        currentResponse = response.body();
+                                        Log.d(TAG, response.message());
+                                        initImageLoader();
+                                        fillViewPager(currentResponse);
+                                        TextView test = (TextView) findViewById(R.id.address1);
+                                        test.setText(currentResponse.getFormations()[0].getTitle());
+                                        progressDialog.dismiss();
+                                    }
+                                }
+                            }, 500);
                 } else {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
                                     Log.d(TAG, response.message());
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
                 }
             }
 
             @Override
             public void onFailure(Call<AllFormationResponse> call2, final Throwable t) {
-                Log.d(TAG, "FormationAll failure");
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
                                 Log.d(TAG, t.getMessage());
+                                progressDialog.dismiss();
+                            }
+                        }, 500);
             }
         });
 
 
-        initImageLoader();
-
-        fillViewPager();
+        //ToDo remplir l'imageArray en fonction des elements de currentResponse et de leur theme
     }
 
     /**
      * ViewPager
      */
-    private void fillViewPager() {
+    private void fillViewPager(final AllFormationResponse currentResponse) {
+        final int count = currentResponse.getFormations().length;
         indicatorTv = (TextView) findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         // 1. viewPager parallax PageTransformer
         viewPager.setPageTransformer(false, new CustPagerTransformer(this));
 
+
+
+
+
         // 2. viewPager adapter
-        for (int i = 0; i < 10; i++) {
-            // 10 fragment
-            fragments.add(new CommonFragment());
+        for (int i = 0; i < count; i++) {
+            CommonFragment test = new CommonFragment();
+
+            Bundle args = new Bundle();
+            args.putString("formation", currentResponse.getFormations()[i].getTitle());
+            test.setArguments(args);
+
+            fragments.add(test);
         }
 
         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
@@ -116,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public int getCount() {
-                return 10;
+                return count;
             }
         });
 
