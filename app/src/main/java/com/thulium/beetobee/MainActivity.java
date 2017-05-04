@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public User user;
     private ViewPager viewPager;
     private List<CommonFragment> fragments = new ArrayList<>(); // ViewPager
-    private final String[] imageArray = {"assets://informatique.png", "assets://commerce.png", "assets://graphique.png"};
+    private String[] imageArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
                                         Log.d(TAG, response.message());
                                         initImageLoader();
                                         fillViewPager(currentResponse);
-                                        TextView test = (TextView) findViewById(R.id.address1);
-                                        test.setText(currentResponse.getFormations()[0].getTitle());
                                         progressDialog.dismiss();
                                     }
                                 }
@@ -122,23 +120,45 @@ public class MainActivity extends AppCompatActivity {
         final int count = currentResponse.getFormations().length;
         indicatorTv = (TextView) findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+        List<String> listImageArray = new ArrayList<String>();
+     //= {"assets://informatique.png", "assets://commerce.png", "assets://graphique.png"};
+
 
         // 1. viewPager parallax PageTransformer
         viewPager.setPageTransformer(false, new CustPagerTransformer(this));
-
-
-
-
 
         // 2. viewPager adapter
         for (int i = 0; i < count; i++) {
             CommonFragment test = new CommonFragment();
 
             Bundle args = new Bundle();
-            args.putString("formation", currentResponse.getFormations()[i].getTitle());
+            args.putString("title", currentResponse.getFormations()[i].getTitle());
+            args.putString("description", currentResponse.getFormations()[i].getDescription());
+            args.putString("creatorFirstName", currentResponse.getFormations()[i].getCreator().getFirstname());
+            args.putString("creatorLastName", currentResponse.getFormations()[i].getCreator().getLastname());
             test.setArguments(args);
-
             fragments.add(test);
+
+            //ToDo a modifier avec un vrai jeu de test
+            int idTheme = currentResponse.getFormations()[i].getThemes().get(0).getId();
+            switch (idTheme)
+            {
+                case 1 :
+                    listImageArray.add("assets://graphique.png");
+                    break;
+                case 2 :
+                    listImageArray.add("assets://informatique.png");
+                    break;
+                case 3 :
+                    listImageArray.add("assets://commerce.png");
+                    break;
+                default:
+                    listImageArray.add("assets://graphique.png");
+                    break;
+            }
+
+            imageArray = listImageArray.toArray(new String[0]);
+
         }
 
         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {

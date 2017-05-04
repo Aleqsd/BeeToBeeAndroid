@@ -185,7 +185,6 @@ public class LaunchActivity extends Activity implements Serializable {
         call.enqueue(new Callback<MyResponse>() {
             @Override
             public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
-                Log.d(TAG, "Login, Response code : "+response.code());
                 if (response.body().getCode() == 200) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {

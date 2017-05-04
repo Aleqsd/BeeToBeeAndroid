@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -30,13 +31,20 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private RatingBar ratingBar;
     private View head1, head2, head3, head4;
     private String imageUrl;
-    private String salut = "fail";
+    private String title = "Unknown";
+    private String description = "Unknown";
+    private String creatorFirstName = "Unknown";
+    private String creatorLastName = "Unknown";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
-            salut = getArguments().getString("formation");
+        if (getArguments() != null) {
+            title = getArguments().getString("title");
+            description = getArguments().getString("description");
+            creatorFirstName = getArguments().getString("creatorFirstName");
+            creatorLastName = getArguments().getString("creatorLastName");
+        }
     }
 
     @Nullable
@@ -48,8 +56,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
         ImageLoader.getInstance().displayImage(imageUrl, imageView);
         address1 = (TextView) dragLayout.findViewById(R.id.address1);
-        //address4 = dragLayout.findViewById(R.id.address4);
-        //address5 = dragLayout.findViewById(R.id.address5);
+        address4 = (TextView) dragLayout.findViewById(R.id.address4);
+        address5 = (TextView) dragLayout.findViewById(R.id.address5);
         ratingBar = (RatingBar) dragLayout.findViewById(R.id.rating);
 
         head1 = dragLayout.findViewById(R.id.head1);
@@ -58,7 +66,9 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         head4 = dragLayout.findViewById(R.id.head4);
 
         dragLayout.setGotoDetailListener(this);
-        address1.setText(salut);
+        address1.setText(title);
+        address4.setText(description);
+        address5.setText(creatorFirstName+" "+creatorLastName);
         return rootView;
     }
 
