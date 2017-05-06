@@ -1,7 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    >
 
         <View
             android:id="@+id/leHaut3"
@@ -27,16 +29,32 @@
             android:layout_above="@+id/leBas"
             android:layout_height="match_parent" />
 
-        <ScrollView
-            android:id="@+id/leBas"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/primary"
-            android:orientation="horizontal"
-            android:layout_below="@+id/info">
+    <ScrollView
+        android:id="@+id/leBas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info"
+        android:background="@color/primary"
+        android:orientation="horizontal"
+        android:layout_above="@+id/carouselView">
 
-        </ScrollView>
+    </ScrollView>
+
+    <com.synnapps.carouselview.CarouselView
+        android:id="@+id/carouselView"
+        android:layout_width="220dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/primary"
+        app:fillColor="#FFFFFFFF"
+        app:pageColor="#00000000"
+        app:radius="6dp"
+        app:slideInterval="3000"
+        app:strokeColor="#FF777777"
+        app:strokeWidth="1dp">
+
+    </com.synnapps.carouselview.CarouselView>
 
         <RelativeLayout
             android:id="@+id/info"

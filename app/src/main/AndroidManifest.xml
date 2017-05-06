@@ -26,7 +26,8 @@
         <activity
             android:name=".MainActivity"
             android:label="MainActivity"
-            android:theme="@style/AppTheme.Dark" />
+            android:theme="@style/AppTheme.Dark"
+            android:screenOrientation="portrait"/>
         <activity android:name=".LaunchActivity"
             android:theme="@style/AppTheme.Launch" >
             <intent-filter>

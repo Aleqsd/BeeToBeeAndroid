@@ -32,11 +32,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageClickListener;
+import com.synnapps.carouselview.ImageListener;
 import com.thulium.beetobee.WebService.MyResponse;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
@@ -51,6 +56,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import gun0912.tedbottompicker.TedBottomPicker;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -70,6 +76,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Toolbar myToolbar;
     public TextView name;
     public TextView desc;
+    CarouselView carouselView;
+    int[] sampleImages = {R.drawable.informatique, R.drawable.graphique, R.drawable.commerce, R.drawable.graphique, R.drawable.graphique};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,20 +87,32 @@ public class ProfileActivity extends AppCompatActivity {
         myToolbar.setTitle("Profile");
         setSupportActionBar(myToolbar);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+
+        carouselView = (CarouselView) findViewById(R.id.carouselView);
+        carouselView.setPageCount(sampleImages.length);
+
+        carouselView.setImageListener(imageListener);
+        carouselView.setImageClickListener(new ImageClickListener() {
+            @Override
+            public void onClick(int position) {
+                Toast.makeText(ProfileActivity.this, "Clicked item: "+ position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         name = (TextView) findViewById(R.id.textView1);
         desc = (TextView) findViewById(R.id.textView2);
         avatar = (CircularImageView) findViewById(R.id.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (floatingActionButton.getVisibility() == View.VISIBLE)
-                    openImageIntent();
+                    changeAvatar();
             }
         });
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (floatingActionButton.getVisibility() == View.VISIBLE)
-                    openImageIntent();
+                    changeAvatar();
             }
         });;
 
@@ -103,6 +123,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         user = (User) getIntent().getSerializableExtra("user");
+
 
         if (user != null)
             setProfileInfos();
@@ -146,6 +167,13 @@ public class ProfileActivity extends AppCompatActivity {
             }.execute();
         }
     }
+
+    ImageListener imageListener = new ImageListener() {
+        @Override
+        public void setImageForPosition(int position, ImageView imageView) {
+            imageView.setImageResource(sampleImages[position]);
+        }
+    };
 
     private void setProfileInfos() {
         ScrollView leBas = (ScrollView) findViewById(R.id.leBas);
@@ -268,6 +296,68 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void changeAvatar() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        YOUR_SELECT_PICTURE_REQUEST_CODE);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+        TedBottomPicker tedBottomPicker = new TedBottomPicker.Builder(ProfileActivity.this)
+                .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
+                    @Override
+                    public void onImageSelected(Uri uri) {
+                        outputFileUri = uri;
+                        avatar.setImageURI(outputFileUri);
+                        File image = new File(uri.getPath());
+
+                        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), image);
+                        MultipartBody.Part body = MultipartBody.Part.createFormData("picture", image.getName(), requestFile);
+
+                        RequeteService requeteService = RestService.getClient().create(RequeteService.class);
+                        Call<ResponseBody> call = requeteService.uploadProfilePicture(user.getId(), body, user.getAccess_token());
+                        final File finalImage = image;
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                Log.v("Upload", "success");
+                                SavePictureInPreferences(finalImage.getAbsolutePath());
+                                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                                intent.putExtra("user", user);
+                                intent.putExtra("update", "ok");
+                                startActivity(intent);
+                                floatingActionButton.setVisibility(View.INVISIBLE);
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Log.e("Upload error:", t.getMessage());
+                            }
+                        });
+                    }
+                })
+                .create();
+
+        tedBottomPicker.show(getSupportFragmentManager());
+    }
+
+    /* Old method
     private void openImageIntent() {
 
         // Here, thisActivity is the current activity
@@ -330,8 +420,9 @@ public class ProfileActivity extends AppCompatActivity {
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
 
         startActivityForResult(chooserIntent, YOUR_SELECT_PICTURE_REQUEST_CODE);
-    }
+    }*/
 
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -387,8 +478,9 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         }
-    }
+    }*/
 
+    /*
     public static String getRealPathFromURI(Context context, Uri uri) {
         String filePath = "";
         String wholeID = DocumentsContract.getDocumentId(uri);
@@ -410,7 +502,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         cursor.close();
         return filePath;
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
