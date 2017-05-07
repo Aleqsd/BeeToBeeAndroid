@@ -56,4 +56,7 @@ public interface RequeteService {
 
     @POST("formations/add")
     Call<MyFormationResponse> addFormation(@Body Formation formation);
+
+    @POST("formations/delete/{formationId}")
+    Call<SimpleResponse> deleteFormation(@Path("formationId") Integer id);
 }

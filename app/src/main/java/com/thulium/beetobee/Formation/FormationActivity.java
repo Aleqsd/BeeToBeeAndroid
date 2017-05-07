@@ -1,8 +1,10 @@
 package com.thulium.beetobee.Formation;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -244,18 +246,83 @@ public class FormationActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_profile, menu);//Menu Resource, Menu
+        getMenuInflater().inflate(R.menu.menu_formation, menu);//Menu Resource, Menu
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_edit:
+            case R.id.formation_edit_setting:
                 Toast.makeText(getApplicationContext(),"Item 1 Selected",Toast.LENGTH_LONG).show();
                 return true;
+            case R.id.formation_delete_setting:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Voulez vous vraiment supprimer cette formation ?").setPositiveButton("Oui", dialogClickListener)
+                        .setNegativeButton("Non", dialogClickListener).show();
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    DeleteFormation();
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        }
+    };
+
+    public void DeleteFormation()
+    {
+        final ProgressDialog progressDialog = new ProgressDialog(FormationActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Suppression");
+        progressDialog.show();
+
+        final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
+        Call<SimpleResponse> call = requeteService.deleteFormation(formation.getId());
+        call.enqueue(new Callback<SimpleResponse>() {
+            @Override
+            public void onResponse(final Call<SimpleResponse> call, final Response<SimpleResponse> response) {
+                if (response.isSuccessful()) {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getBaseContext(), "Formation supprimée", Toast.LENGTH_LONG).show();
+                                    Log.d("FormationActivity", response.message());
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
+                } else {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getBaseContext(), "La formation n'a pas pu être supprimée, contactez le support BeeToBee", Toast.LENGTH_LONG).show();
+                                    Log.d("FormationActivity", response.message());
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
+                }
+            }
+            @Override
+            public void onFailure(Call<SimpleResponse> call, final Throwable t) {
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                Toast.makeText(getBaseContext(), "La formation n'a pas pu être supprimée, contactez le support BeeToBee", Toast.LENGTH_LONG).show();
+                                Log.d("FormationActivity", t.getMessage());
+                                progressDialog.dismiss();
+                            }
+                        }, 500);
+            }
+        });
     }
 }
