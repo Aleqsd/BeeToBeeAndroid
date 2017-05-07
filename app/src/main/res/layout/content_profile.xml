@@ -36,9 +36,15 @@
         android:layout_below="@+id/info"
         android:background="@color/primary"
         android:orientation="horizontal"
-        android:layout_above="@+id/carouselView">
+        android:layout_above="@+id/space">
 
     </ScrollView>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_above="@+id/carouselView"
+        android:id="@+id/space" />
 
     <com.synnapps.carouselview.CarouselView
         android:id="@+id/carouselView"
@@ -122,5 +128,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/formations_suivies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/carouselView"
+        android:layout_centerHorizontal="true"
+        android:text="Formations suivies"
+        android:textAlignment="center" />
 
 </RelativeLayout>

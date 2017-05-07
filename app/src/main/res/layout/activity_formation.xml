@@ -17,68 +17,85 @@
         android:id="@+id/toolbarFormation" />
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/bleu_electrique"
-        android:id="@+id/logoFormation"
-        android:layout_weight="0.55"
-        android:adjustViewBounds="false" />
+        android:id="@+id/imageFormation"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        app:srcCompat="@drawable/graphique1080" />
 
-    <TextView
-        android:id="@+id/titleFormation"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:textAlignment="center"
-        android:textSize="30sp" />
+        android:layout_height="match_parent"
+        android:id="@+id/scrollViewFormation">
 
-    <TextView
-        android:id="@+id/descriptionFormation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Description"
-        android:textAlignment="center"
-        android:textSize="18sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/durationFormation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Duration"
-        android:textAlignment="center" />
+            <TextView
+                android:id="@+id/titleFormation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="30dp"
+                android:paddingLeft="10dp"
+                android:text="Title" />
 
-    <TextView
-        android:id="@+id/dateFormation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Date"
-        android:textAlignment="center" />
+            <TextView
+                android:id="@+id/descriptionFormation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:text="Description" />
 
-    <TextView
-        android:id="@+id/hourFormation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hour"
-        android:textAlignment="center" />
+            <TextView
+                android:id="@+id/dateFormation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:text="Date" />
 
-    <TextView
-        android:id="@+id/placeFormation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Place"
-        android:textAlignment="center" />
+            <TextView
+                android:id="@+id/hourFormation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:text="Hour" />
 
-    <TextView
-        android:id="@+id/availableSeatFormation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="AvailableSeat"
-        android:textAlignment="center" />
+            <TextView
+                android:id="@+id/durationFormation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:text="Duration" />
 
-    <Button
-        android:id="@+id/buttonInscription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="S'inscrire" />
+            <TextView
+                android:id="@+id/placeFormation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:text="Place" />
+
+            <TextView
+                android:id="@+id/availableSeatFormation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:text="AvailableSeat" />
+
+            <Button
+                android:id="@+id/buttonInscription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:text="S'inscrire" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

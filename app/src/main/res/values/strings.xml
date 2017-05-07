@@ -148,4 +148,5 @@
     <string name="formationtitle">FormationTitle</string>
     <string name="title_activity_feed">FeedActivity</string>
     <string name="title_activity_news">NewsActivity</string>
+    <string name="title_activity_create_formation">CreateFormationActivity</string>
 </resources>

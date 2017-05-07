@@ -185,7 +185,7 @@ public class LaunchActivity extends Activity implements Serializable {
         call.enqueue(new Callback<MyResponse>() {
             @Override
             public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
-                if (response.body().getCode() == 200) {
+                if (response.isSuccessful()) {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
@@ -206,7 +206,7 @@ public class LaunchActivity extends Activity implements Serializable {
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
-                                    Log.d(TAG, response.body().getResponse());
+                                    Log.d(TAG, response.message());
                                     onWrongLogin();
                                     progressDialog.dismiss();
                                 }

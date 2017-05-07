@@ -22,6 +22,8 @@ import com.thulium.beetobee.R;
 
 import org.junit.runner.Describable;
 
+import java.util.ArrayList;
+
 /**
  * Created by xmuSistone on 2016/9/18.
  */
@@ -35,15 +37,35 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private String description = "Unknown";
     private String creatorFirstName = "Unknown";
     private String creatorLastName = "Unknown";
+    private int duration = 0;
+    private String hour = "Unknown";
+    private String date = "Unknwon";
+    private String place = "Unknown";
+    private int availableSeat = 0;
+    private int id = 0;
+    private int userId;
+    private ArrayList<Integer> userIds;
+    private String access_token;
+    private Formation currentFormation;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            id = getArguments().getInt("id");
             title = getArguments().getString("title");
             description = getArguments().getString("description");
             creatorFirstName = getArguments().getString("creatorFirstName");
             creatorLastName = getArguments().getString("creatorLastName");
+            date = getArguments().getString("date");
+            duration = getArguments().getInt("duration");
+            hour = getArguments().getString("hour");
+            place = getArguments().getString("place");
+            availableSeat = getArguments().getInt("availableSeat");
+            userId = getArguments().getInt("userId");
+            access_token = getArguments().getString("access_token");
+            userIds = getArguments().getIntegerArrayList("userIds");
         }
     }
 
@@ -107,7 +129,14 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, imageUrl);
         startActivity(intent);
         //ActivityCompat.startActivity(activity, intent, options.toBundle());*/
+
+        currentFormation = new Formation(id,title,description,duration,date,hour,place,availableSeat);
+
         Intent intent = new Intent(getContext(), FormationActivity.class);
+        intent.putExtra("formation",currentFormation);
+        intent.putExtra("userId",userId);
+        intent.putExtra("access_token",access_token);
+        intent.putExtra("userIds",userIds);
         startActivity(intent);
     }
 

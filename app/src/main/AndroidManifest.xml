@@ -26,10 +26,11 @@
         <activity
             android:name=".MainActivity"
             android:label="MainActivity"
-            android:theme="@style/AppTheme.Dark"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".LaunchActivity"
-            android:theme="@style/AppTheme.Launch" >
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Dark" />
+        <activity
+            android:name=".LaunchActivity"
+            android:theme="@style/AppTheme.Launch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,6 +49,10 @@
         <activity
             android:name=".NewsActivity"
             android:label="@string/title_activity_news"
+            android:theme="@style/AppTheme.Dark" />
+        <activity
+            android:name=".Formation.CreateFormationActivity"
+            android:label="@string/title_activity_create_formation"
             android:theme="@style/AppTheme.Dark"></activity>
     </application>
 

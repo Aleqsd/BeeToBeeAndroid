@@ -36,9 +36,9 @@
                 android:icon="@drawable/ic_mail_black_24dp"
                 android:title="Devenir formateur" />
             <item
-                android:id="@+id/creer_formation"
+                android:id="@+id/espace_formateur"
                 android:icon="@drawable/ic_faq_black_24dp"
-                android:title="Créer une formation" />
+                android:title="Espace Formateur" />
         </menu>
     </item>
 

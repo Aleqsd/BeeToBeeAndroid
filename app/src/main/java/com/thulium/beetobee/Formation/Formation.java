@@ -1,5 +1,6 @@
 package com.thulium.beetobee.Formation;
 
+import com.thulium.beetobee.WebService.Creator;
 import com.thulium.beetobee.WebService.User;
 
 import java.io.Serializable;
@@ -30,7 +31,7 @@ public class Formation implements Serializable {
     private String place;
     private int availableSeat;
     private int creatorId;
-    private User creator;
+    private Creator creator;
     private List<User> users;
     private List<Theme> themes;
 
@@ -50,6 +51,12 @@ public class Formation implements Serializable {
         this.availableSeat = availableSeat;
     }
 
+    public Formation(String title, String description, int duration, String date) {
+        this.title = title;
+        this.description = description;
+        this.duration = duration;
+        this.date = date;
+    }
 
     public List<User> getUsers() {
         return users;
@@ -69,11 +76,11 @@ public class Formation implements Serializable {
     }
 
 
-    public User getCreator() {
+    public Creator getCreator() {
         return creator;
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(Creator creator) {
         this.creator = creator;
     }
 

@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,10 +133,27 @@ public class MainActivity extends AppCompatActivity {
             CommonFragment test = new CommonFragment();
 
             Bundle args = new Bundle();
+            args.putInt("id",currentResponse.getFormations()[i].getId());
             args.putString("title", currentResponse.getFormations()[i].getTitle());
             args.putString("description", currentResponse.getFormations()[i].getDescription());
-            args.putString("creatorFirstName", currentResponse.getFormations()[i].getCreator().getFirstname());
-            args.putString("creatorLastName", currentResponse.getFormations()[i].getCreator().getLastname());
+            args.putString("creatorFirstName", currentResponse.getFormations()[i].getCreator().getFirstName());
+            args.putString("creatorLastName", currentResponse.getFormations()[i].getCreator().getLastName());
+            args.putInt("duration", currentResponse.getFormations()[i].getDuration());
+            args.putString("date", currentResponse.getFormations()[i].getDate());
+            args.putString("hour", currentResponse.getFormations()[i].getHour());
+            args.putString("place", currentResponse.getFormations()[i].getPlace());
+            args.putInt("availableSeat", currentResponse.getFormations()[i].getAvailableSeat());
+            args.putInt("userId",user.getId());
+            args.putString("access_token",user.getAccess_token());
+
+            ArrayList<Integer> userIds = new ArrayList<Integer>();
+            for (User user : currentResponse.getFormations()[i].getUsers())
+            {
+                userIds.add(user.getId());
+            }
+
+            args.putIntegerArrayList("userIds",userIds);
+
             test.setArguments(args);
             fragments.add(test);
 

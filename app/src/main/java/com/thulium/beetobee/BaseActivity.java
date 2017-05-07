@@ -31,6 +31,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.thulium.beetobee.Formation.CreateFormationActivity;
 import com.thulium.beetobee.Formation.Formation;
 import com.thulium.beetobee.WebService.MyFormationResponse;
 import com.thulium.beetobee.WebService.RequeteService;
@@ -256,7 +257,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         if(user.getRoleId() == 0) // Non formateur
             item.getSubMenu().getItem(1).setVisible(false); // Cacher Espace Formateur
         else
-            item.getSubMenu().getItem(0).setVisible(false); // Cacher Espace Formateur
+            item.getSubMenu().getItem(0).setVisible(false); // Cacher Devenir Formateur
     }
 
 
@@ -338,7 +339,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
-                    Toast.makeText(getBaseContext(), "Need backend", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "La demande a été transmise au support BeeToBee", Toast.LENGTH_LONG).show();
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
@@ -379,9 +380,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Voulez vous faire une demande afin de devenir formateur ?").setPositiveButton("Oui", dialogClickListener)
                     .setNegativeButton("Non", dialogClickListener).show();
+            Intent intent = new Intent(getApplicationContext(), CreateFormationActivity.class);
+            startActivity(intent);
         }
-        else if (id == R.id.creer_formation) {
-
+        else if (id == R.id.espace_formateur) {
+            Intent intent = new Intent(getApplicationContext(), CreateFormationActivity.class);
+            startActivity(intent);
         }
 
 

@@ -45,6 +45,12 @@ public interface RequeteService {
     @GET("formations/{id}")
     Call<MyFormationResponse> getFormation(@Path("id") Integer id);
 
+    @POST("formations/participate/{formationId}/{userId}")
+    Call<MyFormationResponse> participateFormation(@Path("formationId") Integer formationId,@Path("userId") Integer userId, @Query("access_token") String access_token);
+
+    @POST("formations/participate/{formationId}/{userId}/delete")
+    Call<SimpleResponse> deleteParticipateFormation(@Path("formationId") Integer formationId,@Path("userId") Integer userId, @Query("access_token") String access_token);
+
     @GET("formations/all")
     Call<AllFormationResponse> getAllFormation();
 
