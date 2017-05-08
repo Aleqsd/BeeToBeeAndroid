@@ -35,6 +35,16 @@ public class Formation implements Serializable {
     private List<User> users;
     private List<Theme> themes;
 
+    public int getThemeId() {
+        return themeId;
+    }
+
+    public void setThemeId(int themeId) {
+        this.themeId = themeId;
+    }
+
+    private int themeId;
+
     public Formation(String title, String description) {
         this.title = title;
         this.description = description;

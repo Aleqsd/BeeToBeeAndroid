@@ -201,14 +201,14 @@ public class SignupActivity extends AppCompatActivity {
             _reEnterEmail.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 16) {
-            _passwordText.setError(getString(R.string.between4and16char));
+        if (password.isEmpty() || password.length() < 6 || password.length() > 16) {
+            _passwordText.setError("Password must be between 6 and 16 alphanumeric characters");
             valid = false;
         } else {
             _passwordText.setError(null);
         }
 
-        if (reEnterPassword.isEmpty() || reEnterPassword.length() < 4 || reEnterPassword.length() > 16 || !(reEnterPassword.equals(password))) {
+        if (reEnterPassword.isEmpty() || reEnterPassword.length() < 6 || reEnterPassword.length() > 16 || !(reEnterPassword.equals(password))) {
             _reEnterPasswordText.setError(getString(R.string.passwordDoNotMatch));
             valid = false;
         } else {

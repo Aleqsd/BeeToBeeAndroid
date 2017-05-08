@@ -12,28 +12,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thulium.beetobee.BaseActivity;
-import com.thulium.beetobee.Formation.Formation;
 import com.thulium.beetobee.R;
+import com.thulium.beetobee.WebService.FormationUpdate;
 import com.thulium.beetobee.WebService.MyFormationResponse;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.SimpleResponse;
-import com.thulium.beetobee.WebService.User;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,6 +44,15 @@ public class FormationActivity extends AppCompatActivity {
     private boolean userInscris = false;
     private boolean userCreator = false;
     private ArrayList<Integer> userIds;
+    EditText _title;
+    EditText _description;
+    Spinner _spinner;
+    EditText _date;
+    EditText _heure;
+    EditText _duree;
+    Button button;
+    private String[] arraySpinner;
+    FormationUpdate formationUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +149,8 @@ public class FormationActivity extends AppCompatActivity {
         }
     }
 
+
+
     View.OnClickListener participate = new View.OnClickListener() {
         public void onClick(View v) {
 
@@ -153,6 +162,7 @@ public class FormationActivity extends AppCompatActivity {
                 progressDialog.setMessage("Désinscription");
                 progressDialog.show();
 
+                Log.d("FormationActivity", formation.getId()+" "+userId);
                 final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
                 Call<SimpleResponse> call = requeteService.deleteParticipateFormation(formation.getId(),userId,access_token);
                 call.enqueue(new Callback<SimpleResponse>() {
@@ -248,7 +258,8 @@ public class FormationActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_formation, menu);//Menu Resource, Menu
+        if (userId == formation.getCreatorId())
+            getMenuInflater().inflate(R.menu.menu_formation, menu);//Menu Resource, Menu
         return true;
     }
 
@@ -256,7 +267,7 @@ public class FormationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.formation_edit_setting:
-                Toast.makeText(getApplicationContext(),"Item 1 Selected",Toast.LENGTH_LONG).show();
+                affichageEditMode();
                 return true;
             case R.id.formation_delete_setting:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -267,12 +278,183 @@ public class FormationActivity extends AppCompatActivity {
         }
     }
 
+    public void affichageEditMode()
+    {
+        // remove your listview
+        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollViewFormation);
+        ViewGroup parent = (ViewGroup) scrollView.getParent();
+        parent.removeView(scrollView);
+        // inflate your profile view (or get the reference to it if it's already inflated)
+        View editView = getLayoutInflater().inflate(R.layout.formation_edit_infos, parent, false);
+        // add it to the parent
+        parent.addView(editView);
+
+        _title = (EditText) findViewById(R.id.input_title_edit);
+        _description = (EditText) findViewById(R.id.input_description_edit);
+        _spinner = (Spinner) findViewById(R.id.spinner_type_formation_edit);
+        arraySpinner = new String[] {"Informatique", "Management", "Design"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, arraySpinner);
+        _spinner.setAdapter(adapter);
+        _date = (EditText) findViewById(R.id.input_date_edit);
+        _heure = (EditText) findViewById(R.id.input_heure_edit);
+        _duree = (EditText) findViewById(R.id.input_duree_edit);
+        button = (Button) findViewById(R.id.btn_edit_formation);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(!validate())
+                {
+                    Toast.makeText(getBaseContext(), "Champs incorrects", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                editFormation();
+            }
+        });
+
+        _date.setText(formation.getDate());
+        _title.setText(formation.getTitle());
+        _description.setText(formation.getDescription());
+        _duree.setText(Integer.toString(formation.getDuration()));
+        _heure.setText(formation.getHour());
+
+    }
+
+    public void editFormation()
+    {
+            final ProgressDialog progressDialog = new ProgressDialog(FormationActivity.this,
+                    R.style.AppTheme_Dark_Dialog);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Edition de la formation...");
+            progressDialog.show();
+
+        final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
+            Call<MyFormationResponse> call = requeteService.updateFormation(formationUpdate,formation.getId(),access_token);
+            call.enqueue(new Callback<MyFormationResponse>() {
+                @Override
+                public void onResponse(final Call<MyFormationResponse> call, final Response<MyFormationResponse> response) {
+                    if (response.isSuccessful()) {
+                        new android.os.Handler().postDelayed(
+                                new Runnable() {
+                                    public void run() {
+                                        Log.d("FormationActivity", response.message());
+                                        Toast.makeText(getBaseContext(), "Formation éditée !", Toast.LENGTH_LONG).show();
+                                        progressDialog.dismiss();
+                                    }
+                                }, 500);
+                    } else {
+                        new android.os.Handler().postDelayed(
+                                new Runnable() {
+                                    public void run() {
+
+                                        Log.d("FormationActivity", response.message());
+                                        Toast.makeText(getBaseContext(), "Echec de l'édition, contactez le support BeeToBee", Toast.LENGTH_LONG).show();
+                                        progressDialog.dismiss();
+                                    }
+                                }, 500);
+                    }
+                }
+                @Override
+                public void onFailure(Call<MyFormationResponse> call, final Throwable t) {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    Log.d("CreateFormationActivity", t.getMessage());
+                                    Toast.makeText(getBaseContext(), "Echec de l'édition, contactez le support BeeToBee", Toast.LENGTH_LONG).show();
+                                    progressDialog.dismiss();
+                                }
+                            }, 500);
+                }
+            });
+    }
+
+
+    public boolean validate() {
+        boolean valid = true;
+
+        String title = _title.getText().toString();
+        String description = _description.getText().toString();
+        String date = _date.getText().toString();
+        int duree = 0;
+        if (_duree.getText().length() > 0)
+        {
+            duree = Integer.parseInt(_duree.getText().toString());
+        }
+
+        String heure = _heure.getText().toString();
+
+        if (title.isEmpty() || title.length() < 2 || title.length() > 100) {
+            _title.setError("Le titre doit être entre 2 et 100 caractères");
+            valid = false;
+        } else {
+            _title.setError(null);
+        }
+
+        if (description.isEmpty() || description.length() < 2 || description.length() > 10000) {
+            _description.setError("Le titre doit être entre 2 et 10000 caractères");
+            valid = false;
+        } else {
+            _description.setError(null);
+        }
+
+        if (date.isEmpty()) {
+            _date.setError("Date obligatoire");
+            valid = false;
+        } else {
+            _date.setError(null);
+        }
+
+        if (duree < 1) {
+            _duree.setError("Durée obligatoire");
+            valid = false;
+        } else {
+            _duree.setError(null);
+        }
+
+        if (heure.isEmpty()) {
+            _heure.setError("Heure obligatoire");
+            valid = false;
+        } else {
+            _heure.setError(null);
+        }
+
+        if (valid)
+        {
+
+            formationUpdate = new FormationUpdate();
+
+            formationUpdate.setTitle(title);
+            formationUpdate.setDescription(description);
+            formationUpdate.setDuration(duree);
+            formationUpdate.setDate(date);
+            formationUpdate.setHour(heure);
+
+            switch (_spinner.getSelectedItemPosition()){
+                case 0:
+                    formationUpdate.setThemeId(2);
+                    break;
+                case 1:
+                    formationUpdate.setThemeId(3);
+                    break;
+                case 2:
+                    formationUpdate.setThemeId(4);
+                    break;
+                default:
+                    formationUpdate.setThemeId(0);
+                    break;
+            }
+
+        }
+
+        return valid;
+    }
+
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     DeleteFormation();
+                    onBackPressed();
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
@@ -290,7 +472,7 @@ public class FormationActivity extends AppCompatActivity {
         progressDialog.show();
 
         final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
-        Call<SimpleResponse> call = requeteService.deleteFormation(formation.getId());
+        Call<SimpleResponse> call = requeteService.deleteFormation(formation.getId(),access_token);
         call.enqueue(new Callback<SimpleResponse>() {
             @Override
             public void onResponse(final Call<SimpleResponse> call, final Response<SimpleResponse> response) {

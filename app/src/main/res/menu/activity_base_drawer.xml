@@ -3,41 +3,28 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_home_black_24dp"
+            android:id="@+id/nav_drawer_accueil"
+            android:icon="@drawable/ic_news"
             android:title="Accueil" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_drawer_liste_formations"
             android:icon="@drawable/ic_board_black_24dp"
-            android:title="Board" />
+            android:title="Formations" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_forum_black_24dp"
-            android:title="FAQ" />
+            android:id="@+id/nav_drawer_profil"
+            android:icon="@drawable/ic_contact"
+            android:title="Profil" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_mail_black_24dp"
-                android:title="Contact" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_faq_black_24dp"
-                android:title="A propos" />
-        </menu>
-    </item>
 
     <item android:title="Formateur">
         <menu>
             <item
                 android:id="@+id/devenir_formateur"
-                android:icon="@drawable/ic_mail_black_24dp"
+                android:icon="@drawable/ic_suit_case"
                 android:title="Devenir formateur" />
             <item
                 android:id="@+id/espace_formateur"
-                android:icon="@drawable/ic_faq_black_24dp"
+                android:icon="@drawable/ic_suit_case"
                 android:title="Espace Formateur" />
         </menu>
     </item>

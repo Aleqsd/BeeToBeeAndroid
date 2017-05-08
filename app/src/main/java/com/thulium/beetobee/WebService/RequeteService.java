@@ -48,15 +48,18 @@ public interface RequeteService {
     @POST("formations/participate/{formationId}/{userId}")
     Call<MyFormationResponse> participateFormation(@Path("formationId") Integer formationId,@Path("userId") Integer userId, @Query("access_token") String access_token);
 
-    @POST("formations/participate/{formationId}/{userId}/delete")
+    @POST("formations/delete/{formationId}/{userId}")
     Call<SimpleResponse> deleteParticipateFormation(@Path("formationId") Integer formationId,@Path("userId") Integer userId, @Query("access_token") String access_token);
 
     @GET("formations/all")
     Call<AllFormationResponse> getAllFormation();
 
     @POST("formations/add")
-    Call<MyFormationResponse> addFormation(@Body Formation formation);
+    Call<MyFormationResponse> addFormation(@Body Formation formation, @Query("access_token") String access_token);
 
     @POST("formations/delete/{formationId}")
-    Call<SimpleResponse> deleteFormation(@Path("formationId") Integer id);
+    Call<SimpleResponse> deleteFormation(@Path("formationId") Integer id, @Query("access_token") String access_token);
+
+    @POST("formations/update/{formationId}")
+    Call<MyFormationResponse> updateFormation(@Body FormationUpdate formationUpdate,@Path("formationId") Integer id, @Query("access_token") String access_token);
 }

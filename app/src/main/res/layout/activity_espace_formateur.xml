@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.thulium.beetobee.Formation.EspaceFormateurActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -21,6 +22,159 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_profile" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary">
 
-</android.support.design.widget.CoordinatorLayout>
+        <View
+            android:id="@+id/leHaut_espace_formateur"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentStart="true"
+            android:background="@color/primary_darker" />
+
+        <View
+            android:id="@+id/leHaut2_espace_formateur"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/profil_layout_content_espace_formateur"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/leHaut_espace_formateur"
+            android:background="@color/primary" />
+
+        <LinearLayout
+            android:id="@+id/profil_layout_content_espace_formateur"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/info_espace_formateur"
+            android:background="@color/primary"
+            android:orientation="vertical">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/leBas_espace_formateur"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_education_espace_createur"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/text_level_espace_createur"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/text_email_espace_createur"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="18sp" />
+
+                <Space
+                    android:id="@+id/space_espace_formateur"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_above="@+id/carouselView_espace_formateur" />
+
+                <TextView
+                    android:id="@+id/formations_suivies_espace_formateur"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/carouselView_espace_formateur"
+                    android:layout_centerHorizontal="true"
+                    android:text="Formations dispensées"
+                    android:textAlignment="center" />
+
+                <com.synnapps.carouselview.CarouselView
+                    android:id="@+id/carouselView_espace_formateur"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/app_bar_height"
+                    android:background="@color/primary"
+                    app:fillColor="#FFFFFFFF"
+                    app:pageColor="#00000000"
+                    app:radius="6dp"
+                    app:slideInterval="3000"
+                    app:strokeColor="#FF777777"
+                    app:strokeWidth="1dp">
+
+                </com.synnapps.carouselview.CarouselView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true">
+
+                    <Button
+                        android:id="@+id/button_creer_formation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="Créer Formation" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/info_espace_formateur"
+            android:layout_width="231dp"
+            android:layout_height="136dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="23dp"
+            android:adjustViewBounds="true">
+
+            <TextView
+                android:id="@+id/textView1_espace_formateur"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/avatar_espace_formateur"
+                android:text="Full Name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView2_espace_formateur"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/textView1_espace_formateur"
+                android:layout_below="@+id/textView1_espace_formateur"
+                android:maxLines="1"
+                android:text="Description"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@id/avatar_espace_formateur"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="15dp"
+                android:src="@drawable/bleu_electrique"
+                app:civ_border_color="@color/primary_dark"
+                app:civ_border_width="4dp"
+                app:civ_shadow="true"
+                app:civ_shadow_color="@color/primary_darker"
+                app:civ_shadow_radius="10" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

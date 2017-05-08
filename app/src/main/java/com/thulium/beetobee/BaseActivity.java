@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -32,9 +31,8 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.thulium.beetobee.Formation.CreateFormationActivity;
+import com.thulium.beetobee.Formation.EspaceFormateurActivity;
 import com.thulium.beetobee.Formation.Formation;
-import com.thulium.beetobee.WebService.MyFormationResponse;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.User;
@@ -259,7 +257,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             AppController.getInstance().addToRequestQueue(jsonReq);
         }
 
-        MenuItem item = navigationView.getMenu().getItem(4);
+        MenuItem item = navigationView.getMenu().getItem(3);
         if(user.getRoleId() == 0) // Non formateur
             item.getSubMenu().getItem(1).setVisible(false); // Cacher Espace Formateur
         else
@@ -309,27 +307,63 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
      * */
     private void addLocalNews() {
 
-            for (int i = 0; i < 3; i++) {
                 FeedItem item = new FeedItem();
-                item.setId(i);
-                item.setName("Voltaire");
+                item.setId(0);
+                item.setName("Projet Voltaire");
 
                 // Image might be null sometimes
                 String image = "http://afci-newsoft.fr/wp-content/uploads/2016/11/score_voltaire.png";
                 item.setImge(image);
                 item.setStatus("LA CERTIFICATION VOLTAIRE : UNE VRAIE VALEUR AJOUTÉE A MENTIONNER SUR UN CV\n" +
                         "Le Certificat Voltaire certifie votre niveau en orthographe sur votre CV, à l’instar du TOEIC® ou du TOEFL® pour l’anglais. 60 % des règles mesurées relèvent de la grammaire. Le Certificat Voltaire s’attache aux difficultés que gèrent mal les correcteurs automatiques.\n");
-                item.setProfilePic("https://image.freepik.com/icones-gratuites/certificat-de-jeux_318-57809.jpg");
+                item.setProfilePic("http://is1.mzstatic.com/image/thumb/Purple122/v4/1a/b1/37/1ab13774-6fd0-50b5-9f68-251adf748296/source/175x175bb.jpg");
                 item.setTimeStamp("1403375851930");
 
                 // url might be null sometimes
                 String feedUrl = null;
                 item.setUrl(feedUrl);
 
-                feedItems.add(item);
-            }
+                FeedItem item2 = new FeedItem();
+                item2.setId(1);
+                item2.setName("Cisco");
 
-            // notify data changes to list adapater
+                // Image might be null sometimes
+                String image2 = "http://www.atplacademy.com/wp/wp-content/uploads/2014/08/cisco_Banner.png";
+                item2.setImge(image2);
+                item2.setStatus("CISCO – CCNA Routing &amp; Switching \n"+"La certification CCNA – Cisco Certified Network Associate est à ce jour la certification la plus connue\n"+
+                                "et la plus demandée dans le monde des réseaux informatiques.\n"+
+                                "Cette certification permet de valider la capacité à installer, opérer et dépanner un réseau\n"+
+                                "informatique pour TPE et PME.\n"+
+                                "Elle permet également de valider une base de connaissances relativement large, passant de la \n"+
+                                "couche physique, aux protocoles niveau 2, aux protocoles de routage et pour finir aux protocoles applicatifs.");
+                item2.setProfilePic("https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Cisco_logo.svg/1200px-Cisco_logo.svg.png");
+                item2.setTimeStamp("1403375851930");
+
+                // url might be null sometimes
+                String feedUrl2 = null;
+                item2.setUrl(feedUrl2);
+
+
+                FeedItem item3 = new FeedItem();
+                item3.setId(2);
+                item3.setName("Adobe");
+
+                // Image might be null sometimes
+                String image3 = "https://www.courseandexam.com/media/catalog/category/Adobe-banner.jpg";
+                item3.setImge(image3);
+                item3.setStatus("La certification ACA (Adobe Certified Associate) valide les compétences acquises sur les outils de communication numérique Adobe. En obtenant la certification ACA, vous vous démarquez de la concurrence, prenez confiance en vous et découvrez de nouvelles opportunités professionnelles.\n"+"La certification ACA valide les compétences de base acquises dans les domaines de la communication, de la création et de la conception numérique avec les outils Adobe.");
+                item3.setProfilePic("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Adobe_Systems_logo_and_wordmark.svg/2000px-Adobe_Systems_logo_and_wordmark.svg.png");
+                item3.setTimeStamp("1403375851930");
+
+                // url might be null sometimes
+                String feedUrl3 = null;
+                item3.setUrl(feedUrl3);
+
+                feedItems.add(item2);
+                feedItems.add(item);
+                feedItems.add(item3);
+
+        // notify data changes to list adapater
             listAdapter.notifyDataSetChanged();
     }
 
@@ -388,15 +422,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_drawer_accueil) {
             Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
             intent.putExtra("user", user);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_drawer_liste_formations) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("user", user);
             startActivity(intent);
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_drawer_profil) {
             Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
             intent.putExtra("user", user);
             startActivity(intent);
@@ -405,19 +439,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             fragment = ListFormationFragment.newInstance(formation);
             tx.replace(R.id.content_base, fragment);
             tx.commit();*/
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
         }
         else if (id == R.id.devenir_formateur) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Voulez vous faire une demande afin de devenir formateur ?").setPositiveButton("Oui", dialogClickListener)
                     .setNegativeButton("Non", dialogClickListener).show();
-            Intent intent = new Intent(getApplicationContext(), CreateFormationActivity.class);
-            startActivity(intent);
         }
         else if (id == R.id.espace_formateur) {
-            Intent intent = new Intent(getApplicationContext(), CreateFormationActivity.class);
+            Intent intent = new Intent(getApplicationContext(), EspaceFormateurActivity.class);
+            intent.putExtra("user", user);
             startActivity(intent);
         }
 
