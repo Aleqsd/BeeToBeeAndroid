@@ -34,6 +34,17 @@ public class AllFormationResponse {
     }
 
     public int code;
+
+    public AllFormationResponse(int code, String response, Formation[] formations) {
+        this.code = code;
+        this.response = response;
+        this.formations = formations;
+    }
+
     public String response;
+
+    public AllFormationResponse() {
+    }
+
     public Formation[] formations;
 }

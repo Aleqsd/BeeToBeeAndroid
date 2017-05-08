@@ -1,10 +1,12 @@
 package com.thulium.beetobee.Formation;
 
+import java.io.Serializable;
+
 /**
  * Created by Alex on 03/05/2017.
  */
 
-public class Theme {
+public class Theme implements Serializable{
     private int id;
 
     public int getId() {

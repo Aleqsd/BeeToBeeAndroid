@@ -2,6 +2,7 @@ package com.thulium.beetobee.WebService;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Alex on 01/02/2017.
@@ -13,13 +14,13 @@ public class User implements Serializable{
     public String firstname;
     public String lastname;
     public String password;
-    public Date birthDate;
+    public String birthDate;
     public String profilePicture;
     public String skypeId;
     public String city;
     public String university;
     public String education;
-    public int level;
+    public String level;
     public String fbLink;
     public String twitterLink;
     public String access_token;
@@ -115,11 +116,11 @@ public class User implements Serializable{
         this.education = education;
     }
 
-    public int getLevel() {
+    public String getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(String level) {
         this.level = level;
     }
 
@@ -167,11 +168,11 @@ public class User implements Serializable{
         this.firstname = firstname;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 

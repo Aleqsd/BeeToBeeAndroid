@@ -1,44 +1,82 @@
 package com.thulium.beetobee.WebService;
 
-import java.util.Date;
+import java.io.Serializable;
 
 /**
- * Created by Alex on 18/02/2017.
+ * Created by Alex on 01/02/2017.
  */
 
-public class UserUpdate {
+public class UserUpdate implements Serializable{
+    public int id;
     public String email;
     public String firstname;
+
+    public UserUpdate(User user)
+    {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.firstname = user.getFirstname();
+        this.lastname = user.getLastname();
+        this.birthDate = user.getBirthDate();
+        this.profilePicture = user.getProfilePicture();
+        this.skypeId = user.getBirthDate();
+        this.city = user.getCity();
+        this.university = user.getUniversity();
+        this.education = user.getEducation();
+        this.level = user.getLevel();
+        this.fbLink = user.getFbLink();
+        this.twitterLink = user.getTwitterLink();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
+        this.roleId = user.getRoleId();
+    }
+
+    public UserUpdate(int id, String email, String firstname, String lastname, String birthDate, String profilePicture, String skypeId, String city, String university, String education, String level, String fbLink, String twitterLink, String createdAt, String updatedAt, int roleId) {
+        this.id = id;
+        this.email = email;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.birthDate = birthDate;
+        this.profilePicture = profilePicture;
+        this.skypeId = skypeId;
+        this.city = city;
+        this.university = university;
+        this.education = education;
+        this.level = level;
+        this.fbLink = fbLink;
+        this.twitterLink = twitterLink;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.roleId = roleId;
+    }
+
     public String lastname;
-    public Date birthDate;
+    public String birthDate;
+    public String profilePicture;
     public String skypeId;
     public String city;
     public String university;
     public String education;
-    public int level = 0;
+    public String level;
     public String fbLink;
     public String twitterLink;
+    public String createdAt;
+    public String updatedAt;
+    public int roleId;
 
-    public UserUpdate() {
-
+    public int getId() {
+        return id;
     }
 
-
-
-    public String getEmail() {
-
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstname() {
         return firstname;
     }
 
-    public void setFirstname(String firstname) {
+    public void setFirstName(String firstname) {
         this.firstname = firstname;
     }
 
@@ -50,12 +88,28 @@ public class UserUpdate {
         this.lastname = lastname;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public String getEmail() {
+        return email;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public String getSkypeId() {
@@ -90,11 +144,11 @@ public class UserUpdate {
         this.education = education;
     }
 
-    public int getLevel() {
+    public String getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(String level) {
         this.level = level;
     }
 
@@ -112,5 +166,55 @@ public class UserUpdate {
 
     public void setTwitterLink(String twitterLink) {
         this.twitterLink = twitterLink;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", birthDate=" + birthDate +
+                ", profilePicture='" + profilePicture + '\'' +
+                ", skypeId='" + skypeId + '\'' +
+                ", city='" + city + '\'' +
+                ", university='" + university + '\'' +
+                ", education='" + education + '\'' +
+                ", level=" + level +
+                ", fbLink='" + fbLink + '\'' +
+                ", twitterLink='" + twitterLink + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", roleId=" + roleId +
+                '}';
     }
 }

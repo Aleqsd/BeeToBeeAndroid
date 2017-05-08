@@ -1,10 +1,12 @@
 package com.thulium.beetobee.data;
 
+import java.io.Serializable;
+
 /**
  * Created by Alex on 30/04/2017.
  */
 
-public class FeedItem {
+public class FeedItem implements Serializable{
     private int id;
     private String name, status, image, profilePic, timeStamp, url;
 

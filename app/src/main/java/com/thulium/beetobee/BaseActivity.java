@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -97,7 +98,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             //The key argument here must match that used in the other activity
         }
 
-
+/*
         // Getting the formation for the FormationList Fragment
         final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
         Call<MyFormationResponse> call = requeteService.getFormation(1);
@@ -118,7 +119,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             public void onFailure(Call<MyFormationResponse> call, final Throwable t) {
                 Log.d(TAG, t.getMessage());
             }
-        });
+        });*/
 
         // Getting the profile picture from local or downloading it if the url exists for this user in database
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -207,6 +208,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         ListView feed_list = (ListView) findViewById(R.id.feed_list);
+        feed_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
+                intent.putExtra("feedItem", feedItems.get((int)id));
+                startActivity(intent);
+            }
+        });
 
         feedItems = new ArrayList<FeedItem>();
 
@@ -220,11 +230,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             // fetch the data from cache
             try {
                 String data = new String(entry.data, "UTF-8");
-                try {
-                    parseJsonFeed(new JSONObject(data));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    addLocalNews();
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -238,7 +244,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 public void onResponse(JSONObject response) {
                     VolleyLog.d(TAG, "Response: " + response.toString());
                     if (response != null) {
-                        parseJsonFeed(response);
+                        addLocalNews();
                     }
                 }
             }, new com.android.volley.Response.ErrorListener() {
@@ -298,7 +304,34 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Parsing json reponse and passing the data to feed view list adapter
+     * */
+    private void addLocalNews() {
 
+            for (int i = 0; i < 3; i++) {
+                FeedItem item = new FeedItem();
+                item.setId(i);
+                item.setName("Voltaire");
+
+                // Image might be null sometimes
+                String image = "http://afci-newsoft.fr/wp-content/uploads/2016/11/score_voltaire.png";
+                item.setImge(image);
+                item.setStatus("LA CERTIFICATION VOLTAIRE : UNE VRAIE VALEUR AJOUTÉE A MENTIONNER SUR UN CV\n" +
+                        "Le Certificat Voltaire certifie votre niveau en orthographe sur votre CV, à l’instar du TOEIC® ou du TOEFL® pour l’anglais. 60 % des règles mesurées relèvent de la grammaire. Le Certificat Voltaire s’attache aux difficultés que gèrent mal les correcteurs automatiques.\n");
+                item.setProfilePic("https://image.freepik.com/icones-gratuites/certificat-de-jeux_318-57809.jpg");
+                item.setTimeStamp("1403375851930");
+
+                // url might be null sometimes
+                String feedUrl = null;
+                item.setUrl(feedUrl);
+
+                feedItems.add(item);
+            }
+
+            // notify data changes to list adapater
+            listAdapter.notifyDataSetChanged();
+    }
 
 
     @Override

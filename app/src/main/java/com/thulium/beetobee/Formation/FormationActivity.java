@@ -28,10 +28,12 @@ import com.thulium.beetobee.WebService.User;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -95,11 +97,11 @@ public class FormationActivity extends AppCompatActivity {
                 }
             });
 
-            date.setText("Date : "+formation.getDate().toString());
+            date.setText("Date : "+formation.getDate());
             title.setText(formation.getTitle());
             description.setText(formation.getDescription());
             duration.setText("Durée : "+formation.getDuration());
-            hour.setText("à "+formation.getHour());
+            hour.setText("à "+formation.getHour()+ "heure");
             place.setText("Place : "+formation.getPlace());
             availableSeat.setText("Places disponibles : "+formation.getAvailableSeat());
         }

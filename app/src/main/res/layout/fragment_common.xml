@@ -84,27 +84,29 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/head1"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:border_color="#ed3e3e"
+                        app:border_width="1dp"
                         android:src="@drawable/head1" />
 
-                    <ImageView
+                    <com.thulium.beetobee.adapter.MLRoundedImageView
                         android:id="@+id/head2"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="-10dp"
                         android:src="@drawable/head2" />
 
-                    <ImageView
+                    <com.thulium.beetobee.adapter.MLRoundedImageView
                         android:id="@+id/head3"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="-10dp"
                         android:src="@drawable/head3" />
 
-                    <ImageView
+                    <com.thulium.beetobee.adapter.MLRoundedImageView
                         android:id="@+id/head4"
                         android:layout_width="30dp"
                         android:layout_height="30dp"

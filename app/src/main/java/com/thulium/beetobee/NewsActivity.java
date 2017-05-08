@@ -12,22 +12,38 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.thulium.beetobee.data.FeedItem;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 public class NewsActivity extends AppCompatActivity {
     //private News news;
+    private FeedItem feedItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
+        feedItem = (FeedItem) getIntent().getSerializableExtra("feedItem");
+
+        Toolbar toolbarNews = (Toolbar) findViewById(R.id.toolbarNews);
+        toolbarNews.setTitle(feedItem.getName());
+        setSupportActionBar(toolbarNews);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         //news = (News) getIntent().getSerializableExtra("news");
 
         ImageView logo = (ImageView) findViewById(R.id.logoNews);
         TextView title = (TextView) findViewById(R.id.titleNews);
         TextView description = (TextView) findViewById(R.id.descriptionNews);
+
+        title.setText(feedItem.getName());
+        description.setText(feedItem.getStatus());
 
         /*
         if (news != null) {
@@ -90,6 +106,5 @@ public class NewsActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
         startActivity(intent);
     }
-
 
 }

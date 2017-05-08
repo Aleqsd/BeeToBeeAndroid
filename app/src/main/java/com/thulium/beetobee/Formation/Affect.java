@@ -1,10 +1,12 @@
 package com.thulium.beetobee.Formation;
 
+import java.io.Serializable;
+
 /**
  * Created by Alex on 03/05/2017.
  */
 
-public class Affect {
+public class Affect implements Serializable{
     private int formationId;
 
     public int getFormationId() {

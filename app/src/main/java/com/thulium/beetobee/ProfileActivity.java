@@ -2,23 +2,16 @@ package com.thulium.beetobee;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.database.Cursor;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -33,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +36,9 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
+import com.thulium.beetobee.Formation.Formation;
+import com.thulium.beetobee.Formation.FormationActivity;
+import com.thulium.beetobee.WebService.AllFormationResponse;
 import com.thulium.beetobee.WebService.MyResponse;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
@@ -53,7 +50,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import gun0912.tedbottompicker.TedBottomPicker;
@@ -65,7 +65,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements Serializable {
 
     private static final String TAG = "ProfileActivity";
     public int YOUR_SELECT_PICTURE_REQUEST_CODE = 0;
@@ -76,8 +76,11 @@ public class ProfileActivity extends AppCompatActivity {
     private Toolbar myToolbar;
     public TextView name;
     public TextView desc;
-    CarouselView carouselView;
-    int[] sampleImages = {R.drawable.informatique, R.drawable.graphique, R.drawable.commerce, R.drawable.graphique, R.drawable.graphique};
+    public CarouselView carouselView;
+    private AllFormationResponse allFormation;
+    public ArrayList<Integer> themes = new ArrayList<>();
+    public int[] sampleImages;
+    public List formationsUser = new ArrayList<>();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,17 +90,6 @@ public class ProfileActivity extends AppCompatActivity {
         myToolbar.setTitle("Profile");
         setSupportActionBar(myToolbar);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-
-        carouselView = (CarouselView) findViewById(R.id.carouselView);
-        carouselView.setPageCount(sampleImages.length);
-
-        carouselView.setImageListener(imageListener);
-        carouselView.setImageClickListener(new ImageClickListener() {
-            @Override
-            public void onClick(int position) {
-                Toast.makeText(ProfileActivity.this, "Clicked item: "+ position, Toast.LENGTH_SHORT).show();
-            }
-        });
 
         name = (TextView) findViewById(R.id.textView1);
         desc = (TextView) findViewById(R.id.textView2);
@@ -124,9 +116,70 @@ public class ProfileActivity extends AppCompatActivity {
 
         user = (User) getIntent().getSerializableExtra("user");
 
-
         if (user != null)
             setProfileInfos();
+
+
+        RequeteService requeteService2 = RestService.getClient().create(RequeteService.class);
+        Call<AllFormationResponse> call2 = requeteService2.getAllFormation();
+        call2.enqueue(new Callback<AllFormationResponse>() {
+            @Override
+            public void onResponse(final Call<AllFormationResponse> call2, final Response<AllFormationResponse> response) {
+                if (response.isSuccessful()) {
+                    allFormation = response.body();
+                    Log.d(TAG, response.message());
+
+                    for (Formation formation : allFormation.getFormations())
+                    {
+                        for (User userFormation : formation.getUsers())
+                        {
+                            if (userFormation.getId() == user.getId())
+                            {
+                                formationsUser.add(formation);
+                                AddImageCarousel(formation.getThemes().get(0).getId());
+                            }
+                        }
+                    }
+
+                    //ToDO tester le cas où pas de formations suivies
+                    if(themes.size()!=0)
+                    {
+                        sampleImages = convertIntegers(themes);
+                        carouselView = (CarouselView) findViewById(R.id.carouselView);
+                        carouselView.setImageListener(imageListener);
+                        carouselView.setPageCount(sampleImages.length);
+
+                        carouselView.setImageClickListener(new ImageClickListener() {
+                            @Override
+                            public void onClick(int position) {
+                                Intent intent = new Intent(getApplicationContext(), FormationActivity.class);
+                                intent.putExtra("formation", (Formation) formationsUser.get(position));
+                                intent.putExtra("userId", user.getId());
+                                intent.putExtra("access_token", user.getAccess_token());
+                                ArrayList<Integer> userIds = new ArrayList<Integer>();
+                                for (User user : ((Formation) formationsUser.get(position)).getUsers())
+                                {
+                                    userIds.add(user.getId());
+                                }
+                                intent.putExtra("userIds", userIds);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+                } else {
+                    Log.d(TAG, response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AllFormationResponse> call2, final Throwable t) {
+                                Log.d(TAG, t.getMessage());
+            }
+        });
+
+
+
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -168,6 +221,35 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void AddImageCarousel(int idTheme)
+    {
+        switch (idTheme){
+            case 2:
+                themes.add(R.drawable.informatique);
+                break;
+            case 3:
+                themes.add(R.drawable.commerce);
+                break;
+            case 4:
+                themes.add(R.drawable.graphique);
+                break;
+            default:
+                themes.add(R.drawable.informatique);
+                break;
+        }
+    }
+
+    public static int[] convertIntegers(List<Integer> integers)
+    {
+        int[] ret = new int[integers.size()];
+        Iterator<Integer> iterator = integers.iterator();
+        for (int i = 0; i < ret.length; i++)
+        {
+            ret[i] = iterator.next().intValue();
+        }
+        return ret;
+    }
+
     ImageListener imageListener = new ImageListener() {
         @Override
         public void setImageForPosition(int position, ImageView imageView) {
@@ -186,6 +268,23 @@ public class ProfileActivity extends AppCompatActivity {
 
         View viewBas = LayoutInflater.from(this).inflate(R.layout.profile_infos, null);
 
+        TextView text_education = (TextView) viewBas.findViewById(R.id.text_education);
+        TextView text_level = (TextView) viewBas.findViewById(R.id.text_level);
+        TextView text_email = (TextView) viewBas.findViewById(R.id.text_email);
+
+        if (user.getEducation() != null)
+            text_education.setText(user.getEducation());
+        if (user.getLevel() != null)
+            text_level.setText(user.getLevel());
+        text_email.setText(user.getEmail());
+
+        name.setText(user.getFirstname()+" "+user.getLastname());
+        if (user.getEducation() != null)
+            desc.setText(user.getEducation());
+        else
+            desc.setText("Étudiant Ynov");
+
+        /*
         TextView textView = (TextView) viewBas.findViewById(R.id.textView);
         TextView textView3 = (TextView) viewBas.findViewById(R.id.textView3);
         TextView textView4 = (TextView) viewBas.findViewById(R.id.textView4);
@@ -220,10 +319,8 @@ public class ProfileActivity extends AppCompatActivity {
         textView9.setText("City : " + user.getCity());
         textView10.setText("University : " + user.getUniversity());
         textView11.setText("Education : " + user.getEducation());
-        if (user.getLevel() != 0)
-            textView12.setText("Level : " + user.getLevel());
-        else
-            textView12.setText("Level : null");
+        textView12.setText("Level : " + user.getLevel());
+        textView12.setText("Level : null");
         textView13.setText("Facebook : " + user.getFbLink());
         textView14.setText("Twitter : " + user.getTwitterLink());
         textView15.setText("AccessToken : " + user.getAccess_token());
@@ -232,7 +329,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (user.getRoleId() != 0)
             textView18.setText("Role : " + user.getRoleId());
         else
-            textView18.setText("Role : null");
+            textView18.setText("Role : null");*/
 
         leBas.addView(viewBas);
     }
@@ -240,58 +337,113 @@ public class ProfileActivity extends AppCompatActivity {
     private void setProfileEditableInfos() {
         floatingActionButton.setVisibility(View.VISIBLE);
         myToolbar.setTitle("Edit Profile");
-        ScrollView leBas = (ScrollView) findViewById(R.id.leBas);
+        LinearLayout linearLayoutContent = (LinearLayout) findViewById(R.id.profil_layout_content);
+        CarouselView carouselView = (CarouselView) findViewById(R.id.carouselView);
+        carouselView.setVisibility(View.INVISIBLE);
+        TextView formations_suivies = (TextView) findViewById(R.id.formations_suivies);
+        formations_suivies.setVisibility(View.INVISIBLE);
 
-        leBas.removeAllViews();
+        linearLayoutContent.removeAllViews();
 
-        // ToDo mettre le nom/mail actuel lorsque clické
         final View view = LayoutInflater.from(this).inflate(R.layout.profile_edit_infos, null);
         final EditText profil_email = (EditText) view.findViewById(R.id.profil_email);
         final EditText profil_firstname = (EditText) view.findViewById(R.id.profil_firstname);
         final EditText profil_lastname = (EditText) view.findViewById(R.id.profil_lastname);
+        final EditText profil_university = (EditText) view.findViewById(R.id.profil_university);
+        final EditText profil_education = (EditText) view.findViewById(R.id.profil_education);
+        final EditText profil_level = (EditText) view.findViewById(R.id.profil_level);
+
+        profil_email.setText(user.getEmail());
+        profil_firstname.setText(user.getFirstname());
+        profil_lastname.setText(user.getLastname());
+        if (user.getUniversity() != null)
+            profil_university.setText(user.getUniversity());
+        if (user.getEducation() != null)
+            profil_education.setText(user.getEducation());
+        if (user.getLevel() != null)
+            profil_level.setText(user.getLevel());
+
 
         Button button = (Button) view.findViewById(R.id.btn_confirm);
 
-        leBas.addView(view);
+        linearLayoutContent.addView(view);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //ToDo faire une logique validate() comme avec SignupActivity avant updateUser
-                UserUpdate ourUser = new UserUpdate();
 
-                ourUser.setFirstname(profil_firstname.getText().toString());
-                ourUser.setLastname(profil_lastname.getText().toString());
-                ourUser.setEmail(profil_email.getText().toString());
+                Boolean valid = true;
+                String firstName = profil_firstname.getText().toString();
+                String lastName = profil_lastname.getText().toString();
+                String email = profil_email.getText().toString();
+                String university = profil_university.getText().toString();
+                String education = profil_education.getText().toString();
+                String level = profil_level.getText().toString();
 
-                RequeteService requeteService = RestService.getClient().create(RequeteService.class);
-                Call<MyResponse> call = requeteService.updateUser(ourUser, user.getId(), user.getAccess_token());
-                call.enqueue(new Callback<MyResponse>() {
-                    @Override
-                    public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
-                        Log.d(TAG, "Update, Response code : " + response.code());
-                        if (response.isSuccessful()) {
-                            Log.d(TAG, response.raw().request().toString());
-                            Log.d(TAG, response.message());
-                            user = response.body().getUser();
-                            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                            intent.putExtra("user", user);
-                            intent.putExtra("update", "ok");
-                            startActivity(intent);
-                            floatingActionButton.setVisibility(View.INVISIBLE);
-                        } else {
-                            Log.d(TAG, response.message());
+                if (firstName.isEmpty() || firstName.length() < 2 || firstName.length() > 30) {
+                    profil_firstname.setError(getString(R.string.between2and30char));
+                    valid = false;
+                } else {
+                    profil_firstname.setError(null);
+                }
+
+                if (lastName.isEmpty() || lastName.length() < 2 || lastName.length() > 30) {
+                    profil_lastname.setError(getString(R.string.between2and30char));
+                    valid = false;
+                } else {
+                    profil_lastname.setError(null);
+                }
+
+                if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    profil_email.setError(getString(R.string.enterValidEmail));
+                    valid = false;
+                } else {
+                    profil_email.setError(null);
+                }
+
+                if (valid)
+                {
+                    final UserUpdate newUser = new UserUpdate(user);
+
+                    newUser.setFirstname(profil_firstname.getText().toString());
+                    newUser.setLastname(profil_lastname.getText().toString());
+                    newUser.setEmail(profil_email.getText().toString());
+                    if (university != null)
+                        newUser.setUniversity(university);
+                    if (education != null)
+                        newUser.setEducation(education);
+                    if (level != null)
+                        newUser.setLevel(level);
+
+                    RequeteService requeteService = RestService.getClient().create(RequeteService.class);
+                    Call<MyResponse> call = requeteService.updateUser(newUser, user.getId(), user.getAccess_token());
+                    call.enqueue(new Callback<MyResponse>() {
+                        @Override
+                        public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
+                            Log.d(TAG, "Update, Response code : " + response.code());
+                            if (response.isSuccessful()) {
+                                Log.d(TAG, response.raw().request().toString());
+                                Log.d(TAG, response.message());
+                                user = response.body().getUser();
+                                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                                intent.putExtra("user", user);
+                                intent.putExtra("update", "ok");
+                                startActivity(intent);
+                                floatingActionButton.setVisibility(View.INVISIBLE);
+                            } else {
+                                Log.d(TAG, response.message());
+                                Snackbar snackbar = Snackbar.make(view, "Update failed", Snackbar.LENGTH_LONG);
+                                snackbar.show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<MyResponse> call, final Throwable t) {
+                            Log.d(TAG, t.getMessage());
                             Snackbar snackbar = Snackbar.make(view, "Update failed", Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<MyResponse> call, final Throwable t) {
-                        Log.d(TAG, t.getMessage());
-                        Snackbar snackbar = Snackbar.make(view, "Update failed", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    }
-                });
+                    });
+                }
             }
         });
     }

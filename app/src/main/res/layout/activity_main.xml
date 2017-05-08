@@ -40,7 +40,8 @@
         android:gravity="center_vertical"
         android:text="1/199"
         android:textColor="#ffffff"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="invisible" />
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

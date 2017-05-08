@@ -109,7 +109,7 @@ public class LaunchActivity extends Activity implements Serializable {
 
 
         RequeteService requeteService = RestService.getClient().create(RequeteService.class);
-        Call<MyResponse> call2 = requeteService.loginWithToken(auth_id, auth_token);
+        Call<MyResponse> call2 = requeteService.loginWithToken(auth_token);
         call2.enqueue(new Callback<MyResponse>() {
             @Override
             public void onResponse(final Call<MyResponse> call, final Response<MyResponse> response) {
@@ -137,7 +137,7 @@ public class LaunchActivity extends Activity implements Serializable {
                                 public void run() {
                                     // On complete call either onLoginSuccess or onLoginFailed
                                     //onLoginSuccess();
-                                    Log.d(TAG, response.body().getResponse());
+                                    Log.d(TAG, response.message());
                                     onLoginFailed();
                                     progressDialog.dismiss();
                                 }

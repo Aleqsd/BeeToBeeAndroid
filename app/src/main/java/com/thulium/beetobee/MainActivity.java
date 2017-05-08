@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
@@ -145,14 +146,18 @@ public class MainActivity extends AppCompatActivity {
             args.putInt("availableSeat", currentResponse.getFormations()[i].getAvailableSeat());
             args.putInt("userId",user.getId());
             args.putString("access_token",user.getAccess_token());
+            args.putInt("creatorId",currentResponse.getFormations()[i].getCreatorId());
 
             ArrayList<Integer> userIds = new ArrayList<Integer>();
+            ArrayList<String> userPictures = new ArrayList<>();
             for (User user : currentResponse.getFormations()[i].getUsers())
             {
                 userIds.add(user.getId());
+                userPictures.add(user.getProfilePicture());
             }
 
             args.putIntegerArrayList("userIds",userIds);
+            args.putStringArrayList("userPictures",userPictures);
 
             test.setArguments(args);
             fragments.add(test);
@@ -218,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
         int totalNum = viewPager.getAdapter().getCount();
         int currentItem = viewPager.getCurrentItem() + 1;
         indicatorTv.setText(Html.fromHtml("<font color='#12edf0'>" + currentItem + "</font>  /  " + totalNum));
+        indicatorTv.setVisibility(View.VISIBLE);
     }
 
     @SuppressWarnings("deprecation")

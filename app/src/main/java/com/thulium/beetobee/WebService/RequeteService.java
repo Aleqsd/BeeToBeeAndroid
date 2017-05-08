@@ -26,8 +26,8 @@ public interface RequeteService {
     @GET("signin")
     Call<MyResponse> login(@Query("email") String email, @Query("password") String password);
 
-    @GET("users/{id}")
-    Call<MyResponse> loginWithToken(@Path("id") Integer id, @Query("access_token") String access_token);
+    @POST("check")
+    Call<MyResponse> loginWithToken(@Query("access_token") String access_token);
 
     @POST("users/signup")
     Call<MyResponse> addStudent(@Body UserRegister user);

@@ -1,10 +1,12 @@
 package com.thulium.beetobee.WebService;
 
+import java.io.Serializable;
+
 /**
  * Created by Alex on 07/05/2017.
  */
 
-public class Creator  {
+public class Creator implements Serializable {
     public int getId() {
         return id;
     }

@@ -1,0 +1,150 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    >
+
+    <View
+        android:id="@+id/leHaut3_espace_formateur"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/primary_darker"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/leHaut_espace_formateur"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/primary_darker"
+        android:layout_below="@+id/leHaut3_espace_formateur"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/leHaut2_espace_formateur"
+        android:layout_width="match_parent"
+        android:background="@color/primary"
+        android:layout_below="@+id/leHaut_espace_formateur"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/profil_layout_content_espace_formateur"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/profil_layout_content_espace_formateur"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/primary"
+        android:layout_below="@+id/info">
+
+        <ScrollView
+            android:id="@+id/leBas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/space"
+            android:layout_below="@+id/info"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+        </ScrollView>
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="match_parent"
+            android:layout_height="27dp"
+            android:layout_above="@+id/carouselView" />
+
+        <TextView
+            android:id="@+id/formations_suivies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/carouselView"
+            android:layout_centerHorizontal="true"
+            android:text="Formations suivies"
+            android:textAlignment="center" />
+
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/carouselView"
+            android:layout_width="match_parent"
+            android:layout_height="117dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/primary"
+            app:fillColor="#FFFFFFFF"
+            app:pageColor="#00000000"
+            app:radius="6dp"
+            app:slideInterval="3000"
+            app:strokeColor="#FF777777"
+            app:strokeWidth="1dp">
+
+        </com.synnapps.carouselview.CarouselView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/info"
+        android:layout_width="231dp"
+        android:layout_height="136dp"
+        android:adjustViewBounds="true"
+        android:layout_marginStart="23dp"
+        android:layout_below="@+id/leHaut3"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/avatar"
+            android:text="Full Name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView1"
+            android:layout_below="@+id/textView1"
+            android:maxLines="1"
+            android:text="Description"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/bleu_electrique"
+            app:civ_border_color="@color/primary_dark"
+            app:civ_border_width="4dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="10"
+            app:civ_shadow_color="@color/primary_darker"
+            android:id="@id/avatar"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_alignParentStart="true" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_action_edit"
+            android:layout_alignBottom="@+id/avatar"
+            android:layout_alignEnd="@+id/avatar"
+            android:layout_marginEnd="33dp"
+            android:id="@+id/floatingActionButton"
+            app:backgroundTint="@color/primary_darker"
+            app:rippleColor="@color/primary_dark"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
