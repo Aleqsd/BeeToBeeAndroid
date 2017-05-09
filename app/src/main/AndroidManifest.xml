@@ -57,10 +57,10 @@
         <activity
             android:name=".Formation.CreateFormationActivity"
             android:label="@string/title_activity_create_formation"
-            android:theme="@style/AppTheme.Dark" />
+            android:theme="@style/AppTheme.DarkRed" />
         <activity
             android:name=".Formation.EspaceFormateurActivity"
-            android:theme="@style/AppTheme.Dark"/>
+            android:theme="@style/AppTheme.DarkRed"/>
     </application>
 
 </manifest>

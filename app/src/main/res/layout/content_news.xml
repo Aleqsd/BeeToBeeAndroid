@@ -22,7 +22,7 @@
                 <ImageView
                     android:id="@+id/logoNews"
                     android:layout_width="match_parent"
-                    android:layout_height="205dp"
+                    android:layout_height="86dp"
                     android:adjustViewBounds="false"
                     app:srcCompat="@drawable/bleu_electrique" />
 
@@ -32,8 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.55"
                     android:text="Title"
-                    android:textAlignment="center"
-                    android:textSize="30sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/descriptionNews"
@@ -41,8 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.55"
                     android:text="Description"
-                    android:textAlignment="center"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
         </ScrollView>

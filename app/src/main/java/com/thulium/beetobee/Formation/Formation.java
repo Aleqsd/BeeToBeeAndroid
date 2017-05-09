@@ -34,6 +34,7 @@ public class Formation implements Serializable {
     private Creator creator;
     private List<User> users;
     private List<Theme> themes;
+    private int themeId;
 
     public int getThemeId() {
         return themeId;
@@ -43,14 +44,12 @@ public class Formation implements Serializable {
         this.themeId = themeId;
     }
 
-    private int themeId;
-
     public Formation(String title, String description) {
         this.title = title;
         this.description = description;
     }
 
-    public Formation(int id, String title, String description, int duration, String date, String hour, String place, int availableSeat) {
+    public Formation(int id, String title, String description, int duration, String date, String hour, String place, int availableSeat, int creatorId, int themeId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -59,6 +58,8 @@ public class Formation implements Serializable {
         this.hour = hour;
         this.place = place;
         this.availableSeat = availableSeat;
+        this.creatorId = creatorId;
+        this.themeId = themeId;
     }
 
     public Formation(String title, String description, int duration) {

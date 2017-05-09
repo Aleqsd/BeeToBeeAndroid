@@ -64,52 +64,26 @@ public class MainActivity extends AppCompatActivity {
         user = (User) getIntent().getSerializableExtra("user");
         currentResponse = new AllFormationResponse();
 
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Getting formations...");
-        progressDialog.show();
-
         RequeteService requeteService = RestService.getClient().create(RequeteService.class);
         Call<AllFormationResponse> call2 = requeteService.getAllFormation();
         call2.enqueue(new Callback<AllFormationResponse>() {
             @Override
             public void onResponse(final Call<AllFormationResponse> call2, final Response<AllFormationResponse> response) {
                 if (response.isSuccessful()) {
-                    new android.os.Handler().postDelayed(
-                            new Runnable() {
-                                public void run() {
-                                    if (response.isSuccessful()) {
-                                        currentResponse = response.body();
-                                        Log.d(TAG, response.message());
-                                        initImageLoader();
-                                        fillViewPager(currentResponse);
-                                        progressDialog.dismiss();
-                                    }
-                                }
-                            }, 500);
+                    currentResponse = response.body();
+                    Log.d(TAG, response.message());
+                    initImageLoader();
+                    fillViewPager(currentResponse);
+
                 } else {
-                    new android.os.Handler().postDelayed(
-                            new Runnable() {
-                                public void run() {
-                                    Log.d(TAG, response.message());
-                                    progressDialog.dismiss();
-                                }
-                            }, 500);
+                    Log.d(TAG, response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<AllFormationResponse> call2, final Throwable t) {
-                new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
                                 Log.d(TAG, t.getMessage());
-                                progressDialog.dismiss();
-                            }
-                        }, 500);
-            }
-        });
+        }});
 
 
         //ToDo remplir l'imageArray en fonction des elements de currentResponse et de leur theme
@@ -123,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
         indicatorTv = (TextView) findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         List<String> listImageArray = new ArrayList<String>();
-     //= {"assets://informatique.png", "assets://commerce.png", "assets://graphique.png"};
-
 
         // 1. viewPager parallax PageTransformer
         viewPager.setPageTransformer(false, new CustPagerTransformer(this));
@@ -145,8 +117,10 @@ public class MainActivity extends AppCompatActivity {
             args.putString("place", currentResponse.getFormations()[i].getPlace());
             args.putInt("availableSeat", currentResponse.getFormations()[i].getAvailableSeat());
             args.putInt("userId",user.getId());
+            args.putInt("themeId",currentResponse.getFormations()[i].getThemes().get(0).getId());
             args.putString("access_token",user.getAccess_token());
             args.putInt("creatorId",currentResponse.getFormations()[i].getCreatorId());
+            args.putSerializable("user",user);
 
             ArrayList<Integer> userIds = new ArrayList<Integer>();
             ArrayList<String> userPictures = new ArrayList<>();

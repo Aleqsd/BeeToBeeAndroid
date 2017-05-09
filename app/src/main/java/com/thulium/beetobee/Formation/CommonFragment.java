@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,10 +24,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.thulium.beetobee.MainActivity;
 import com.thulium.beetobee.ProfileActivity;
 import com.thulium.beetobee.R;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
+import com.thulium.beetobee.WebService.User;
 
 import org.junit.runner.Describable;
 
@@ -38,6 +42,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,7 +55,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private ImageView imageView;
     private TextView address1, address2, address3, address4, address5;
     private RatingBar ratingBar;
-    private ImageView head1, head2, head3, head4;
+    private CircleImageView head1, head2, head3, head4;
     private String imageUrl;
     private String title = "Unknown";
     private String description = "Unknown";
@@ -67,7 +72,10 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private ArrayList<Integer> userIds;
     private String access_token;
     private Formation currentFormation;
-    private ArrayList<ImageView> avatars;
+    private ArrayList<CircleImageView> avatars;
+    private User user;
+    private int themeId;
+
 
 
     @Override
@@ -88,6 +96,8 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             access_token = getArguments().getString("access_token");
             userIds = getArguments().getIntegerArrayList("userIds");
             creatorId = getArguments().getInt("creatorId");
+            user = (User) getArguments().getSerializable("user");
+            themeId = getArguments().getInt("themeId");
         }
     }
 
@@ -98,16 +108,17 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
+
         ImageLoader.getInstance().displayImage(imageUrl, imageView);
         address1 = (TextView) dragLayout.findViewById(R.id.address1);
         address4 = (TextView) dragLayout.findViewById(R.id.address4);
         address5 = (TextView) dragLayout.findViewById(R.id.address5);
         ratingBar = (RatingBar) dragLayout.findViewById(R.id.rating);
 
-        head1 = (ImageView) dragLayout.findViewById(R.id.head1);
-        head2 = (ImageView) dragLayout.findViewById(R.id.head2);
-        head3 = (ImageView) dragLayout.findViewById(R.id.head3);
-        head4 = (ImageView) dragLayout.findViewById(R.id.head4);
+        head1 = (CircleImageView) dragLayout.findViewById(R.id.head1);
+        head2 = (CircleImageView) dragLayout.findViewById(R.id.head2);
+        head3 = (CircleImageView) dragLayout.findViewById(R.id.head3);
+        head4 = (CircleImageView) dragLayout.findViewById(R.id.head4);
 
         avatars = new ArrayList<>();
         avatars.add(head1);
@@ -154,17 +165,21 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         for (int i = 0; i<number; i++)
         {
             final String url;
+            final int finalI = i;
+
             if (i == 0)
-            {
                 url = "https://api.beetobee.fr/users/" + creatorId + "/picture/dl";
+            else {
+                url = "https://api.beetobee.fr/users/" + userIds.get(i - 1) + "/picture/dl";
+                if (userIds.get(i-1) == user.getId())
+                {
+                    avatars.get(finalI).setBorderWidth(3);
+                    avatars.get(finalI).setBorderColor(Color.parseColor("#4D276B"));
+                }
             }
-            else
-            {
-                url = "https://api.beetobee.fr/users/" + userIds.get(i-1) + "/picture/dl";
-            }
+
             final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
 
-            final int finalI = i;
             new AsyncTask<Void, Long, Void>() {
                 @Override
                 protected Void doInBackground(Void... voids) {
@@ -193,47 +208,15 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
     @Override
     public void gotoDetail() {
-        //salut = getArguments().getString("formation");
 
-
-
-/*
-        Intent intent = new Intent(getContext(), DetailActivity.class);
-        intent.putExtra(DetailActivity.IMAGE_TRANSITION_NAME, imageView);
-        startActivity(intent);
-
-        DetailActivity nextFrag = new DetailActivity();
-        getFragmentManager().beginTransaction()
-                .replace(((ViewGroup) getView().getParent()).getId(), nextFrag)
-                .addToBackStack(null)
-                .commit();
-
-        Activity activity = (Activity) getContext();
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                new Pair(imageView, DetailActivity.IMAGE_TRANSITION_NAME),
-                new Pair(address1, DetailActivity.ADDRESS1_TRANSITION_NAME),
-                new Pair(address2, DetailActivity.ADDRESS2_TRANSITION_NAME),
-                new Pair(address3, DetailActivity.ADDRESS3_TRANSITION_NAME),
-                new Pair(address4, DetailActivity.ADDRESS4_TRANSITION_NAME),
-                new Pair(address5, DetailActivity.ADDRESS5_TRANSITION_NAME),
-                new Pair(ratingBar, DetailActivity.RATINGBAR_TRANSITION_NAME),
-                new Pair(head1, DetailActivity.HEAD1_TRANSITION_NAME),
-                new Pair(head2, DetailActivity.HEAD2_TRANSITION_NAME),
-                new Pair(head3, DetailActivity.HEAD3_TRANSITION_NAME),
-                new Pair(head4, DetailActivity.HEAD4_TRANSITION_NAME)
-        );
-        Intent intent = new Intent(activity, DetailActivity.class);
-        intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, imageUrl);
-        startActivity(intent);
-        //ActivityCompat.startActivity(activity, intent, options.toBundle());*/
-
-        currentFormation = new Formation(id,title,description,duration,date,hour,place,availableSeat);
+        currentFormation = new Formation(id,title,description,duration,date,hour,place,availableSeat,creatorId,themeId);
 
         Intent intent = new Intent(getContext(), FormationActivity.class);
         intent.putExtra("formation",currentFormation);
         intent.putExtra("userId",userId);
         intent.putExtra("access_token",access_token);
         intent.putExtra("userIds",userIds);
+        intent.putExtra("user",user);
         startActivity(intent);
     }
 

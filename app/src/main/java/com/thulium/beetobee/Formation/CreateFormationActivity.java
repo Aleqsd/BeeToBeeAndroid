@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.thulium.beetobee.BaseActivity;
 import com.thulium.beetobee.R;
 import com.thulium.beetobee.WebService.MyFormationResponse;
 import com.thulium.beetobee.WebService.RequeteService;
@@ -203,7 +204,7 @@ public class CreateFormationActivity extends AppCompatActivity {
             SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
             SimpleDateFormat input = new SimpleDateFormat("dd/MM/yyyy");
             try {
-                Date oneWayTripDate = input.parse(date);                 // parse input
+                Date oneWayTripDate = input.parse(date);              // parse input
                 formation.setDate(output.format(oneWayTripDate));    // format output
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -242,6 +243,14 @@ public class CreateFormationActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("FormationActivity", "onBackPressed Called");
+        Intent intent = new Intent(getApplicationContext(), EspaceFormateurActivity.class);
+        intent.putExtra("user",user);
+        startActivity(intent);
     }
 
 }

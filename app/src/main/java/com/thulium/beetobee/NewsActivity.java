@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.thulium.beetobee.data.FeedItem;
 
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class NewsActivity extends AppCompatActivity {
 
         title.setText(feedItem.getName());
         description.setText(feedItem.getStatus());
+        Picasso.with(getApplicationContext()).load(feedItem.getImge()).into(logo);
 
         /*
         if (news != null) {

@@ -43,6 +43,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -378,5 +380,13 @@ public class EspaceFormateurActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("FormationActivity", "onBackPressed Called");
+        Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+        intent.putExtra("user",user);
+        startActivity(intent);
     }
 }

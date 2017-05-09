@@ -15,6 +15,10 @@
   <color name="colorPrimaryDark">#4D276B</color>
   <color name="colorAccent">#321851</color>
 
+  <color name="redLight">#e0b4b1</color>
+  <color name="red">#ed4747</color>
+    <color name="redDark">#b20a0a</color>
+
   <color name="accent">#321851</color>
 
   <color name="black">#000000</color>
@@ -25,6 +29,8 @@
   <color name="aluminum">#999999</color>
   <color name="base">#AAAAAA</color>
   <color name="iron">#CCCCCC</color>
+    <color name="greyMaterial">#E1E2E1</color>
+    <color name="whitelike">#F5F5F6</color>
 
   <color name="white">#ffffff</color>
   <color name="feed_bg">#2C3664</color>

@@ -96,6 +96,8 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/avatar"
                 android:text="Full Name"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="-30dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />

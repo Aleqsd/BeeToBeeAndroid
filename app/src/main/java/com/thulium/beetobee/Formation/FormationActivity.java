@@ -17,18 +17,21 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thulium.beetobee.BaseActivity;
+import com.thulium.beetobee.MainActivity;
 import com.thulium.beetobee.R;
 import com.thulium.beetobee.WebService.FormationUpdate;
 import com.thulium.beetobee.WebService.MyFormationResponse;
 import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.SimpleResponse;
+import com.thulium.beetobee.WebService.User;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,16 +59,27 @@ public class FormationActivity extends AppCompatActivity {
     Button button;
     private String[] arraySpinner;
     FormationUpdate formationUpdate;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_formation);
 
         formation = (Formation) getIntent().getSerializableExtra("formation");
+        user = (User) getIntent().getSerializableExtra("user");
         userId = getIntent().getIntExtra("userId",0);
         access_token = getIntent().getStringExtra("access_token");
         userIds = getIntent().getIntegerArrayListExtra("userIds");
+
+        if(userId == formation.getCreatorId())
+        {
+            super.setTheme(R.style.AppTheme_DarkRed);
+            userCreator = true;
+        }
+        else
+            super.setTheme(R.style.AppTheme_Dark);
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_formation);
 
         TextView title = (TextView) findViewById(R.id.titleFormation);
         TextView description = (TextView) findViewById(R.id.descriptionFormation);
@@ -73,88 +87,85 @@ public class FormationActivity extends AppCompatActivity {
         TextView date = (TextView) findViewById(R.id.dateFormation);
         TextView place = (TextView) findViewById(R.id.placeFormation);
         TextView availableSeat = (TextView) findViewById(R.id.availableSeatFormation);
+        ImageView imageFormation = (ImageView) findViewById(R.id.imageFormation);
         Button buttonInscription = (Button) findViewById(R.id.buttonInscription);
         buttonInscription.setOnClickListener(participate);
 
-        if (formation != null) {
+        Toolbar toolbarFormation = (Toolbar) findViewById(R.id.toolbarFormation);
+        toolbarFormation.setTitle(formation.getTitle());
+        setSupportActionBar(toolbarFormation);
 
-            for(Integer id : userIds)
-            {
-                if (id == userId)
-                    userInscris = true;
-            }
-
-            if (userInscris)
-                buttonInscription.setText("Se désinscrire");
-
-            if(userId == formation.getCreatorId())
-                buttonInscription.setVisibility(View.INVISIBLE);
-
-            Toolbar toolbarFormation = (Toolbar) findViewById(R.id.toolbarFormation);
-            toolbarFormation.setTitle(formation.getTitle());
-            setSupportActionBar(toolbarFormation);
-
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setDisplayShowHomeEnabled(true);
-            }
-
-            toolbarFormation.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
-
-
-            SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-            SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
-            if (formation.getDate() != null)
-            {
-                try {
-                    Date oneWayTripDate = input.parse(formation.getDate());                 // parse input
-                    date.setText("Date : " + output.format(oneWayTripDate)+" à "+formation.getHour()+ " heures");    // format output
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    date.setText("Date : "+formation.getDate());
-                }
-            }
-
-            title.setText(formation.getTitle());
-            description.setText(formation.getDescription());
-            duration.setText("Durée : "+formation.getDuration()+" minutes");
-            place.setText("Place : "+formation.getPlace());
-            availableSeat.setText("Places disponibles : "+formation.getAvailableSeat());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        else // test
+
+        toolbarFormation.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        if(userCreator)
         {
-            Toolbar toolbarFormation = (Toolbar) findViewById(R.id.toolbarFormation);
-            toolbarFormation.setTitle("Formation Cryptographie");
-            setSupportActionBar(toolbarFormation);
-
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setDisplayShowHomeEnabled(true);
-            }
-
-            toolbarFormation.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
-
-            InputStream ims = null;
-            try {
-                ims = getAssets().open("image7.png");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // load image as Drawable
-            Drawable d = Drawable.createFromStream(ims, null);
-
-            title.setText("Unknwon");
+            buttonInscription.setVisibility(View.INVISIBLE);
+            toolbarFormation.setBackgroundResource(R.color.red);
         }
+
+        switch (formation.getThemeId()){
+            case 2:
+                imageFormation.setImageResource(R.drawable.informatique1080);
+                break;
+            case 3:
+                imageFormation.setImageResource(R.drawable.commerce1080);
+                break;
+            case 4:
+                imageFormation.setImageResource(R.drawable.graphique1080);
+                break;
+            default:
+                imageFormation.setImageResource(R.drawable.graphique1080);
+                break;
+        }
+
+        for(Integer id : userIds)
+        {
+            if (id == userId)
+                userInscris = true;
+        }
+
+        if (userInscris)
+            buttonInscription.setText("Se désinscrire");
+
+
+
+
+        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+        if (formation.getDate() != null)
+        {
+            try {
+                Date oneWayTripDate = input.parse(formation.getDate());                 // parse input
+                date.setText("Date : " + output.format(oneWayTripDate)+" à "+formation.getHour()+ " heures");    // format output
+            } catch (ParseException e) {
+                e.printStackTrace();
+                date.setText("Date : "+formation.getDate());
+            }
+        }
+
+        title.setText(formation.getTitle());
+        description.setText(formation.getDescription());
+        duration.setText("Durée : "+formation.getDuration()+" minutes");
+        place.setText("Place : "+formation.getPlace());
+        availableSeat.setText("Places disponibles : "+formation.getAvailableSeat());
+
+
+    }
+
+    @Override
+    public void setTheme(int resid) {
+        boolean changeTheme = true;
+        super.setTheme(changeTheme ? R.style.AppTheme_DarkRed : resid);
     }
 
     public static boolean isValidFormat(String format, String value) {
@@ -195,6 +206,9 @@ public class FormationActivity extends AppCompatActivity {
                                             Toast.makeText(getBaseContext(), "Désinscription réussie", Toast.LENGTH_LONG).show();
                                             Log.d("FormationActivity", response.message());
                                             progressDialog.dismiss();
+                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                            intent.putExtra("user", user);
+                                            startActivity(intent);
                                         }
                                     }, 500);
                         } else {
@@ -241,6 +255,9 @@ public class FormationActivity extends AppCompatActivity {
                                         public void run() {
                                             Toast.makeText(getBaseContext(), "Inscription réussie", Toast.LENGTH_LONG).show();
                                             progressDialog.dismiss();
+                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                            intent.putExtra("user", user);
+                                            startActivity(intent);
                                         }
                                     }, 500);
                         } else {
@@ -271,7 +288,8 @@ public class FormationActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Log.d("FormationActivity", "onBackPressed Called");
-        Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("user",user);
         startActivity(intent);
     }
 
@@ -369,6 +387,9 @@ public class FormationActivity extends AppCompatActivity {
                                     public void run() {
                                         Log.d("FormationActivity", response.message());
                                         Toast.makeText(getBaseContext(), "Formation éditée !", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(getApplicationContext(), EspaceFormateurActivity.class);
+                                        intent.putExtra("user", user);
+                                        startActivity(intent);
                                         progressDialog.dismiss();
                                     }
                                 }, 500);
@@ -522,6 +543,9 @@ public class FormationActivity extends AppCompatActivity {
                                 public void run() {
                                     Toast.makeText(getBaseContext(), "Formation supprimée", Toast.LENGTH_LONG).show();
                                     Log.d("FormationActivity", response.message());
+                                    Intent intent = new Intent(getApplicationContext(), EspaceFormateurActivity.class);
+                                    intent.putExtra("user", user);
+                                    startActivity(intent);
                                     progressDialog.dismiss();
                                 }
                             }, 500);
