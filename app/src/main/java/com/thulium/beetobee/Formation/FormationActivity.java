@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.icu.text.SimpleDateFormat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,7 +32,9 @@ import com.thulium.beetobee.WebService.SimpleResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,8 +50,8 @@ public class FormationActivity extends AppCompatActivity {
     EditText _title;
     EditText _description;
     Spinner _spinner;
-    EditText _date;
     EditText _heure;
+    EditText _date;
     EditText _duree;
     Button button;
     private String[] arraySpinner;
@@ -68,7 +71,6 @@ public class FormationActivity extends AppCompatActivity {
         TextView description = (TextView) findViewById(R.id.descriptionFormation);
         TextView duration = (TextView) findViewById(R.id.durationFormation);
         TextView date = (TextView) findViewById(R.id.dateFormation);
-        TextView hour = (TextView) findViewById(R.id.hourFormation);
         TextView place = (TextView) findViewById(R.id.placeFormation);
         TextView availableSeat = (TextView) findViewById(R.id.availableSeatFormation);
         Button buttonInscription = (Button) findViewById(R.id.buttonInscription);
@@ -104,11 +106,23 @@ public class FormationActivity extends AppCompatActivity {
                 }
             });
 
-            date.setText("Date : "+formation.getDate());
+
+            SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+            if (formation.getDate() != null)
+            {
+                try {
+                    Date oneWayTripDate = input.parse(formation.getDate());                 // parse input
+                    date.setText("Date : " + output.format(oneWayTripDate)+" à "+formation.getHour()+ " heures");    // format output
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    date.setText("Date : "+formation.getDate());
+                }
+            }
+
             title.setText(formation.getTitle());
             description.setText(formation.getDescription());
-            duration.setText("Durée : "+formation.getDuration());
-            hour.setText("à "+formation.getHour()+ "heure");
+            duration.setText("Durée : "+formation.getDuration()+" minutes");
             place.setText("Place : "+formation.getPlace());
             availableSeat.setText("Places disponibles : "+formation.getAvailableSeat());
         }
@@ -139,17 +153,23 @@ public class FormationActivity extends AppCompatActivity {
             // load image as Drawable
             Drawable d = Drawable.createFromStream(ims, null);
 
-            title.setText("Formation Cryptographie");
-            description.setText("La cryptographie est une des disciplines de la cryptologie s'attachant à protéger des messages (assurant confidentialité, authenticité et intégrité) en s'aidant souvent de secrets ou clés.");
-            duration.setText("Durée : 2 heures");
-            date.setText("Date : 03/05/2017");
-            hour.setText("à 16h");
-            place.setText("Places : 20");
-            availableSeat.setText("Places disponibles : 5");
+            title.setText("Unknwon");
         }
     }
 
-
+    public static boolean isValidFormat(String format, String value) {
+        Date date = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            date = sdf.parse(value);
+            if (!value.equals(sdf.format(date))) {
+                date = null;
+            }
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        return date != null;
+    }
 
     View.OnClickListener participate = new View.OnClickListener() {
         public void onClick(View v) {
@@ -311,7 +331,18 @@ public class FormationActivity extends AppCompatActivity {
             }
         });
 
-        _date.setText(formation.getDate());
+
+
+        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date oneWayTripDate = input.parse(formation.getDate());                 // parse input
+            _date.setText(output.format(oneWayTripDate));    // format output
+        } catch (ParseException e) {
+            e.printStackTrace();
+            _date.setText("Date : "+formation.getDate());
+        }
+
         _title.setText(formation.getTitle());
         _description.setText(formation.getDescription());
         _duree.setText(Integer.toString(formation.getDuration()));
@@ -396,12 +427,13 @@ public class FormationActivity extends AppCompatActivity {
             _description.setError(null);
         }
 
-        if (date.isEmpty()) {
-            _date.setError("Date obligatoire");
+
+        if (!isValidFormat("dd/MM/yyyy",date)) {
+            _date.setError("La date doit être au format jj/mm/aaaa");
             valid = false;
-        } else {
-            _date.setError(null);
         }
+        else
+            _date.setError(null);
 
         if (duree < 1) {
             _duree.setError("Durée obligatoire");
@@ -427,6 +459,15 @@ public class FormationActivity extends AppCompatActivity {
             formationUpdate.setDuration(duree);
             formationUpdate.setDate(date);
             formationUpdate.setHour(heure);
+
+            SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            SimpleDateFormat input = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                Date oneWayTripDate = input.parse(date);                 // parse input
+                formationUpdate.setDate(output.format(oneWayTripDate));    // format output
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             switch (_spinner.getSelectedItemPosition()){
                 case 0:
@@ -454,7 +495,6 @@ public class FormationActivity extends AppCompatActivity {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     DeleteFormation();
-                    onBackPressed();
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:

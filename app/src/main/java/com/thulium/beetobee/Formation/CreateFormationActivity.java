@@ -2,6 +2,7 @@ package com.thulium.beetobee.Formation;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,7 +23,9 @@ import com.thulium.beetobee.WebService.RequeteService;
 import com.thulium.beetobee.WebService.RestService;
 import com.thulium.beetobee.WebService.User;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -125,6 +128,20 @@ public class CreateFormationActivity extends AppCompatActivity {
         });
     }
 
+    public static boolean isValidFormat(String format, String value) {
+        Date date = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            date = sdf.parse(value);
+            if (!value.equals(sdf.format(date))) {
+                date = null;
+            }
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        return date != null;
+    }
+
     public boolean validate() {
         boolean valid = true;
 
@@ -157,12 +174,12 @@ public class CreateFormationActivity extends AppCompatActivity {
             _description.setError(null);
         }
 
-        if (date.isEmpty()) {
-            _date.setError("Date obligatoire");
+        if (!isValidFormat("dd/MM/yyyy",date)) {
+            _date.setError("La date doit être au format jj/mm/aaaa");
             valid = false;
-        } else {
-            _date.setError(null);
         }
+        else
+            _date.setError(null);
 
         if (duree < 1) {
             _duree.setError("Durée obligatoire");
@@ -180,8 +197,17 @@ public class CreateFormationActivity extends AppCompatActivity {
 
         if (valid)
         {
+            formation = new Formation(title,description,duree);
 
-            formation = new Formation(title,description,duree,date);
+
+            SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            SimpleDateFormat input = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                Date oneWayTripDate = input.parse(date);                 // parse input
+                formation.setDate(output.format(oneWayTripDate));    // format output
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             switch (_spinner.getSelectedItemPosition()){
                 case 0:

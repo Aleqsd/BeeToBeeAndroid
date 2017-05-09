@@ -61,11 +61,10 @@ public class Formation implements Serializable {
         this.availableSeat = availableSeat;
     }
 
-    public Formation(String title, String description, int duration, String date) {
+    public Formation(String title, String description, int duration) {
         this.title = title;
         this.description = description;
         this.duration = duration;
-        this.date = date;
     }
 
     public List<User> getUsers() {

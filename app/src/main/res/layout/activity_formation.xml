@@ -57,14 +57,6 @@
                 android:text="Date" />
 
             <TextView
-                android:id="@+id/hourFormation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingLeft="10dp"
-                android:text="Hour" />
-
-            <TextView
                 android:id="@+id/durationFormation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

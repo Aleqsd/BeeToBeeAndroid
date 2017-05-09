@@ -32,7 +32,7 @@
             android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".LaunchActivity"
-            android:theme="@style/AppTheme.Launch">
+            android:theme="@style/AppTheme.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,7 +47,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".Formation.FormationActivity" />
+        <activity
+            android:name=".Formation.FormationActivity"
+            android:theme="@style/AppTheme.Dark"/>
         <activity
             android:name=".NewsActivity"
             android:label="@string/title_activity_news"
@@ -56,7 +58,9 @@
             android:name=".Formation.CreateFormationActivity"
             android:label="@string/title_activity_create_formation"
             android:theme="@style/AppTheme.Dark" />
-        <activity android:name=".Formation.EspaceFormateurActivity"></activity>
+        <activity
+            android:name=".Formation.EspaceFormateurActivity"
+            android:theme="@style/AppTheme.Dark"/>
     </application>
 
 </manifest>
