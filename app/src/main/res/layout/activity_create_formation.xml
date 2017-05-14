@@ -60,8 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:hint="Titre"
-                    android:textColor="#F5C12B"/>
+                    android:hint="Titre"/>
             </android.support.design.widget.TextInputLayout>
 
             <!-- LastName Label -->
@@ -74,8 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:hint="Description"
-                    android:textColor="#F5C12B"/>
+                    android:hint="Description"/>
 
 
             </android.support.design.widget.TextInputLayout>
@@ -115,9 +113,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Heure"
+                    android:hint="Heure : hh:mm"
                     android:ems="10"
-                    android:inputType="number" />
+                    android:inputType="textShortMessage" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -131,6 +129,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Durée : nombre de minutes"
+                    android:ems="10"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+                <EditText
+                    android:id="@+id/input_place"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre de places"
                     android:ems="10"
                     android:inputType="number" />
             </android.support.design.widget.TextInputLayout>

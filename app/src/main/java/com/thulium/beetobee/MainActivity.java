@@ -64,26 +64,49 @@ public class MainActivity extends AppCompatActivity {
         user = (User) getIntent().getSerializableExtra("user");
         currentResponse = new AllFormationResponse();
 
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Récupération des formations");
+        progressDialog.show();
+
         RequeteService requeteService = RestService.getClient().create(RequeteService.class);
         Call<AllFormationResponse> call2 = requeteService.getAllFormation();
         call2.enqueue(new Callback<AllFormationResponse>() {
             @Override
-            public void onResponse(final Call<AllFormationResponse> call2, final Response<AllFormationResponse> response) {
+            public void onResponse(final Call<AllFormationResponse> call, final Response<AllFormationResponse> response) {
                 if (response.isSuccessful()) {
-                    currentResponse = response.body();
-                    Log.d(TAG, response.message());
-                    initImageLoader();
-                    fillViewPager(currentResponse);
-
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    currentResponse = response.body();
+                                    Log.d(TAG, response.message());
+                                    initImageLoader();
+                                    fillViewPager(currentResponse);
+                                    progressDialog.dismiss();
+                                }
+                            }, 100);
                 } else {
-                    Log.d(TAG, response.message());
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    Log.d(TAG, response.message());
+                                    progressDialog.dismiss();
+                                }
+                            }, 100);
                 }
             }
-
             @Override
-            public void onFailure(Call<AllFormationResponse> call2, final Throwable t) {
+            public void onFailure(Call<AllFormationResponse> call, final Throwable t) {
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
                                 Log.d(TAG, t.getMessage());
-        }});
+                                progressDialog.dismiss();
+                            }
+                        }, 100);
+            }
+        });
 
 
         //ToDo remplir l'imageArray en fonction des elements de currentResponse et de leur theme
@@ -234,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (item.getItemId() == android.R.id.home) {
+        if (id == android.R.id.home) {
             onBackPressed();
         }
 

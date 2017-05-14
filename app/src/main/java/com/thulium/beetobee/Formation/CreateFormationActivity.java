@@ -40,7 +40,7 @@ public class CreateFormationActivity extends AppCompatActivity {
     private Formation formation;
     private User user;
     private Button _createFormationButton;
-    private EditText _title, _description, _date, _duree, _heure;
+    private EditText _title, _description, _date, _duree, _heure, _place;
     private Spinner _spinner;
 
     @Override
@@ -62,6 +62,7 @@ public class CreateFormationActivity extends AppCompatActivity {
         _date = (EditText) findViewById(R.id.input_date);
         _duree = (EditText) findViewById(R.id.input_duree);
         _heure = (EditText) findViewById(R.id.input_heure);
+        _place = (EditText) findViewById(R.id.input_place);
 
 
         _spinner = (Spinner) findViewById(R.id.spinner_type_formation);
@@ -149,16 +150,24 @@ public class CreateFormationActivity extends AppCompatActivity {
         String title = _title.getText().toString();
         String description = _description.getText().toString();
         String date = _date.getText().toString();
+        String heure = _heure.getText().toString();
         int duree = 0;
         if (_duree.getText().length() > 0)
         {
             duree = Integer.parseInt(_duree.getText().toString());
         }
 
-        int heure = 0;
-        if (_heure.getText().length() > 0)
+        int place = 0;
+        if (_place.getText().length() > 0)
         {
-            heure = Integer.parseInt(_heure.getText().toString());
+            place = Integer.parseInt(_place.getText().toString());
+        }
+
+        if (heure.isEmpty() || heure.length() < 2 || heure.length() > 5) {
+            _heure.setError("L'heure doit être au format hh:mm");
+            valid = false;
+        } else {
+            _heure.setError(null);
         }
 
         if (title.isEmpty() || title.length() < 2 || title.length() > 100) {
@@ -189,17 +198,17 @@ public class CreateFormationActivity extends AppCompatActivity {
             _duree.setError(null);
         }
 
-        if (heure < 1) {
-            _heure.setError("Durée obligatoire");
+        if (place < 1) {
+            _place.setError("Nombre de place à définir");
             valid = false;
         } else {
-            _heure.setError(null);
+            _place.setError(null);
         }
+
 
         if (valid)
         {
             formation = new Formation(title,description,duree);
-
 
             SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
             SimpleDateFormat input = new SimpleDateFormat("dd/MM/yyyy");
@@ -224,8 +233,9 @@ public class CreateFormationActivity extends AppCompatActivity {
                     formation.setThemeId(0);
                     break;
             }
-            formation.setHour(heure+" ");
-            formation.setPlace("20");
+            formation.setHour(heure);
+            formation.setPlace(String.valueOf(place));
+            formation.setAvailableSeat(place);
         }
 
         return valid;

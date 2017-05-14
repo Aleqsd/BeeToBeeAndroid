@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,7 +40,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -53,9 +56,7 @@ import retrofit2.Response;
  */
 public class CommonFragment extends Fragment implements DragLayout.GotoDetailListener {
     private ImageView imageView;
-    private TextView address1, address2, address3, address4, address5;
-    private RatingBar ratingBar;
-    private CircleImageView head1, head2, head3, head4;
+    private TextView address1, address4, address5, address6;
     private String imageUrl;
     private String title = "Unknown";
     private String description = "Unknown";
@@ -113,97 +114,27 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         address1 = (TextView) dragLayout.findViewById(R.id.address1);
         address4 = (TextView) dragLayout.findViewById(R.id.address4);
         address5 = (TextView) dragLayout.findViewById(R.id.address5);
-        ratingBar = (RatingBar) dragLayout.findViewById(R.id.rating);
-
-        head1 = (CircleImageView) dragLayout.findViewById(R.id.head1);
-        head2 = (CircleImageView) dragLayout.findViewById(R.id.head2);
-        head3 = (CircleImageView) dragLayout.findViewById(R.id.head3);
-        head4 = (CircleImageView) dragLayout.findViewById(R.id.head4);
-
-        avatars = new ArrayList<>();
-        avatars.add(head1);
-        avatars.add(head2);
-        avatars.add(head3);
-        avatars.add(head4);
-
-        switch (userIds.size()) {
-            case 0:
-                head1.setVisibility(View.INVISIBLE);
-                head2.setVisibility(View.INVISIBLE);
-                head3.setVisibility(View.INVISIBLE);
-                head4.setVisibility(View.INVISIBLE);
-                break;
-            case 1:
-                head2.setVisibility(View.INVISIBLE);
-                head3.setVisibility(View.INVISIBLE);
-                head4.setVisibility(View.INVISIBLE);
-                setPictures(1);
-                break;
-            case 2:
-                head3.setVisibility(View.INVISIBLE);
-                head4.setVisibility(View.INVISIBLE);
-                setPictures(2);
-                break;
-            case 3:
-                head4.setVisibility(View.INVISIBLE);
-                setPictures(3);
-                break;
-            default:
-                setPictures(4);
-                break;
-        }
+        address6 = (TextView) dragLayout.findViewById(R.id.address6);
 
         dragLayout.setGotoDetailListener(this);
         address1.setText(title);
         address4.setText(description);
-        address5.setText(creatorFirstName+" "+creatorLastName);
-        return rootView;
-    }
 
-    public void setPictures(int number)
-    {
-        for (int i = 0; i<number; i++)
+        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+        if (date != null)
         {
-            final String url;
-            final int finalI = i;
-
-            if (i == 0)
-                url = "https://api.beetobee.fr/users/" + creatorId + "/picture/dl";
-            else {
-                url = "https://api.beetobee.fr/users/" + userIds.get(i - 1) + "/picture/dl";
-                if (userIds.get(i-1) == user.getId())
-                {
-                    avatars.get(finalI).setBorderWidth(3);
-                    avatars.get(finalI).setBorderColor(Color.parseColor("#4D276B"));
-                }
+            try {
+                Date oneWayTripDate = input.parse(date);                 // parse input
+                address6.setText("Le "+output.format(oneWayTripDate)+" à "+hour);    // format output
+            } catch (ParseException e) {
+                e.printStackTrace();
+                address6.setText(date+" à "+hour);
             }
-
-            final RequeteService requeteService = RestService.getClient().create(RequeteService.class);
-
-            new AsyncTask<Void, Long, Void>() {
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    Call<ResponseBody> call = requeteService.downloadProfilePicture(url);
-                    call.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if (response.isSuccessful()) {
-                                Log.d("CommonFragment", "server contacted and has file");
-                                writeResponseBodyToDisk(response.body(),avatars.get(finalI));
-                            } else {
-                                Log.d("CommonFragment", "server contact failed");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Log.e("CommonFragment", "error");
-                        }
-                    });
-                    return null;
-                }
-            }.execute();
         }
+
+        address5.setText("Places disponibles : "+availableSeat);
+        return rootView;
     }
 
     @Override
@@ -222,73 +153,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
     public void bindData(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    private boolean writeResponseBodyToDisk(ResponseBody body, ImageView imageView) {
-        try {
-            File futureStudioIconFile = new File(getContext().getExternalFilesDir(null) + File.separator + "img_" + System.currentTimeMillis() + ".jpg");
-
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-            final ProgressDialog progressDialog = new ProgressDialog(this.getContext(), R.style.AppTheme_Dark_Dialog);
-            progressDialog.setIndeterminate(false);
-            progressDialog.setTitle("Downloading Profile Picture");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setCancelable(true);
-            progressDialog.setMax(100);
-            progressDialog.show();
-
-            try {
-                byte[] fileReader = new byte[4096];
-
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
-
-                inputStream = body.byteStream();
-                outputStream = new FileOutputStream(futureStudioIconFile);
-
-                while (true) {
-                    int read = inputStream.read(fileReader);
-
-                    if (read == -1) {
-                        break;
-                    }
-
-                    outputStream.write(fileReader, 0, read);
-
-                    fileSizeDownloaded += read;
-
-                    long progress = fileSizeDownloaded / fileSize;
-                    progressDialog.setProgress((int) progress);
-                    //Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
-                }
-
-                outputStream.flush();
-                progressDialog.dismiss();
-
-                if (futureStudioIconFile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(futureStudioIconFile.getAbsolutePath());
-                    imageView.setImageBitmap(myBitmap);
-                }
-
-
-                return true;
-            } catch (IOException e) {
-                return false;
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            }
-        } catch (IOException e) {
-            return false;
-        }
-
     }
 
 }
