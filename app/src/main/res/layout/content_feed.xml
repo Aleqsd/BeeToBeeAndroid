@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.thulium.beetobee.FeedActivity"
-    tools:showIn="@layout/activity_feed">
+    tools:context="com.thulium.beetobee.NewsActivity"
+    tools:showIn="@layout/activity_feed"
+    android:background="@color/whitelike">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"

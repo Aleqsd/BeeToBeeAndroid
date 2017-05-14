@@ -38,8 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="@string/firstName"
-                android:textColor="#F5C12B"/>
+                android:hint="@string/firstName"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- LastName Label -->
@@ -52,8 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="@string/lastName"
-                android:textColor="#F5C12B"/>
+                android:hint="@string/lastName"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -68,8 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="@string/email"
-                android:textColor="#F5C12B"/>
+                android:hint="@string/email"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -83,8 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="@string/reenterEmail"
-                android:textColor="#F5C12B"/>
+                android:hint="@string/reenterEmail"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Label -->
@@ -97,8 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="@string/password"
-                android:textColor="#F5C12B"/>
+                android:hint="@string/password"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Re-enter Label -->
@@ -111,8 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="@string/reenterPassword"
-                android:textColor="#F5C12B"/>
+                android:hint="@string/reenterPassword"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Signup Button -->
@@ -123,6 +117,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
+            android:background="@color/blue_electric"
             android:text="@string/createAccount"/>
 
         <TextView android:id="@+id/link_login"

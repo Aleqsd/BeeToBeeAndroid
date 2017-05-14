@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.thulium.beetobee.WebService.User;
 import com.thulium.beetobee.data.FeedItem;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.io.InputStream;
 public class NewsActivity extends AppCompatActivity {
     //private News news;
     private FeedItem feedItem;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,8 @@ public class NewsActivity extends AppCompatActivity {
         Toolbar toolbarNews = (Toolbar) findViewById(R.id.toolbarNews);
         toolbarNews.setTitle(feedItem.getName());
         setSupportActionBar(toolbarNews);
+
+        user = (User) getIntent().getSerializableExtra("user");
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -107,6 +111,7 @@ public class NewsActivity extends AppCompatActivity {
     public void onBackPressed() {
         Log.d("FormationActivity", "onBackPressed Called");
         Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+        intent.putExtra("user",user);
         startActivity(intent);
     }
 

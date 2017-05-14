@@ -24,6 +24,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/whitelike"
         android:id="@+id/scrollViewFormation">
 
         <LinearLayout
@@ -35,6 +36,7 @@
                 android:id="@+id/titleFormation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:paddingTop="30dp"
                 android:paddingLeft="10dp"
                 android:text="Title" />
@@ -43,6 +45,7 @@
                 android:id="@+id/descriptionFormation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:paddingTop="10dp"
                 android:paddingLeft="10dp"
                 android:text="Description" />
@@ -51,6 +54,7 @@
                 android:id="@+id/dateFormation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:paddingTop="10dp"
                 android:paddingLeft="10dp"
                 android:text="Date" />
@@ -59,6 +63,7 @@
                 android:id="@+id/durationFormation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:paddingTop="10dp"
                 android:paddingLeft="10dp"
                 android:text="Duration" />
@@ -67,6 +72,7 @@
                 android:id="@+id/placeFormation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:paddingTop="10dp"
                 android:paddingLeft="10dp"
                 android:text="Place" />
@@ -75,6 +81,7 @@
                 android:id="@+id/availableSeatFormation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:paddingTop="10dp"
                 android:paddingLeft="10dp"
                 android:text="AvailableSeat" />
@@ -83,6 +90,7 @@
                 android:id="@+id/buttonInscription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:layout_marginTop="30dp"
                 android:paddingLeft="10dp"
                 android:text="S'inscrire" />

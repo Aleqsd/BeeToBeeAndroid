@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
 import android.support.v4.app.ActivityCompat;
@@ -109,6 +110,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
+        ImageView threeDot = (ImageView) dragLayout.findViewById(R.id.three_dot);
 
         ImageLoader.getInstance().displayImage(imageUrl, imageView);
         address1 = (TextView) dragLayout.findViewById(R.id.address1);
@@ -116,9 +118,15 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         address5 = (TextView) dragLayout.findViewById(R.id.address5);
         address6 = (TextView) dragLayout.findViewById(R.id.address6);
 
-        dragLayout.setGotoDetailListener(this);
+        threeDot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoDetail();
+            }
+        });
+        //dragLayout.setGotoDetailListener(this);
         address1.setText(title);
-        address4.setText(description);
+        address5.setText(description);
 
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
@@ -133,7 +141,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
             }
         }
 
-        address5.setText("Places disponibles : "+availableSeat);
+        address4.setText("Places disponibles : "+availableSeat);
         return rootView;
     }
 

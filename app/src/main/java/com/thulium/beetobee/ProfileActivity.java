@@ -16,6 +16,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -76,11 +77,12 @@ public class ProfileActivity extends AppCompatActivity implements Serializable {
     private Toolbar myToolbar;
     public TextView name;
     public TextView desc;
+    public TextView titreFormation;
     public CarouselView carouselView;
     private AllFormationResponse allFormation;
     public ArrayList<Integer> themes = new ArrayList<>();
     public int[] sampleImages;
-    public List formationsUser = new ArrayList<>();;
+    public List formationsUser = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity implements Serializable {
 
         name = (TextView) findViewById(R.id.textView1);
         desc = (TextView) findViewById(R.id.textView2);
+        titreFormation = (TextView) findViewById(R.id.titreFormationCarousel);
         avatar = (CircularImageView) findViewById(R.id.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -148,7 +151,23 @@ public class ProfileActivity extends AppCompatActivity implements Serializable {
                         carouselView = (CarouselView) findViewById(R.id.carouselView);
                         carouselView.setImageListener(imageListener);
                         carouselView.setPageCount(sampleImages.length);
+                        carouselView.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                            @Override
+                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                Formation currentFormation = (Formation) formationsUser.get(position);
+                                titreFormation.setText(currentFormation.getTitle());
+                            }
 
+                            @Override
+                            public void onPageSelected(int position) {
+
+                            }
+
+                            @Override
+                            public void onPageScrollStateChanged(int state) {
+
+                            }
+                        });
                         carouselView.setImageClickListener(new ImageClickListener() {
                             @Override
                             public void onClick(int position) {
@@ -257,6 +276,8 @@ public class ProfileActivity extends AppCompatActivity implements Serializable {
         }
     };
 
+
+
     private void setProfileInfos() {
         ScrollView leBas = (ScrollView) findViewById(R.id.leBas);
 
@@ -272,10 +293,10 @@ public class ProfileActivity extends AppCompatActivity implements Serializable {
         TextView text_level = (TextView) viewBas.findViewById(R.id.text_level);
         TextView text_email = (TextView) viewBas.findViewById(R.id.text_email);
 
-        if (user.getEducation() != null)
-            text_education.setText(user.getEducation());
-        if (user.getLevel() != null)
-            text_level.setText(user.getLevel());
+        if (user.getCity() != null)
+            text_education.setText(user.getCity());
+        if (user.getLevel() != null && user.getEducation() != null && user.getUniversity() != null)
+            text_level.setText(user.getUniversity() + " " + user.getEducation() + " " + user.getLevel());
         text_email.setText(user.getEmail());
 
         name.setText(user.getFirstname()+" "+user.getLastname());

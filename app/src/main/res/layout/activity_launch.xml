@@ -66,6 +66,7 @@
             android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp"
             android:padding="12dp"
+            android:background="@color/blue_electric"
             android:text="@string/login"/>
 
         <TextView android:id="@+id/link_signup"

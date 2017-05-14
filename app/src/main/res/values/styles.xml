@@ -27,23 +27,42 @@
         <item name="android:background">@color/primary_blue</item>
         <item name="android:windowBackground">@color/primary_blue</item>
 
-        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlNormal">@color/primary_blue</item>
         <item name="colorControlActivated">@color/primary_blue</item>
         <item name="colorControlHighlight">@color/primary_blue</item>
         <item name="android:textColorHint">@color/primary_light</item>
+        <item name="android:textColor">@color/white</item>
 
         <item name="colorButtonNormal">@color/primary_darker</item>
         <item name="android:colorButtonNormal">@color/primary_darker</item>
     </style>
 
     <style name="AppTheme.DarkRed" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/red</item>
-        <item name="colorPrimaryDark">@color/red</item>
-        <item name="colorAccent">@color/red</item>
-        <item name="android:windowBackground">@color/redDark</item>
-        <item name="colorButtonNormal">@color/red</item>
+        <item name="colorPrimary">@color/redDark</item>
+        <item name="colorPrimaryDark">@color/redDark</item>
+        <item name="colorAccent">@color/redDark</item>
+        <item name="android:windowBackground">@color/whitelike</item>
+        <item name="colorButtonNormal">@color/redDark</item>
+        <item name="colorControlNormal">@color/redDark</item>
+        <item name="colorControlActivated">@color/redDark</item>
+        <item name="colorControlHighlight">@color/redDark</item>
+        <item name="android:textColorHint">@color/redDark</item>
+        <item name="android:itemBackground">@color/whitelike</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
     </style>
 
+    <style name="mySpinnerItemStyle" parent="@android:style/Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/redDark</item>
+    </style>
+
+    <style name="AppTheme.LightBlue" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimaryDark">@color/primary_blue_dark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/whitelike</item>
+        <item name="colorButtonNormal">@color/blue_electric</item>
+    </style>
 
     <style name="AppTheme.Launch" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/primary</item>

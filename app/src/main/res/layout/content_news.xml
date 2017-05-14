@@ -6,6 +6,7 @@
         android:layout_height="match_parent"
         tools:context="com.thulium.beetobee.NewsActivity"
         android:orientation="vertical"
+        android:background="@color/whitelike"
         android:weightSum="1">
 
 
@@ -32,6 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.55"
                     android:text="Title"
+                    android:textColor="@color/black"
                     android:textSize="20sp" />
 
                 <TextView
@@ -40,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.55"
                     android:text="Description"
+                    android:textColor="@color/black"
                     android:textSize="14sp" />
 
             </LinearLayout>

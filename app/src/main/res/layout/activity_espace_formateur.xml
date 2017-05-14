@@ -17,7 +17,6 @@
             android:id="@+id/toolbar_espace_formateur"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@color/red"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -39,7 +38,7 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/profil_layout_content_espace_formateur"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/leHaut_espace_formateur"/>
+            android:layout_below="@+id/leHaut_espace_formateur" />
 
         <LinearLayout
             android:id="@+id/profil_layout_content_espace_formateur"
@@ -60,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
                 <TextView
@@ -68,6 +68,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
                 <TextView
@@ -76,6 +77,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
                 <Space
@@ -91,37 +93,47 @@
                     android:layout_above="@+id/carouselView_espace_formateur"
                     android:layout_centerHorizontal="true"
                     android:text="Formations dispensées"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
 
-                <com.synnapps.carouselview.CarouselView
-                    android:id="@+id/carouselView_espace_formateur"
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutCarouselFormateur"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/app_bar_height"
-                    android:background="@color/primary"
-                    app:fillColor="#FFFFFFFF"
-                    app:pageColor="#00000000"
-                    app:radius="6dp"
-                    app:slideInterval="3000"
-                    app:strokeColor="#FF777777"
-                    app:strokeWidth="1dp">
+                    android:layout_height="140dp">
 
-                </com.synnapps.carouselview.CarouselView>
+                    <com.synnapps.carouselview.CarouselView
+                        android:id="@+id/carouselView_espace_formateur"
+                        android:layout_width="314dp"
+                        android:layout_height="match_parent"
+
+                        android:layout_centerHorizontal="true"
+                        android:background="@color/primary"
+                        app:fillColor="#FFFFFFFF"
+                        app:pageColor="#00000000"
+                        app:radius="6dp"
+                        app:slideInterval="3000"
+                        app:strokeColor="#FF777777"
+                        app:strokeWidth="1dp">
+
+                    </com.synnapps.carouselview.CarouselView>
+                </RelativeLayout>
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true">
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignBottom="@id/relativeLayoutCarouselFormateur">
 
                     <Button
                         android:id="@+id/button_creer_formation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="10dp"
-                        android:textColor="@color/white"
-                        android:text="Créer Formation" />
+                        android:text="Créer Formation"
+                        android:textColor="@color/white" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -141,9 +153,9 @@
                 android:id="@+id/textView1_espace_formateur"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/avatar_espace_formateur"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/avatar_espace_formateur"
                 android:text="Full Name"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"

@@ -277,10 +277,10 @@ public class EspaceFormateurActivity extends AppCompatActivity {
         TextView text_level = (TextView) findViewById(R.id.text_level_espace_createur);
         TextView text_email = (TextView) findViewById(R.id.text_email_espace_createur);
 
-        if (user.getEducation() != null)
-            text_education.setText(user.getEducation());
-        if (user.getLevel() != null)
-            text_level.setText(user.getLevel());
+        if (user.getCity() != null)
+            text_education.setText(user.getCity());
+        if (user.getLevel() != null && user.getEducation() != null && user.getUniversity() != null)
+            text_level.setText(user.getUniversity() + " " + user.getEducation() + " " + user.getLevel());
         text_email.setText(user.getEmail());
 
 

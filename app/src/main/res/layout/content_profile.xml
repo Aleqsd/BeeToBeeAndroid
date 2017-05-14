@@ -2,7 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
     >
 
         <View
@@ -23,9 +22,9 @@
         <View
             android:id="@+id/leHaut2"
             android:layout_width="match_parent"
-            android:background="@color/primary"
             android:layout_below="@+id/leHaut"
             android:layout_alignParentStart="true"
+            android:background="@color/whitelike"
             android:layout_above="@+id/profil_layout_content"
             android:layout_height="match_parent" />
 
@@ -34,16 +33,16 @@
         android:id="@+id/profil_layout_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/primary"
-        android:layout_below="@+id/info">
+        android:background="@color/whitelike"
+        android:layout_below="@+id/info"
+        android:weightSum="1">
 
         <ScrollView
             android:id="@+id/leBas"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="104dp"
             android:layout_above="@+id/space"
             android:layout_below="@+id/info"
-            android:layout_weight="1"
             android:orientation="horizontal">
 
         </ScrollView>
@@ -61,23 +60,42 @@
             android:layout_above="@+id/carouselView"
             android:layout_centerHorizontal="true"
             android:text="Formations suivies"
+            android:textColor="@color/black"
             android:textAlignment="center" />
 
-        <com.synnapps.carouselview.CarouselView
-            android:id="@+id/carouselView"
+        <RelativeLayout
+            android:id="@+id/relativeLayoutCarousel"
             android:layout_width="match_parent"
-            android:layout_height="117dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@color/primary"
-            app:fillColor="#FFFFFFFF"
-            app:pageColor="#00000000"
-            app:radius="6dp"
-            app:slideInterval="3000"
-            app:strokeColor="#FF777777"
-            app:strokeWidth="1dp">
+            android:layout_height="140dp"
+            android:layout_above="@+id/titreFormationCarousel"
+            android:layout_weight="0.74">
 
-        </com.synnapps.carouselview.CarouselView>
+            <com.synnapps.carouselview.CarouselView
+                android:id="@+id/carouselView"
+                android:layout_width="314dp"
+                android:layout_height="match_parent"
+
+                android:layout_centerHorizontal="true"
+                android:background="@color/primary"
+                app:fillColor="#FFFFFFFF"
+                app:pageColor="#00000000"
+                app:radius="6dp"
+                app:slideInterval="3000"
+                app:strokeColor="#FF777777"
+                app:strokeWidth="1dp">
+
+            </com.synnapps.carouselview.CarouselView>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/titreFormationCarousel"
+            android:layout_width="match_parent"
+            android:layout_height="29dp"
+            android:layout_below="@+id/relativeLayoutCarousel"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:text="Titre"
+            android:textAlignment="center" />
     </LinearLayout>
 
     <RelativeLayout

@@ -212,6 +212,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
                 Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
                 intent.putExtra("feedItem", feedItems.get((int)id));
+                intent.putExtra("user",user);
                 startActivity(intent);
             }
         });

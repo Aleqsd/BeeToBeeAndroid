@@ -68,8 +68,9 @@ public class CreateFormationActivity extends AppCompatActivity {
         _spinner = (Spinner) findViewById(R.id.spinner_type_formation);
         arraySpinner = new String[] {"Informatique", "Management", "Design"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner);
+                R.layout.spinner_item, arraySpinner);
         _spinner.setAdapter(adapter);
+
         _createFormationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

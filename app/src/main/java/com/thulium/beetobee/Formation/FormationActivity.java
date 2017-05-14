@@ -326,7 +326,11 @@ public class FormationActivity extends AppCompatActivity {
         ViewGroup parent = (ViewGroup) scrollView.getParent();
         parent.removeView(scrollView);
         // inflate your profile view (or get the reference to it if it's already inflated)
-        View editView = getLayoutInflater().inflate(R.layout.formation_edit_infos, parent, false);
+        View editView;
+        if(userId == formation.getCreatorId())
+            editView = getLayoutInflater().inflate(R.layout.formation_edit_infos_formateur, parent, false);
+        else
+            editView = getLayoutInflater().inflate(R.layout.formation_edit_infos, parent, false);
         // add it to the parent
         parent.addView(editView);
 
@@ -437,6 +441,8 @@ public class FormationActivity extends AppCompatActivity {
 
         String heure = _heure.getText().toString();
 
+
+
         if (title.isEmpty() || title.length() < 2 || title.length() > 100) {
             _title.setError("Le titre doit être entre 2 et 100 caractères");
             valid = false;
@@ -466,8 +472,8 @@ public class FormationActivity extends AppCompatActivity {
             _duree.setError(null);
         }
 
-        if (heure.isEmpty()) {
-            _heure.setError("Heure obligatoire");
+        if (heure.isEmpty() || heure.length() < 2 || heure.length() > 5) {
+            _heure.setError("L'heure doit être au format hh:mm");
             valid = false;
         } else {
             _heure.setError(null);

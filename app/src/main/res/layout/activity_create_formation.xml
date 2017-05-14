@@ -60,6 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
+                    android:textColor="@color/black"
                     android:hint="Titre"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -73,10 +74,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
+                    android:textColor="@color/black"
                     android:hint="Description"/>
 
 
             </android.support.design.widget.TextInputLayout>
+
             <Spinner
                 android:id="@+id/spinner_type_formation"
                 android:layout_width="match_parent"
@@ -97,6 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Date : dd/mm/yyyy"
+                    android:textColor="@color/black"
                     android:ems="10"
                     android:inputType="datetime" />
 
@@ -114,6 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Heure : hh:mm"
+                    android:textColor="@color/black"
                     android:ems="10"
                     android:inputType="textShortMessage" />
 
@@ -129,6 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Durée : nombre de minutes"
+                    android:textColor="@color/black"
                     android:ems="10"
                     android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
@@ -143,6 +149,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nombre de places"
+                    android:textColor="@color/black"
                     android:ems="10"
                     android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
