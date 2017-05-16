@@ -89,7 +89,7 @@ public class ProfileActivity extends AppCompatActivity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        myToolbar.setTitle("Profile");
+        myToolbar.setTitle("Profil");
         setSupportActionBar(myToolbar);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
@@ -357,7 +357,7 @@ public class ProfileActivity extends AppCompatActivity implements Serializable {
 
     private void setProfileEditableInfos() {
         floatingActionButton.setVisibility(View.VISIBLE);
-        myToolbar.setTitle("Edit Profile");
+        myToolbar.setTitle("Editer Profil");
         LinearLayout linearLayoutContent = (LinearLayout) findViewById(R.id.profil_layout_content);
         CarouselView carouselView = (CarouselView) findViewById(R.id.carouselView);
         carouselView.setVisibility(View.INVISIBLE);

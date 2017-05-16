@@ -16,8 +16,8 @@
   <color name="colorPrimaryDark">#4D276B</color>
   <color name="colorAccent">#321851</color>
 
-  <color name="redLight">#e0b4b1</color>
-  <color name="red">#ed4747</color>
+  <color name="redLight">#b20a0a</color>
+  <color name="red">#b20a0a</color>
     <color name="redDark">#b20a0a</color>
 
   <color name="accent">#321851</color>

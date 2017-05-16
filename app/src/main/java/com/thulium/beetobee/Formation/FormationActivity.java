@@ -156,7 +156,7 @@ public class FormationActivity extends AppCompatActivity {
         title.setText(formation.getTitle());
         description.setText(formation.getDescription());
         duration.setText("Durée : "+formation.getDuration()+" minutes");
-        place.setText("Place : "+formation.getPlace());
+        place.setText("Lieu : "+formation.getPlace());
         availableSeat.setText("Places disponibles : "+formation.getAvailableSeat());
 
 
@@ -377,8 +377,12 @@ public class FormationActivity extends AppCompatActivity {
 
     public void editFormation()
     {
-            final ProgressDialog progressDialog = new ProgressDialog(FormationActivity.this,
-                    R.style.AppTheme_Dark_Dialog);
+            final ProgressDialog progressDialog;
+            if (userCreator)
+                progressDialog = new ProgressDialog(FormationActivity.this, R.style.AppTheme_DarkRed_Dialog);
+            else
+                progressDialog = new ProgressDialog(FormationActivity.this, R.style.AppTheme_Dark_Dialog);
+
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Edition de la formation...");
             progressDialog.show();

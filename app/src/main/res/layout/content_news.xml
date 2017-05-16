@@ -12,8 +12,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="10dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,6 +31,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.55"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="6dp"
                     android:text="Title"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
@@ -41,6 +43,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.55"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
                     android:text="Description"
                     android:textColor="@color/black"
                     android:textSize="14sp" />

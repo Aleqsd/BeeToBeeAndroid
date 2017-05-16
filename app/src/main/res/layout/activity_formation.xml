@@ -24,7 +24,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/whitelike"
+        android:background="@color/white"
         android:id="@+id/scrollViewFormation">
 
         <LinearLayout
@@ -38,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:paddingTop="30dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="16dp"
+                android:textSize="14dp"
                 android:text="Title" />
 
             <TextView
@@ -47,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:paddingTop="10dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="16dp"
                 android:text="Description" />
 
             <TextView
@@ -56,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:paddingTop="10dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="16dp"
                 android:text="Date" />
 
             <TextView
@@ -65,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:paddingTop="10dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="16dp"
                 android:text="Duration" />
 
             <TextView
@@ -74,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:paddingTop="10dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="16dp"
                 android:text="Place" />
 
             <TextView
@@ -83,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:paddingTop="10dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="16dp"
                 android:text="AvailableSeat" />
 
             <Button
@@ -92,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:layout_marginTop="30dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="16dp"
                 android:text="S'inscrire" />
         </LinearLayout>
     </ScrollView>

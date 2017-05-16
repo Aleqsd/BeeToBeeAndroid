@@ -81,7 +81,7 @@ public class CreateFormationActivity extends AppCompatActivity {
                 }
 
                 final ProgressDialog progressDialog = new ProgressDialog(CreateFormationActivity.this,
-                        R.style.AppTheme_Dark_Dialog);
+                        R.style.AppTheme_DarkRed_Dialog);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setMessage("Création de la Formation...");
                 progressDialog.show();

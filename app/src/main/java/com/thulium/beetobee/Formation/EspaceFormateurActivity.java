@@ -1,6 +1,8 @@
 package com.thulium.beetobee.Formation;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -77,6 +79,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import gun0912.tedbottompicker.TedBottomPicker;
 import okhttp3.MediaType;
@@ -86,6 +89,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.R.attr.typeface;
 
 public class EspaceFormateurActivity extends AppCompatActivity {
     private Toolbar myToolbar;
@@ -109,6 +114,7 @@ public class EspaceFormateurActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         avatar = (CircularImageView) findViewById(R.id.avatar_espace_formateur);
         Button buttonCreate = (Button) findViewById(R.id.button_creer_formation);
+
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -299,7 +305,7 @@ public class EspaceFormateurActivity extends AppCompatActivity {
             InputStream inputStream = null;
             OutputStream outputStream = null;
 
-            final ProgressDialog progressDialog = new ProgressDialog(EspaceFormateurActivity.this, R.style.AppTheme_Dark_Dialog);
+            final ProgressDialog progressDialog = new ProgressDialog(EspaceFormateurActivity.this, R.style.AppTheme_DarkRed);
             progressDialog.setIndeterminate(false);
             progressDialog.setTitle("Downloading Profile Picture");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);

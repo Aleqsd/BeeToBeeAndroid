@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myToolbar = (Toolbar) findViewById(R.id.toolbarListeFormation);
-        myToolbar.setTitle("Liste Formation");
+        myToolbar.setTitle("Liste Formations");
         setSupportActionBar(myToolbar);
 
         if (getSupportActionBar() != null) {
